@@ -1,22 +1,11 @@
 # AGENT LOCK — Mutex distribuido
 schema_version: "3.0"
 min_compatible_version: "2.0"
-last_updated: "2026-03-09T01:30:00Z"
+last_updated: "2026-03-09T01:52:00Z"
 last_updated_by: "github-copilot"
 
-active_agents:
-  - agent_id: "github-copilot"
-    session_id: "20260309-0130-github-copilot-session-032"
-    started_at: "2026-03-09T01:25:00Z"
-    last_heartbeat: "2026-03-09T01:30:00Z"
-    current_task: "TASK-035"
-    status: "working"
-    working_branch: "main"
-    base_branch: "main"
-    locked_files:
-      - "ai/tasks.yaml"
-    notes: "Auditoría de TASK-017 (Advanced search queries, boosting, ranking)"
+active_agents: []
 
 ghost_entries: []
 
-note: "github-copilot active on TASK-035 (audit review)"
+note: "Clean state after TASK-035 audit completion"
