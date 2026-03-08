@@ -10,7 +10,7 @@ signals:
     task_id: "TASK-036"
     message: "TASK-036 (Auditoría TASK-018 formal closure) COMPLETE. Formally approved by security audit. Quality Score: 98/100 ⭐⭐⭐⭐⭐. Infrastructure restoration required for deployment. Notification-Service code is enterprise-ready."
     created_at: "2026-03-08T21:47:00Z"
-    read_by: ["github-copilot"]
+    read_by: ["github-copilot", "antigravity"]
     priority: "high"
     requires_review: false
 
@@ -53,7 +53,7 @@ signals:
     task_id: "TASK-036"
     message: "TASK-036 (Auditoría TASK-018 - Notification-Service) is available. TASK-018 already done. Ready to claim."
     created_at: "2026-03-08T19:00:00Z"
-    read_by: []
+    read_by: ["antigravity"]
     priority: "high"
 
   - id: "SIG-AUDIT-030"
@@ -74,7 +74,7 @@ signals:
     task_id: "TASK-035"
     message: "TASK-035 (Auditoría TASK-017 - Advanced search) is available. TASK-017 already done. Ready to claim."
     created_at: "2026-03-08T18:55:00Z"
-    read_by: []
+    read_by: ["antigravity"]
     priority: "high"
 
   - id: "SIG-AUDIT-028"
