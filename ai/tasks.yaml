@@ -582,12 +582,13 @@ tasks:
       - Event bus listener (RabbitMQ) recibe JobCreated
     priority: "high"
     severity: "important"
-    status: "claimed"
+    status: "in_progress"
     depends_on: ["TASK-012"]
     estimated_effort: "7h"
     assigned_agent: "antigravity"
     claimed_at: "2026-03-09T00:30:00Z"
-    updated_at: "2026-03-09T00:30:00Z"
+    started_at: "2026-03-09T00:38:00Z"
+    updated_at: "2026-03-09T00:38:00Z"
     tags: ["elasticsearch", "cqrs", "search-service"]
     created_by: "github-copilot"
     state_history:
@@ -596,6 +597,7 @@ tasks:
       - {from: "in_progress", to: "done", at: "2026-03-08T16:25:00Z", by: "github-copilot"}
       - {from: "done", to: "todo", at: "2026-03-08T23:20:00Z", by: "antigravity [CORRECTION]"}
       - {from: "todo", to: "claimed", at: "2026-03-09T00:30:00Z", by: "antigravity"}
+      - {from: "claimed", to: "in_progress", at: "2026-03-09T00:38:00Z", by: "antigravity"}
 
   - id: "TASK-017"
     title: "Implementar filtrado avanzado y ranking"
