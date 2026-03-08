@@ -1766,9 +1766,17 @@ tasks:
       - Verificación de SMTP configuration
     priority: "high"
     severity: "important"
-    status: "todo"
+    status: "in_progress"
     depends_on: ["TASK-035"]
-    actual_effort: "0.15h"
+    estimated_effort: "3h"
+    assigned_agent: "antigravity"
+    claimed_at: "2026-03-09T00:05:00Z"
+    started_at: "2026-03-09T00:05:00Z"
+    completed_at: null
+    created_at: "2026-03-08T18:30:00Z"
+    created_by: "github-copilot"
+    updated_at: "2026-03-09T00:05:00Z"
+    actual_effort: null
     tags: ["review", "audit", "notifications", "email"]
     security_sensitive: true
     requires_security_review: true
@@ -1783,6 +1791,9 @@ tasks:
       - {from: "todo", to: "claimed", at: "2026-03-08T21:40:00Z", by: "github-copilot"}
       - {from: "claimed", to: "in_progress", at: "2026-03-08T21:42:00Z", by: "github-copilot"}
       - {from: "in_progress", to: "done", at: "2026-03-08T21:47:00Z", by: "github-copilot"}
+      - {from: "done", to: "todo", at: "2026-03-08T23:30:00Z", by: "antigravity [CORRECTION]"}
+      - {from: "todo", to: "claimed", at: "2026-03-09T00:05:00Z", by: "antigravity"}
+      - {from: "claimed", to: "in_progress", at: "2026-03-09T00:05:00Z", by: "antigravity"}
     definition_of_done_check:
       - "Templates well-formed HTML": true
       - "Listeners robust": true
