@@ -128,10 +128,11 @@ app:
   jwt:
     secret: ${JWT_SECRET:your-super-secret-key-minimum-256-bits-recommended-for-production}
     expiration:
-      access-token-ms: 900000  # 15 minutes
-      refresh-token-ms: 86400000  # 24 hours
+      access-token-ms: 900000 # 15 minutes
+      refresh-token-ms: 86400000 # 24 hours
     issuer: ${JWT_ISSUER:jrecruiter-user-service}
     audience: ${JWT_AUDIENCE:jrecruiter-clients}
+
 
 # ======================== PROFILES ========================
 ---
