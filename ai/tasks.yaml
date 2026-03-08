@@ -1759,19 +1759,62 @@ tasks:
       - Verificación de faceting implementation
     priority: "high"
     severity: "important"
-    status: "in_progress"
+    status: "done"
     depends_on: ["TASK-034"]
     estimated_effort: "3h"
-    assigned_agent: "github-copilot"
+    assigned_agent: null
     claimed_at: "2026-03-09T01:25:00Z"
     started_at: "2026-03-09T01:35:00Z"
-    completed_at: null
+    completed_at: "2026-03-09T01:50:00Z"
     created_at: "2026-03-08T18:30:00Z"
     created_by: "github-copilot"
-    updated_at: "2026-03-09T01:35:00Z"
-    actual_effort: null
+    updated_at: "2026-03-09T01:50:00Z"
+    actual_effort: "0.25h"
     tags: ["review", "audit", "elasticsearch", "search-service"]
     security_sensitive: false
+    completion_notes: |
+      ✅ AUDITORÍA COMPLETADA (TASK-017: Advanced Search)
+      
+      **Bool Queries:** ✅ Correctas
+      - Uso correcto de boolQuery() con should/filter operators
+      - Lógica AND/OR/NOT implementada correctamente
+      - Estructura Elasticsearch válida
+      
+      **Boosting Implementation (5 Factors):** ⚠️ Conflicto potencial detectado
+      - title keyword: boost 2.0f (vs description: 1.0f)
+      - skills matching: boost 2.0f
+      - remote preference: boost 1.2f
+      - location: boost 0.8f
+      - description: base (1.0f)
+      ⚠️ RIESGO: title y skills compiten al 2.0f - posible conflicto en ranking
+      
+      **Personalized Ranking:** ✅ Implementado
+      - Combina múltiples factores de priorización
+      - Integración con preferencias de candidato
+      - Boost aplicado de forma coherente
+      
+      **Faceting:** ❌ INCOMPLETO
+      - Método facetedSearch() es solo stub
+      - "This would include aggregations in real implementation"
+      - NO HAY IMPLEMENTACIÓN REAL de faceting
+      - Solo retorna FacetedSearchResult vacía sin datos de agregación
+      
+      **API Endpoints:** ✅ Bien expuestos
+      - GET /api/search/jobs - búsqueda simple
+      - GET /api/search/jobs/advanced - filtros avanzados
+      - POST /api/search/jobs/personalized - búsqueda personalizada
+      
+      **Issues Técnicos:**
+      - ⚠️ Validación de entrada ausente (null/empty keyword)
+      - ⚠️ Conversión de tipos insegura para salarios (Double assumed)
+      - ✅ Request parameters bien tipadosSalary null-checks podrían fallar
+      
+      **RECOMENDACIÓN:**
+      TASK-017 está INCOMPLETO. Faceting solo tiene stub. Ranking tiene conflicto potencial en boost.
+      Necesita REFACTORIZACIÓN para:
+      1. Implementar faceting real con agregaciones Elasticsearch
+      2. Resolver conflicto de boosting (documentar prioridad)
+      3. Añadir validación de entrada (salary null-checks, keyword empty checks)
     state_history:
       - {from: "pending", to: "claimed", at: "2026-03-08T18:56:00Z", by: "antigravity"}
       - {from: "claimed", to: "in_progress", at: "2026-03-08T18:56:00Z", by: "antigravity"}
@@ -1782,6 +1825,7 @@ tasks:
       - {from: "in_progress", to: "pending", at: "2026-03-09T00:10:00Z", by: "github-copilot [RECOVERY]"}
       - {from: "pending", to: "claimed", at: "2026-03-09T01:25:00Z", by: "github-copilot"}
       - {from: "claimed", to: "in_progress", at: "2026-03-09T01:35:00Z", by: "github-copilot"}
+      - {from: "in_progress", to: "done", at: "2026-03-09T01:50:00Z", by: "github-copilot"}
 
   - id: "TASK-036"
     title: "REVIEW: Auditoría de TASK-018 (Notification-Service)"
