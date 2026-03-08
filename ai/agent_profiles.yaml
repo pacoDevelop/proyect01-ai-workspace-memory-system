@@ -37,4 +37,23 @@ agents:
       - planning
     active: true
     role: "secondary-assistant"
+
+  - id: "cursor-gpt"
+    name: "Cursor GPT Assistant"
+    model: "GPT 5.1"
+    description: "AI assistant running inside Cursor, especializado en implementación, refactors y consistencia del workspace de IA y microservicios."
+    specialization_tags:
+      [code-generation, debugging, implementation, analysis, consistency, ai-workspace]
+    max_task_priority: "critical"
+    capabilities:
+      - code-writing
+      - code-review
+      - debugging
+      - refactoring
+      - documentation
+      - research
+      - workspace-maintenance
+    active: true
+    role: "assistant"
+
 deactivated_agents: []

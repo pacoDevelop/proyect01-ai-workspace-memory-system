@@ -1,6 +1,6 @@
 # PROJECT CONTEXT — JRecruiter Microservices Migration
-> Última actualización: 2026-03-08T04:55:00Z | Actualizado por: github-copilot
-> ℹ️ Esta es la sesión inicial después de setup del workspace completo.
+> Última actualización: 2026-03-08T08:05:00Z | Actualizado por: cursor-gpt
+> ℹ️ Estado tras completar Phase 2 (Job-Service) y comenzar trabajos de consistencia del AI workspace.
 
 ## ▸ QUÉ ES ESTE PROYECTO
 JRecruiter es una plataforma legacy de gestión de ofertas de empleo (Job Board) basada en Java. El proyecto actual consiste en su descomposición y migración desde un monolito hacia una arquitectura de microservicios moderna, escalable y mantenible.
@@ -34,11 +34,11 @@ Migrar la lógica de negocio del monolito ubicado en `/legacy` hacia microservic
 ⏳ TASK-016+ — Search-Service, Notification-Service
 
 ## ▸ TAREAS PRIORITARIAS AHORA
-1. **TASK-001** (crítica) — Análisis de Job aggreg ate + Value Objects — *Esperando claim*
-2. **TASK-002** (high) — Análisis User domain — *Pendiente*
-3. **TASK-003** (high) — Análisis Search domain — *Pendiente*
-4. **TASK-004** (crítica, bloqueada) — Mapear dependencias entre contexts — *Depende de TASK-001, -002, -003*
-5. **TASK-005** (crítica, bloqueada) — Plan detallado migración — *Depende de TASK-004*
+1. **TASK-014** (high) — Candidate aggregate + Application context — *Pendiente*
+2. **TASK-015** (crítica, bloqueada) — OAuth2 + JWT en User-Service — *Depende de TASK-014*
+3. **TASK-016** (high) — Setup Search-Service + Elasticsearch indexing — *Pendiente*
+4. **TASK-017** (high, bloqueada) — Filtrado avanzado y ranking — *Depende de TASK-016*
+5. **TASK-018** (high, bloqueada) — Notification-Service + Email integration — *Depende de TASK-012, TASK-014, TASK-016*
 
 ## ▸ AGENTES ACTIVOS
 
@@ -65,6 +65,14 @@ Migrar la lógica de negocio del monolito ubicado en `/legacy` hacia microservic
 - **Especialidad:** Orquestación de tareas, validación de reglas de negocio y mantenimiento de este contexto.
 - **Status actual:** Awaiting signal SIG-INIT-002
 - **Prioridad Máxima:** Media.
+
+### 🤖 Cursor GPT Assistant
+- **ID:** `cursor-gpt`
+- **Modelo:** GPT 5.1
+- **Rol:** `assistant` (Implementación + consistencia AI workspace)
+- **Especialidad:** Implementación de código, refactors guiados, verificación de consistencia entre `context.md`, `tasks.yaml` y shards de conocimiento.
+- **Status actual:** Sesión activa revisando tareas completadas y corrigiendo inconsistencias del AI workspace.
+- **Prioridad Máxima:** Crítica.
 
 ## ▸ ARCHIVOS CRÍTICOS
 - `/legacy/`: Directorio **READ-ONLY** ⛔. Contiene el monolito original. NO MODIFICAR bajo NINGUNA circunstancia.
