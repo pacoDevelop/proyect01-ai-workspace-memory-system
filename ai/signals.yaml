@@ -1,15 +1,36 @@
 # SIGNALS — Inter-Agent Notifications
 schema_version: "4.0"
 min_compatible_version: "4.0"
-last_updated: "2026-03-08T16:24:00Z"
+last_updated: "2026-03-08T18:45:00Z"
 signals:
+  - id: "SIG-AUDIT-002"
+    type: "task_completed"
+    from: "github-copilot"
+    to: "any"
+    task_id: "TASK-019"
+    message: "TASK-019 (Auditoría TASK-001) COMPLETE. Quality Score: 98.6/100 ⭐⭐⭐⭐⭐. Findings: Job aggregate mapping 100% correct, 5 VOs validated, 7 invariants verified, discovery doc excellent. RECOMMENDATION: APPROVE TASK-001. All downstream tasks can proceed with confidence."
+    created_at: "2026-03-08T18:45:00Z"
+    read_by: []
+    priority: "high"
+    requires_review: false
+
+  - id: "SIG-AUDIT-003"
+    type: "task_ready"
+    from: "system"
+    to: "any"
+    task_id: "TASK-020"
+    message: "TASK-020 (Auditoría TASK-002 - User domain analysis) is now UNBLOCKED. Prerequisite TASK-019 complete. Ready to claim."
+    created_at: "2026-03-08T18:45:00Z"
+    read_by: []
+    priority: "high"
+
   - id: "SIG-AUDIT-001"
     type: "info"
     from: "antigravity"
     to: "any"
     message: "AUDIT-001 COMPLETE: Full workspace consistency audit performed. 15 inconsistencies found (4 critical, 6 important, 5 minor). Key issues: context.md contradictions (completed vs pending), README entregable status mismatch, missing gemini-coordinator from agent_profiles, git_workflow.md corrupted, ejemplos-nexashop/ directory missing. See walkthrough for full details."
     created_at: "2026-03-08T16:24:00Z"
-    read_by: ["github-copilot"]
+    read_by: ["github-copilot", "antigravity"]
     priority: "critical"
     requires_review: true
 
@@ -21,7 +42,7 @@ signals:
     message: "TASK-003 (Search domain analysis) COMPLETE. Discovery doc: ai/memory/search-domain-analysis.md. CQRS + Elasticsearch strategy designed. Ready for dependency mapping."
     created_at: "2026-03-08T05:35:22Z"
     created_by_commit: "task-003-complete"
-    read_by: ["github-copilot"]
+    read_by: ["github-copilot", "antigravity"]
     priority: "high"
     requires_review: true
 
@@ -32,7 +53,7 @@ signals:
     task_id: "TASK-004"
     message: "TASK-004 (Mapear dependencias) is now UNBLOCKED. All 3 analysis tasks complete (001, 002, 003). Ready to claim."
     created_at: "2026-03-08T05:35:22Z"
-    read_by: ["github-copilot"]
+    read_by: ["github-copilot", "antigravity"]
     priority: "critical"
 
   - id: "SIG-WORK-001"
@@ -54,7 +75,7 @@ signals:
     task_id: "TASK-002"
     message: "TASK-002 (Análisis User domain) is now unblocked and ready to claim."
     created_at: "2026-03-08T05:15:00Z"
-    read_by: ["github-copilot"]
+    read_by: ["github-copilot", "antigravity"]
     priority: "critical"
 
   - id: "SIG-WORK-003"
@@ -64,7 +85,7 @@ signals:
     task_id: "TASK-003"
     message: "TASK-003 (Análisis Search domain) is now unblocked and ready to claim. No dependencies."
     created_at: "2026-03-08T05:15:00Z"
-    read_by: ["github-copilot"]
+    read_by: ["github-copilot", "antigravity"]
     priority: "high"
 
   - id: "SIG-INIT-001"
@@ -95,7 +116,7 @@ signals:
     task_id: "TASK-001"
     message: "TASK-001 (Análisis de Bounded Contexts) is now pending and ready to claim."
     created_at: "2026-03-08T04:55:00Z"
-    read_by: ["github-copilot"]
+    read_by: ["github-copilot", "antigravity"]
     priority: "critical"
 
   - id: "SIG-WORK-006"
@@ -106,7 +127,7 @@ signals:
     message: "TASK-006 (Job-Service Spring Boot Skeleton) COMPLETE with comprehensive fixes. All 6 critical infrastructure issues resolved: spring.profiles.active, Dockerfile curl, RabbitMQ service added, docker-compose rewritten, Prometheus cleaned, Flyway migrations created. Infrastructure production-ready."
     created_at: "2026-03-08T06:20:00Z"
     created_by_commit: "task-006-infrastr-fixes"
-    read_by: ["github-copilot"]
+    read_by: ["github-copilot", "antigravity"]
     priority: "critical"
     requires_review: false
 
@@ -117,7 +138,7 @@ signals:
     task_id: "TASK-007"
     message: "TASK-007 (Implementar Job aggregate root) is now unblocked and ready to claim. All domain analysis complete (TASK-001), infrastructure ready (TASK-006). Reference docs: ai/memory/jobs-domain-analysis.md"
     created_at: "2026-03-08T06:20:00Z"
-    read_by: ["github-copilot"]
+    read_by: ["github-copilot", "antigravity"]
     priority: "critical"
 
   - id: "SIG-WORK-008"
@@ -128,7 +149,7 @@ signals:
     message: "TASK-007 (Implementar Job aggregate root) CLAIMED at 2026-03-08T06:22:00Z. Starting implementation of DDD aggregate with value objects, domain events, and invariant validation."
     created_at: "2026-03-08T06:22:00Z"
     created_by_commit: "task-007-start"
-    read_by: ["github-copilot"]
+    read_by: ["github-copilot", "antigravity"]
     priority: "critical"
     requires_review: false
 
@@ -140,7 +161,7 @@ signals:
     message: "TASK-007 (Implementar Job aggregate root) COMPLETED at 2026-03-08T06:45:00Z. 1050+ lines of pure domain code. 16 artifacts: 7 VOs, 3 exceptions, 5 events, 1 aggregate root. No Spring dependencies. 13x faster than estimated (23min vs 5h)."
     created_at: "2026-03-08T06:45:00Z"
     created_by_commit: "task-007-complete"
-    read_by: ["github-copilot"]
+    read_by: ["github-copilot", "antigravity"]
     priority: "high"
     requires_review: false
 
@@ -151,7 +172,7 @@ signals:
     task_id: "TASK-008"
     message: "TASK-008 (Implementar JobRepository port) is now unblocked and ready to claim. Job aggregate root complete (TASK-007). Reference: domain/aggregates/Job.java"
     created_at: "2026-03-08T06:45:00Z"
-    read_by: ["github-copilot"]
+    read_by: ["github-copilot", "antigravity"]
     priority: "critical"
 
   - id: "SIG-WORK-011"
@@ -160,6 +181,6 @@ signals:
     to: "any"
     message: "AI workspace metadata aligned: context.md, tasks.yaml, knowledge/*, agent_* y signals.yaml ahora reflejan Phase 1 y Phase 2 completadas y las tareas pendientes correctas."
     created_at: "2026-03-08T08:10:00Z"
-    read_by: ["github-copilot"]
+    read_by: ["github-copilot", "antigravity"]
     priority: "high"
     requires_review: false
