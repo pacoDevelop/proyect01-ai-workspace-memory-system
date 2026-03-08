@@ -1,10 +1,16 @@
 # AGENT LOCK — Mutex distribuido
 schema_version: "3.0"
 min_compatible_version: "2.0"
-last_updated: "2026-03-09T00:00:00Z"
-last_updated_by: "antigravity"
+last_updated: "2026-03-09T00:10:00Z"
+last_updated_by: "github-copilot"
 
 active_agents: []
 
-ghost_entries: []
-note: "No active agents. TASK-035 Search Advanced Audit complete."
+ghost_entries:
+  - agent_id: "antigravity"
+    detected_at: "2026-03-09T00:10:00Z"
+    last_heartbeat_was: "2026-03-08T23:40:00Z"
+    cleaned_by: "github-copilot"
+    cleaned_at: "2026-03-09T00:10:00Z"
+
+note: "Ghost agent antigravity cleaned. TASK-035 reverted to pending."

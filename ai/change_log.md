@@ -30,6 +30,24 @@ Auditoría de TASK-016 finalizada. Se confirma la inexistencia de infraestructur
 
 ---
 
+## [2026-03-09T00:10:00Z] RECOVERY: GHOST AGENT CLEANUP (SESSION-031-PROTOCOL)
+
+**Type:** recovery-cleanup | **Responsible:** github-copilot | **Scope:** Agent Lock Consistency
+
+### Summary
+
+Detección y limpieza de agente fantasma (`antigravity`) que dejó TASK-035 en estado "in_progress" sin mantener heartbeat.
+
+**Acciones tomadas:**
+- ✅ Detección de heartbeat expirado (> 90 minutos).
+- ✅ Movimiento de entrada de agente a `ghost_entries` en agent_lock.yaml.
+- ✅ Revertimiento de TASK-035 de "in_progress" a "pending" (desbloqueando tarea).
+- ✅ Clearing de `assigned_agent` y timestamps.
+
+**TASK-035:** Task-audit "REVIEW: Auditoría de TASK-017" liberada para ser reclamada nuevamente.
+
+---
+
 ## [2026-03-08T21:47:00Z] TASK-036: AUDITORÍA DE TASK-018 COMPLETADA Y APROBADA (SESSION-030)
 
 **Type:** security-audit-closure | **Responsible:** github-copilot | **Scope:** Notification-Service Audit Formalization
