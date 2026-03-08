@@ -1,10 +1,22 @@
 # AGENT LOCK — Mutex distribuido
 schema_version: "3.0"
 min_compatible_version: "2.0"
-last_updated: "2026-03-08T21:00:00Z"
+last_updated: "2026-03-08T21:10:00Z"
 last_updated_by: "antigravity"
 
-active_agents: []
+active_agents:
+  - agent_id: "antigravity"
+    session_id: "20260308-2110-antigravity"
+    started_at: "2026-03-08T21:10:00Z"
+    last_heartbeat: "2026-03-08T21:10:00Z"
+    current_task: "TASK-033"
+    status: "working"
+    working_branch: "main"
+    base_branch: "main"
+    locked_files:
+      - "ai/tasks.yaml"
+      - "services/user-service/src/main/java/com/jrecruiter/userservice/infrastructure/security"
+      - "services/user-service/src/main/java/com/jrecruiter/userservice/infrastructure/config"
+    notes: "Auditing TASK-015 (Security/OAuth2/JWT)"
 
 ghost_entries: []
-note: "No active agents. TASK-032 Audit complete."
