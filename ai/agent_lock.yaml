@@ -1,28 +1,10 @@
 # AGENT LOCK — Mutex distribuido
 schema_version: "3.0"
 min_compatible_version: "2.0"
-last_updated: "2026-03-08T08:00:00Z"
+last_updated: "2026-03-08T08:10:00Z"
 last_updated_by: "cursor-gpt"
 
-active_agents:
-  - agent_id: "cursor-gpt"
-    session_id: "20260308-080000-cursor-gpt"
-    started_at: "2026-03-08T08:00:00Z"
-    last_heartbeat: "2026-03-08T08:00:00Z"
-    current_task: "TASK-META-AI-WORKSPACE-CONSISTENCY"
-    status: "working"
-    working_branch: "feat/TASK-META-ai-workspace-consistency"
-    base_branch: "main"
-    merge_strategy: "squash"
-    locked_files:
-      - "ai/agent_profiles.yaml"
-      - "ai/agent_lock.yaml"
-      - "ai/context.md"
-      - "ai/tasks.yaml"
-      - "ai/knowledge/jobs-domain.md"
-      - "ai/knowledge/user-domain.md"
-      - "ai/knowledge/context-dependencies.md"
-    notes: "Revisando y corrigiendo la consistencia del AI workspace (context.md, tasks.yaml, knowledge/*) según el patrón definido."
+active_agents: []
 
 ghost_entries: []
-note: "✅ SESSION-005 COMPLETED. TASK-010 through TASK-013 fully implemented. Job-Service 100% complete (Phase 2). User-Service initialized with Employer domain layer (Phase 3 start). Agent lock released. ✅ SESSION-006 OPENED by cursor-gpt for AI workspace consistency checks."
+note: "✅ SESSION-005 COMPLETED. TASK-010 through TASK-013 fully implemented. Job-Service 100% complete (Phase 2). User-Service initialized with Employer domain layer (Phase 3 start). Agent lock released. ✅ SESSION-006 COMPLETED by cursor-gpt (AI workspace consistency checks). Agent lock released."
