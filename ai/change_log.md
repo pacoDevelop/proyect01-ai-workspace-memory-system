@@ -63,6 +63,7 @@ Refactor integral del agregado `Candidate` para eliminar reflexión y aseguramie
 - **Eventos:** Creados `CandidateEvents`, `ApplicationEvents`, `EmployerEvents` (wrapped records).
 - **Infra:** Creadas entidades JPA manuales y adaptadores Postgres. Script Flyway V1.
 - **Seguridad:** Migración a Spring Security 6.x y actualización de JWT Provider.
+- **Corrección:** Restauración de Java 21 como estándar de construcción.
 
 ---
 
