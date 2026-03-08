@@ -539,10 +539,11 @@ tasks:
     description: "Lógica de aplicaciones, estado, communicaciones."
     priority: "high"
     severity: "important"
-    status: "claimed"
+    status: "in_progress"
     assigned_agent: "antigravity"
     claimed_at: "2026-03-08T22:00:00Z"
-    updated_at: "2026-03-08T22:00:00Z"
+    started_at: "2026-03-08T22:10:00Z"
+    updated_at: "2026-03-08T22:10:00Z"
     estimated_effort: "6h"
     created_at: "2026-03-08T04:50:00Z"
     tags: ["ddd", "user-service"]
@@ -556,6 +557,7 @@ tasks:
       - {from: "in_progress", to: "done", at: "2026-03-08T15:45:00Z", by: "github-copilot"}
       - {from: "done", to: "todo", at: "2026-03-08T21:45:00Z", by: "antigravity [CORRECTION]"}
       - {from: "todo", to: "claimed", at: "2026-03-08T21:23:00Z", by: "antigravity"}
+      - {from: "claimed", to: "in_progress", at: "2026-03-08T22:12:00Z", by: "antigravity"}
 
   - id: "TASK-015"
     title: "Implementar OAuth2 + JWT en User-Service"
