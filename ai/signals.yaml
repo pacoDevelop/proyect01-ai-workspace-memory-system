@@ -1,7 +1,7 @@
 # SIGNALS — Inter-Agent Notifications
 schema_version: "4.0"
 min_compatible_version: "4.0"
-last_updated: "2026-03-09T01:15:00Z"
+last_updated: "2026-03-09T01:20:00Z"
 signals:
   - id: "SIG-WORK-012"
     type: "task_completed"
@@ -10,7 +10,7 @@ signals:
     task_id: "TASK-016"
     message: "TASK-016 (Search-Service Infra Restoration) COMPLETE. pom.xml, Dockerfile and application.yml created. Messaging aligned with Job-Service (job-search-queue). Ready for Search functional verification."
     created_at: "2026-03-09T01:15:00Z"
-    read_by: ["antigravity"]
+    read_by: ["antigravity", "github-copilot"]
     priority: "high"
     requires_review: false
 
