@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  job-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - DATABASE_URL=jdbc:postgresql://postgres:5432/jrecruiter
+      - DATABASE_USERNAME=job_service
+      - DATABASE_PASSWORD=password
+      - JWT_SECRET=development_secret_key_change_in_production
+      - LOG_LEVEL=INFO
+    depends_on:
+      - postgres
+    networks:
+      - jrecruiter-network
+    volumes:
+      - ./logs:/app/logs
+      - ./config:/app/config
+
+  postgres:
+    image: postgres:15-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=jrecruiter
+      - POSTGRES_USER=job_service
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    networks:
+      - jrecruiter-network
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - jrecruiter-network
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./config/grafana:/etc/grafana/provisioning
+    networks:
+      - jrecruiter-network
+
+volumes:
+  postgres_data:
+  grafana_data:
+
+networks:
+  jrecruiter-network:
+    driver: bridge

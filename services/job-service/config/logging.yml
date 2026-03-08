@@ -1,0 +1,20 @@
+logging:
+  level:
+    org.jrecruiter: INFO
+    org.springframework: INFO
+    org.hibernate.SQL: WARN
+    org.hibernate.type.descriptor.sql.BasicBinder: WARN
+    org.springframework.security: INFO
+    org.springframework.web: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: ${LOG_FILE:logs/job-service.log}
+    max-size: ${LOG_FILE_MAX_SIZE:10MB}
+    max-history: ${LOG_FILE_MAX_HISTORY:30}
+    total-size-cap: ${LOG_FILE_TOTAL_SIZE_CAP:1GB}
+    clean-history-on-start: ${LOG_FILE_CLEAN_HISTORY:true}
+  logstash:
+    enabled: ${LOGSTASH_ENABLED:false}
+    destination: ${LOGSTASH_DESTINATION:localhost:5044}

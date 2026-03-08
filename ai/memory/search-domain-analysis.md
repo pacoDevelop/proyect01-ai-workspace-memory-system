@@ -801,18 +801,76 @@ public class PublishJobCommand {
   }
 }
 
-// Separate process (poller or CDC):
-@Scheduled(fixedDelay = 100) // Poll every 100ms
-public void publishUnsentEvents() {
-  List<OutboxEntry> unsent = outboxRepository.findByPublishedFalse();
+// Separate process (poller): Guaranteed event delivery
+@Service
+@Slf4j
+public class OutboxEventPublisher {
+  private final OutboxRepository outboxRepository;
+  private final RabbitTemplate rabbitTemplate;
+  private final ExceptionHandler exceptionHandler;
   
-  for (OutboxEntry entry : unsent) {
+  @Scheduled(fixedDelay = 100) // Poll every 100ms
+  public void publishUnsentEvents() {
+    List<OutboxEntry> unsent = outboxRepository.findByPublishedFalseAndAttemptsLessThan(5);
+    
+    for (OutboxEntry entry : unsent) {
+      try {
+        // Publish to RabbitMQ with routing key
+        rabbitTemplate.convertAndSend(
+            "job-events",  // Exchange
+            entry.getEventType().toLowerCase(),  // Routing key
+            entry.getPayload()
+        );
+        
+        // Mark as published only after successful send
+        entry.markAsPublished();
+        outboxRepository.save(entry);
+        log.info("Event published to RabbitMQ: {}", entry.getEventId());
+        
+      } catch (Exception e) {
+        // Exponential backoff: 2^attempt seconds delay
+        long delaySecs = (long) Math.pow(2, entry.getAttempts());
+        entry.incrementAttempts();
+        entry.setNextRetryAt(Instant.now().plusSeconds(delaySecs));
+        
+        outboxRepository.save(entry);
+        log.warn("Failed to publish event {}, retry #{} scheduled (delay: {}s): {}",
+            entry.getEventId(), entry.getAttempts(), delaySecs, e.getMessage());
+        
+        // After 5 attempts, send to dead-letter queue
+        if (entry.getAttempts() >= 5) {
+          handleDeadLetterEvent(entry, e);
+        }
+      }
+    }
+  }
+  
+  private void handleDeadLetterEvent(OutboxEntry entry, Exception cause) {
     try {
-      messageBroker.publish(entry.getEvent());
-      outboxRepository.markAsPublished(entry.getId());
-    } catch (Exception e) {
-      // Retry logic, exponential backoff
-      logger.error("Failed to publish event, will retry", e);
+      // Send to DLQ for manual investigation
+      rabbitTemplate.convertAndSend(
+          "job-events-dlq",  // Dead-letter exchange
+          "dead-letter",
+          entry.getPayload(),
+          message -> {
+            message.getMessageProperties().setHeader("x-original-event-id", entry.getEventId());
+            message.getMessageProperties().setHeader("x-failure-reason", cause.getMessage());
+            message.getMessageProperties().setHeader("x-retry-attempts", entry.getAttempts());
+            return message;
+          }
+      );
+      
+      entry.markAsDeadLettered();
+      outboxRepository.save(entry);
+      
+      // Alert operations team
+      exceptionHandler.alertOperations(
+          "Event DLQ: " + entry.getEventId() + " after 5 retries"
+      );
+      
+      log.error("Event sent to DLQ after 5 failed attempts: {}", entry.getEventId());
+    } catch (Exception dlqError) {
+      log.error("CRITICAL: Failed to send event to DLQ: {}", entry.getEventId(), dlqError);
     }
   }
 }
@@ -826,27 +884,79 @@ public void publishUnsentEvents() {
 ### Idempotent Event Handling (Search-Service)
 
 ```java
-// Search-Service
+// Search-Service: Event Consumer with Retry & Error Handling
 @Service
+@Slf4j
 public class JobIndexingEventListener {
+  private final JobIndexingService indexingService;
+  private final ProcessedEventRepository processedEventRepository;
+  private final RabbitTemplate rabbitTemplate;
   
-  @RabbitListener(queues = "job-search-queue")
-  public void handleJobPublished(JobPublishedEvent event) throws Exception {
-    // Check if already processed
-    if (eventRepository.existsById(event.getEventId())) {
-      logger.info("Event already processed, skipping: {}", event.getEventId());
-      return;  // Idempotent
-    }
+  @RabbitListener(queues = "job-search-queue", concurrency = "3")
+  public void handleJobPublished(
+      JobPublishedEvent event,
+      Channel channel,
+      @Header(AmqpHeaders.DELIVERY_TAG) long deliveryTag) throws Exception {
     
     try {
-      // Index the job in Elasticsearch
-      elasticsearchService.indexJob(event.toJobDocument());
+      // IDEMPOTENCY CHECK: Has this event been processed before?
+      if (processedEventRepository.existsById(event.getEventId())) {
+        log.info("Event already processed (idempotent), skipping: {}", event.getEventId());
+        // Acknowledge message
+        channel.basicAck(deliveryTag, false);
+        return;
+      }
       
-      // Mark as processed
-      eventRepository.save(new ProcessedEvent(event.getEventId()));
+      // INDEX THE JOB: Write to Elasticsearch
+      try {
+        elasticsearchService.indexJob(event.toJobDocument());
+        log.info("Job indexed successfully: {} (jobId: {})", event.getEventId(), event.getJobId());
+      } catch (IOException esException) {
+        log.error("Elasticsearch indexing failed: {}", event.getEventId(), esException);
+        // Requeue for retry (Spring AMQP automatic retry)
+        throw new RuntimeException("ES indexing failed, will retry", esException);
+      }
+      
+      // MARK AS PROCESSED: Store event ID to prevent duplicates
+      ProcessedEvent processedEvent = new ProcessedEvent(
+          event.getEventId(),
+          Instant.now()
+      );
+      processedEventRepository.save(processedEvent);
+      
+      // ACKNOWLEDGE MESSAGE: Tell RabbitMQ consumption was successful
+      channel.basicAck(deliveryTag, false);
+      log.debug("Message acknowledged: {}", event.getEventId());
+      
+    } catch (RetryableException e) {
+      // Retryable errors: Elasticsearch down, network timeout
+      log.warn("Retryable error processing event {}: {}", event.getEventId(), e.getMessage());
+      
+      // NACK WITH REQUEUE: Tell RabbitMQ to retry this message
+      channel.basicNack(deliveryTag, false, true);
+      
+    } catch (NonRetryableException e) {
+      // Non-retryable errors: Invalid event format, validation failure
+      log.error("Non-retryable error, sending to DLQ: {}", event.getEventId(), e);
+      
+      // Send to dead-letter queue for manual investigation
+      rabbitTemplate.convertAndSend(
+          "job-search-dlq",  // Dead-letter exchange
+          "dead-letter",
+          event,
+          message -> {
+            message.getMessageProperties().setHeader("x-error-reason", e.getMessage());
+            return message;
+          }
+      );
+      
+      // ACKNOWLEDGE TO REMOVE FROM MAIN QUEUE
+      channel.basicAck(deliveryTag, false);
+      
     } catch (Exception e) {
-      // Requeue for retry
-      throw e;  // Spring AMQP will requeue
+      // Unexpected error: Log and NACK
+      log.error("Unexpected error processing job event {}", event.getEventId(), e);
+      channel.basicNack(deliveryTag, false, true);  // Requeue
     }
   }
 }
@@ -856,6 +966,169 @@ public class JobIndexingEventListener {
 - At-Least-Once delivery (RabbitMQ retry)
 - Idempotent processing (event ID tracking)
 - Eventual consistency (Search-Service eventually reflects all writes)
+
+---
+
+## Part 7B: RabbitMQ Configuration (Complete)
+
+```yaml
+# application.yml - RabbitMQ Configuration
+
+spring:
+  rabbitmq:
+    host: rabbitmq.default.svc.cluster.local  # Kubernetes service name
+    port: 5672
+    username: job-service
+    password: ${RABBITMQ_PASSWORD}  # From secrets
+    virtual-host: /jrecruiter
+    connection-timeout: 10000  # 10 seconds
+    
+    # Consumer settings
+    listener:
+      simple:
+        concurrency: 3  # Number of concurrent consumers
+        max-concurrency: 10
+        prefetch: 1  # Process one message at a time (guarantees ordering)
+        # Explicit acknowledgment: manual acking in code
+        acknowledge-mode: manual
+        default-requeue-rejected: true  # Retry on exception
+        
+    # Publisher settings
+    template:
+      retry:
+        enabled: true
+        initial-interval: 1000  # 1 second
+        max-interval: 10000  # 10 seconds
+        multiplier: 2.0  # Exponential backoff
+        max-attempts: 3  # Retry max 3 times
+      exchange: job-events  # Default exchange for publishes
+```
+
+### Java Configuration for Dead-Letter Queue
+
+```java
+@Configuration
+public class RabbitMQConfig {
+  
+  // ============= MAIN EXCHANGES & QUEUES =============
+  
+  // Fanout exchange for publishing job events
+  @Bean
+  public FanoutExchange jobEventsExchange() {
+    return new FanoutExchange(
+        "job-events",           // Exchange name
+        true,                   // Durable
+        false,                  // Not auto-delete
+        Collections.emptyMap()  // No arguments
+    );
+  }
+  
+  // Queue for Search-Service to consume job events
+  @Bean
+  public Queue jobSearchQueue() {
+    return QueueBuilder.durable("job-search-queue")
+        .arguments(
+            // Dead-letter queue configuration
+            Map.of(
+                "x-dead-letter-exchange", "job-search-dlq",
+                "x-message-ttl", 86400000,  // 24 hour TTL on messages
+                "x-max-length", 100000     // Max 100k messages in queue
+            )
+        )
+        .build();
+  }
+  
+  // Binding: job-events exchange → job-search-queue
+  @Bean
+  public Binding jobSearchBinding(
+      Queue jobSearchQueue,
+      FanoutExchange jobEventsExchange) {
+    return BindingBuilder
+        .bind(jobSearchQueue)
+        .to(jobEventsExchange);
+  }
+  
+  // Queue for Notification-Service
+  @Bean
+  public Queue jobNotificationQueue() {
+    return QueueBuilder.durable("job-notification-queue")
+        .arguments(Map.of(
+            "x-dead-letter-exchange", "job-notification-dlq",
+            "x-message-ttl", 86400000
+        ))
+        .build();
+  }
+  
+  @Bean
+  public Binding jobNotificationBinding(
+      Queue jobNotificationQueue,
+      FanoutExchange jobEventsExchange) {
+    return BindingBuilder
+        .bind(jobNotificationQueue)
+        .to(jobEventsExchange);
+  }
+  
+  // ============= DEAD-LETTER QUEUES (DLQ) =============
+  
+  // Dead-letter exchange for failed search indexing
+  @Bean
+  public DirectExchange jobSearchDlqExchange() {
+    return new DirectExchange("job-search-dlq", true, false);
+  }
+  
+  @Bean
+  public Queue jobSearchDlqQueue() {
+    return QueueBuilder.durable("job-search-dlq-queue")
+        .arguments(Map.of(
+            "x-message-ttl", 604800000  // 7 day TTL
+        ))
+        .build();
+  }
+  
+  @Bean
+  public Binding jobSearchDlqBinding(
+      Queue jobSearchDlqQueue,
+      DirectExchange jobSearchDlqExchange) {
+    return BindingBuilder
+        .bind(jobSearchDlqQueue)
+        .to(jobSearchDlqExchange)
+        .with("dead-letter");
+  }
+  
+  // Dead-letter queue for failed notification delivery
+  @Bean
+  public DirectExchange jobNotificationDlqExchange() {
+    return new DirectExchange("job-notification-dlq", true, false);
+  }
+  
+  @Bean
+  public Queue jobNotificationDlqQueue() {
+    return QueueBuilder.durable("job-notification-dlq-queue")
+        .arguments(Map.of(
+            "x-message-ttl", 604800000
+        ))
+        .build();
+  }
+  
+  @Bean
+  public Binding jobNotificationDlqBinding(
+      Queue jobNotificationDlqQueue,
+      DirectExchange jobNotificationDlqExchange) {
+    return BindingBuilder
+        .bind(jobNotificationDlqQueue)
+        .to(jobNotificationDlqExchange)
+        .with("dead-letter");
+  }
+  
+  // ============= MESSAGE CONVERTER =============
+  
+  // Convert events to/from JSON
+  @Bean
+  public MessageConverter jacksonMessageConverter() {
+    return new Jackson2JsonMessageConverter();
+  }
+}
+```
 
 ---
 

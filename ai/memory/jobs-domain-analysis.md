@@ -233,35 +233,180 @@ enum JobPostingStatus {
 
 ---
 
-## ▸ AGGREGATE ROOT INTERFACE (New DDD Design)
+## ▸ AGGREGATE ROOT — Complete Implementation
 
 ```java
 public class Job {
   // IDENTITY
   private final UUID jobId;              // Surrogate key
   private final UUID universalId;        // Business key
-  private final UUID employerId;         // "Owner" reference
+  private final UUID employerId;         // "Owner" reference (no FK)
   
-  // CORE DATA
-  private final JobTitle title;          // Value object
+  // CORE DATA (Immutable)
+  private final JobTitle title;
   private final JobDescription description;
   private final CompanyName companyName;
   private final JobLocation location;
   private final JobSalary salary;
+  private final OfferedBy offeredBy;
+  private final Industry industry;       // Reference data (ID only)
+  private final Region region;           // Reference data (ID only)
   
-  // METADATA
-  private JobPostingStatus status;       // Mutable
-  private OfferedBy offeredBy;
+  // MUTABLE STATE
+  private JobPostingStatus status;
   private Instant createdAt;
   private Instant publishedAt;
   private Instant closedAt;
+  private Instant updatedAt;
   
-  //BEHAVIOUR (Methods to add)
-  public void publish() { /* Business logic */ }
-  public void close() { /* Business logic */ }
-  public void updateLocation(JobLocation newLocation) { /* ... */ }
-  public boolean canPublish() { /* Invariant checks */ }
-  public JobCreatedEvent publishDomainEvent() { /* ... */ }
+  // TRANSIENT (not persisted)
+  private List<DomainEvent> domainEvents = new ArrayList<>();
+  
+  // FACTORY METHOD: Create new (draft) job
+  public static Job createDraft(
+      UUID jobId,
+      UUID universalId,
+      UUID employerId,
+      JobTitle title,
+      JobDescription description,
+      CompanyName companyName,
+      JobLocation location,
+      JobSalary salary,
+      OfferedBy offeredBy,
+      Industry industry,
+      Region region) {
+    
+    // Validate invariants at creation
+    if (jobId == null) throw new InvalidJobException("jobId is required");
+    if (employerId == null) throw new InvalidJobException("employerId is required");
+    if (title == null) throw new InvalidJobException("title is required");
+    if (description == null) throw new InvalidJobException("description is required");
+    if (companyName == null) throw new InvalidJobException("companyName is required");
+    if (location == null) throw new InvalidJobException("location is required");
+    
+    Job job = new Job(
+        jobId, universalId, employerId,
+        title, description, companyName, location, salary, offeredBy,
+        industry, region
+    );
+    
+    job.status = JobPostingStatus.DRAFT;
+    job.createdAt = Instant.now();
+    job.updatedAt = Instant.now();
+    
+    return job;
+  }
+  
+  // PRIVATE CONSTRUCTOR: Only called via factory methods
+  private Job(UUID jobId, UUID universalId, UUID employerId,
+              JobTitle title, JobDescription description,
+              CompanyName companyName, JobLocation location,
+              JobSalary salary, OfferedBy offeredBy,
+              Industry industry, Region region) {
+    this.jobId = jobId;
+    this.universalId = universalId;
+    this.employerId = employerId;
+    this.title = title;
+    this.description = description;
+    this.companyName = companyName;
+    this.location = location;
+    this.salary = salary;
+    this.offeredBy = offeredBy;
+    this.industry = industry;
+    this.region = region;
+  }
+  
+  // BEHAVIOR: Publish job (transition DRAFT → PUBLISHED)
+  public void publish() {
+    if (!this.canPublish()) {
+      throw new InvalidJobStateException(
+          "Cannot publish job in state: " + this.status);
+    }
+    
+    this.status = JobPostingStatus.PUBLISHED;
+    this.publishedAt = Instant.now();
+    this.updatedAt = Instant.now();
+    
+    // Emit domain event
+    this.domainEvents.add(new JobPublishedEvent(
+        this.jobId,
+        this.title,
+        this.description,
+        this.location,
+        this.salary,
+        this.employerId,
+        this.publishedAt
+    ));
+  }
+  
+  // BEHAVIOR: Close job (transition PUBLISHED → CLOSED)
+  public void close() {
+    if (this.status == JobPostingStatus.CLOSED || 
+        this.status == JobPostingStatus.ARCHIVED) {
+      throw new InvalidJobStateException(
+          "Cannot close already closed job: " + this.status);
+    }
+    
+    this.status = JobPostingStatus.CLOSED;
+    this.closedAt = Instant.now();
+    this.updatedAt = Instant.now();
+    
+    // Emit domain event
+    this.domainEvents.add(new JobClosedEvent(
+        this.jobId,
+        this.closedAt
+    ));
+  }
+  
+  // BEHAVIOR: Update location
+  public void updateLocation(JobLocation newLocation) {
+    if (newLocation == null) {
+      throw new InvalidJobException("Location cannot be null");
+    }
+    
+    // Note: We can't reassign final field, so we'd need a new Job
+    // Or use Kotlin data classes with copy()
+    // For now, document that location is immutable
+    throw new UnsupportedOperationException(
+        "Location is immutable. Create new Job version to change.");
+  }
+  
+  // QUERY: Can this job be published?
+  public boolean canPublish() {
+    return this.status == JobPostingStatus.DRAFT &&
+           this.title != null &&
+           this.description != null &&
+           this.location != null &&
+           this.location.getAddress1() != null;
+  }
+  
+  // QUERY: Get all domain events
+  public Collection<DomainEvent> getDomainEvents() {
+    return Collections.unmodifiableCollection(this.domainEvents);
+  }
+  
+  // QUERY: Clear domain events after publishing
+  public void clearDomainEvents() {
+    this.domainEvents.clear();
+  }
+  
+  // GETTERS
+  public UUID getJobId() { return jobId; }
+  public UUID getUniversalId() { return universalId; }
+  public UUID getEmployerId() { return employerId; }
+  public JobTitle getTitle() { return title; }
+  public JobDescription getDescription() { return description; }
+  public CompanyName getCompanyName() { return companyName; }
+  public JobLocation getLocation() { return location; }
+  public JobSalary getSalary() { return salary; }
+  public OfferedBy getOfferedBy() { return offeredBy; }
+  public Industry getIndustry() { return industry; }
+  public Region getRegion() { return region; }
+  public JobPostingStatus getStatus() { return status; }
+  public Instant getCreatedAt() { return createdAt; }
+  public Instant getPublishedAt() { return publishedAt; }
+  public Instant getClosedAt() { return closedAt; }
+  public Instant getUpdatedAt() { return updatedAt; }
 }
 ```
 

@@ -249,7 +249,7 @@ record UserRole(
 
 ---
 
-## ▸ AGGREGATE ROOT INTERFACE (New DDD Design)
+## ▸ AGGREGATE ROOT — Complete Implementation
 
 ```java
 public class User {
@@ -257,23 +257,191 @@ public class User {
   private final UUID userId;              // Surrogate key
   private final UserCredentials credentials;
   private final UserProfile profile;
-  private final UserStatus status;
+  
+  // MUTABLE STATE
+  private Boolean enabled;
+  private Instant lastLoginAt;
+  private String verificationKey;         // Nullable, cleared after verification
+  private Instant createdAt;
+  private Instant verifiedAt;             // Nullable, set after email verification
+  private Instant updatedAt;
   
   // ROLES (Value Objects Collection)
-  private final Set<UserRole> roles;
+  private Set<UserRole> roles = new HashSet<>();
   
-  // METADATA
-  private final Instant createdAt;
-  private final Instant verifiedAt;
-  private final Instant lastLoginAt;
+  // TRANSIENT (not persisted)
+  private List<DomainEvent> domainEvents = new ArrayList<>();
   
-  // BEHAVIOR (Methods to add)
-  public void verifyAccount(String verificationKey) { /* Business logic */ }
-  public void updateProfile(UserProfile newProfile) { /* Business logic */ }
-  public void assignRole(UserRole role) { /* Business logic */ }
-  public void revokeRole(String roleName) { /* Business logic */ }
-  public boolean canCreateJobs() { /* Business logic */ }
-  public UserVerifiedEvent verifyDomainEvent() { /* ... */ }
+  // FACTORY METHOD: Register new user
+  public static User registerNewUser(
+      UUID userId,
+      String username,
+      String email,
+      String plainPassword,  // Will be hashed
+      String firstName,
+      String lastName,
+      PasswordHashingService hashingService) {
+    
+    // Validate invariants
+    if (username == null || username.length() < 5 || username.length() > 50) {
+      throw new InvalidUserException("Username must be 5-50 chars");
+    }
+    if (!isValidEmail(email)) {
+      throw new InvalidUserException("Invalid email format");
+    }
+    if (plainPassword == null || plainPassword.length() < 8) {
+      throw new InvalidUserException("Password must be at least 8 chars");
+    }
+    if (firstName == null || firstName.isEmpty()) {
+      throw new InvalidUserException("First name is required");
+    }
+    if (lastName == null || lastName.isEmpty()) {
+      throw new InvalidUserException("Last name is required");
+    }
+    
+    // Hash password with bcrypt
+    String passwordHash = hashingService.hashPassword(plainPassword);
+    
+    // Generate verification token
+    String verificationKey = UUID.randomUUID().toString();
+    
+    // Create aggregate
+    User user = new User(
+        userId,
+        new UserCredentials(username, passwordHash, UserAuthenticationType.USERNAME_PASSWORD),
+        new UserProfile(firstName, lastName, email, null, null, null)
+    );
+    
+    user.enabled = false;  // Not enabled until verified
+    user.verificationKey = verificationKey;
+    user.createdAt = Instant.now();
+    user.updatedAt = Instant.now();
+    
+    // Emit event
+    user.domainEvents.add(new UserRegisteredEvent(
+        userId, username, email, firstName, lastName, verificationKey
+    ));
+    
+    return user;
+  }
+  
+  // PRIVATE CONSTRUCTOR
+  private User(UUID userId, UserCredentials credentials, UserProfile profile) {
+    this.userId = userId;
+    this.credentials = credentials;
+    this.profile = profile;
+  }
+  
+  // BEHAVIOR: Verify email account
+  public void verifyAccount(String providedVerificationKey) {
+    if (this.enabled) {
+      throw new InvalidUserStateException("Account already verified");
+    }
+    if (!providedVerificationKey.equals(this.verificationKey)) {
+      throw new InvalidVerificationKeyException("Invalid or expired verification key");
+    }
+    
+    this.enabled = true;
+    this.verifiedAt = Instant.now();
+    this.verificationKey = null;  // Clear after verification
+    this.updatedAt = Instant.now();
+    
+    // Emit event
+    this.domainEvents.add(new UserVerifiedEvent(
+        this.userId,
+        this.profile.getEmail(),
+        this.verifiedAt
+    ));
+  }
+  
+  // BEHAVIOR: Authenticate user (verify password)
+  public boolean authenticatePassword(
+      String plainPassword,
+      PasswordHashingService hashingService) {
+    if (!this.enabled) {
+      throw new AccountNotVerifiedException("Account is not verified");
+    }
+    
+    boolean matches = hashingService.verifyPassword(
+        plainPassword,
+        this.credentials.getPasswordHash()
+    );
+    
+    if (matches) {
+      this.lastLoginAt = Instant.now();
+      this.updatedAt = Instant.now();
+    }
+    
+    return matches;
+  }
+  
+  // BEHAVIOR: Assign role to user
+  public void assignRole(String roleName) {
+    if (!isValidRole(roleName)) {
+      throw new InvalidRoleException("Invalid role: " + roleName);
+    }
+    
+    // Check if already has role
+    if (this.roles.stream()
+        .anyMatch(r -> r.getRoleName().equals(roleName))) {
+      return;  // Already assigned
+    }
+    
+    this.roles.add(new UserRole(roleName));
+    this.updatedAt = Instant.now();
+  }
+  
+  // BEHAVIOR: Revoke role from user
+  public void revokeRole(String roleName) {
+    this.roles.removeIf(r -> r.getRoleName().equals(roleName));
+    this.updatedAt = Instant.now();
+  }
+  
+  // QUERY: Can this user create jobs?
+  public boolean canCreateJobs() {
+    return this.enabled &&
+           this.hasRole("ROLE_EMPLOYER") &&
+           this.profile.getCompany() != null;
+  }
+  
+  // QUERY: Check if user has specific role
+  public boolean hasRole(String roleName) {
+    return this.roles.stream()
+        .anyMatch(r -> r.getRoleName().equals(roleName));
+  }
+  
+  // QUERY: Get all domain events
+  public Collection<DomainEvent> getDomainEvents() {
+    return Collections.unmodifiableCollection(this.domainEvents);
+  }
+  
+  // QUERY: Clear domain events after publishing
+  public void clearDomainEvents() {
+    this.domainEvents.clear();
+  }
+  
+  // GETTERS
+  public UUID getUserId() { return userId; }
+  public UserCredentials getCredentials() { return credentials; }
+  public UserProfile getProfile() { return profile; }
+  public Boolean getEnabled() { return enabled; }
+  public Instant getLastLoginAt() { return lastLoginAt; }
+  public Instant getCreatedAt() { return createdAt; }
+  public Instant getVerifiedAt() { return verifiedAt; }
+  public Instant getUpdatedAt() { return updatedAt; }
+  public Set<UserRole> getRoles() { return Collections.unmodifiableSet(roles); }
+  
+  // HELPERS
+  private static boolean isValidEmail(String email) {
+    return email != null && email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$");
+  }
+  
+  private static boolean isValidRole(String roleName) {
+    return roleName != null && 
+           (roleName.equals("ROLE_EMPLOYER") || 
+            roleName.equals("ROLE_CANDIDATE") ||
+            roleName.equals("ROLE_RECRUITER"));
+  }
 }
 ```
 
@@ -385,5 +553,129 @@ public class JobApplication {
 3. **Authentication:** External service, User stores metadata
 4. **Application Context:** Separate bounded context (Candidate domain)
 5. **Password Security:** Domain service for hashing, PasswordHash VO
+
+---
+
+## ▸ PASSWORD HASHING DOMAIN SERVICE
+
+```java
+/**
+ * Domain Service responsible for password security operations.
+ * Pure cryptographic logic, no Spring dependencies.
+ * Used by User aggregate to hash and verify passwords.
+ */
+public interface PasswordHashingService {
+  /**
+   * Hash plaintext password using bcrypt (one-way, irreversible).
+   * @param plainPassword User's plaintext password
+   * @return Bcrypt hash (includes salt, cost factor)
+   */
+  String hashPassword(String plainPassword);
+  
+  /**
+   * Verify plaintext password against bcrypt hash.
+   * @param plainPassword User's provided password (login attempt)
+   * @param storedHash Bcrypt hash from database
+   * @return true if password matches, false otherwise
+   */
+  boolean verifyPassword(String plainPassword, String storedHash);
+}
+
+// Spring Boot Implementation
+@Component
+public class BcryptPasswordHashingService implements PasswordHashingService {
+  private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(10); // Cost factor: 10
+  
+  @Override
+  public String hashPassword(String plainPassword) {
+    if (plainPassword == null || plainPassword.isEmpty()) {
+      throw new IllegalArgumentException("Password cannot be empty");
+    }
+    return encoder.encode(plainPassword);
+    // Result: bcrypt hash like $2a$10$...
+  }
+  
+  @Override
+  public boolean verifyPassword(String plainPassword, String storedHash) {
+    if (plainPassword == null || storedHash == null) {
+      return false;
+    }
+    return encoder.matches(plainPassword, storedHash);
+  }
+}
+```
+
+---
+
+## ▸ RBAC TRANSFORMATION: Legacy → New
+
+### Legacy (Monolith) RBAC
+```java
+// Legacy architecture: User → UserToRole ← Role (join table)
+@Entity
+public class User {
+  @OneToMany(mappedBy = "user")
+  private Set<UserToRole> userToRoles;  // Join table rows
+}
+
+@Entity
+public class UserToRole {
+  @ManyToOne private User user;
+  @ManyToOne private Role role;
+}
+
+@Entity
+public class Role {
+  private String name;  // "ROLE_EMPLOYER", "ROLE_CANDIDATE"
+}
+```
+
+### New (DDD) RBAC
+```java
+// New architecture: User aggregate owns roles as value objects
+public class User {
+  // Roles stored as collection of value objects (no separate table)
+  private Set<UserRole> roles = new HashSet<>();
+  
+  // Methods to manage roles
+  public void assignRole(String roleName) { /* ... */ }
+  public void revokeRole(String roleName) { /* ... */ }
+  public boolean hasRole(String roleName) { /* ... */ }
+}
+
+// UserRole is a Value Object (not an Entity)
+public record UserRole(
+  String roleName,  // "ROLE_EMPLOYER", "ROLE_CANDIDATE", etc.
+  LocalDateTime assignedAt
+) implements ValueObject {
+  // Behavior: immutable, identified by roleName only
+}
+```
+
+### Data Migration Strategy
+```sql
+-- Phase 1: Query legacy join table
+SELECT u.id, r.name FROM users u
+JOIN user_to_role utr ON u.id = utr.user_id
+JOIN role r ON utr.role_id = r.id;
+
+-- Phase 2: Transform to new format (aggregate roles in postgres ARRAY or JSON)
+ALTER TABLE users ADD COLUMN roles JSONB DEFAULT '[]'::jsonb;
+
+UPDATE users SET roles = (
+  SELECT jsonb_agg(
+    jsonb_build_object(
+      'roleName', r.name,
+      'assignedAt', NOW()
+    )
+  )
+  FROM user_to_role utr
+  JOIN role r ON utr.role_id = r.id
+  WHERE utr.user_id = users.id
+);
+
+-- Phase 3: Verify all roles migrated
+SELECT * FROM users WHERE roles = '[]'::jsonb; -- Should be empty
+```
 
 **Ready for TASK-003 (Search domain analysis).**

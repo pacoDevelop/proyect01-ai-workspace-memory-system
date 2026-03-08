@@ -1,0 +1,22 @@
+metrics:
+  enabled: ${METRICS_ENABLED:true}
+  prometheus:
+    enabled: ${PROMETHEUS_ENABLED:true}
+    path: ${PROMETHEUS_PATH:/actuator/prometheus}
+    port: ${PROMETHEUS_PORT:8081}
+  application:
+    name: ${APP_NAME:job-service}
+    version: ${APP_VERSION:1.0.0}
+    environment: ${APP_ENVIRONMENT:development}
+  database:
+    enabled: ${DB_METRICS_ENABLED:true}
+    connection-pool: ${DB_POOL_METRICS_ENABLED:true}
+  http:
+    enabled: ${HTTP_METRICS_ENABLED:true}
+    request-duration: ${HTTP_REQUEST_DURATION:true}
+    status-codes: ${HTTP_STATUS_CODES:true}
+  jvm:
+    enabled: ${JVM_METRICS_ENABLED:true}
+    memory: ${JVM_MEMORY_METRICS:true}
+    gc: ${JVM_GC_METRICS:true}
+    threads: ${JVM_THREADS_METRICS:true}
