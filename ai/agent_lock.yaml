@@ -1,16 +1,22 @@
 # AGENT LOCK — Mutex distribuido
 schema_version: "3.0"
 min_compatible_version: "2.0"
-last_updated: "2026-03-09T00:10:00Z"
+last_updated: "2026-03-09T00:15:00Z"
 last_updated_by: "github-copilot"
 
-active_agents: []
+active_agents:
+  - agent_id: "github-copilot"
+    session_id: "20260309-0015-github-copilot"
+    started_at: "2026-03-09T00:15:00Z"
+    last_heartbeat: "2026-03-09T00:15:00Z"
+    current_task: "TASK-013"
+    status: "working"
+    working_branch: "main"
+    base_branch: "main"
+    locked_files:
+      - "ai/tasks.yaml"
+    notes: "User-Service setup and Employer aggregate implementation"
 
-ghost_entries:
-  - agent_id: "antigravity"
-    detected_at: "2026-03-09T00:10:00Z"
-    last_heartbeat_was: "2026-03-08T23:40:00Z"
-    cleaned_by: "github-copilot"
-    cleaned_at: "2026-03-09T00:10:00Z"
+ghost_entries: []
 
-note: "Ghost agent antigravity cleaned. TASK-035 reverted to pending."
+note: "Agent github-copilot active for TASK-013 (User-Service setup)"
