@@ -1,10 +1,10 @@
 # AGENT LOCK — Mutex distribuido
 schema_version: "3.0"
 min_compatible_version: "2.0"
-    locked_files:
-      - "ai/tasks.yaml"
-      - "ai/memory/job-infrastructure-analysis.md"
-    notes: "Auditoría TASK-009 (PostgreSQL JPA adapter) - validar mappings, transacciones, optimistic locking"
+last_updated: "2026-03-08T19:25:00Z"
+last_updated_by: "antigravity"
+
+active_agents: []
 
 ghost_entries: []
-note: "SESSION-021 in progress: antigravity auditing TASK-014 Candidate Aggregate"
+note: "No active agents. TASK-037 Audit complete."

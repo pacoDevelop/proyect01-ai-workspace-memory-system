@@ -4,6 +4,8 @@
 > Es el protocolo que ejecutas paso a paso, en orden, sin saltarte nada.
 > **Cada gate marcado con 🔴 BLOQUEANTE significa: si no lo haces, PARA y hazlo ahora.**
 > No puedes avanzar a la siguiente fase sin completar todos los pasos de la fase actual.
+> 
+> 🔴 **REGLA DE EJECUCIÓN TÉCNICA:** Si eres una IA con acceso a terminal (`run_command`), CADA bloque de código `bash` (especialmente `git commit`) en este protocolo es una **INSTRUCCIÓN DE EJECUCIÓN**, no un ejemplo. Debes ejecutarlo literalmente e inmediatamente después del cambio de archivo. No agrupes commits. Respeta la atomicidad de cada GATE.
 
 ---
 
@@ -460,6 +462,9 @@ git push origin main
 ## ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ## ERRORES COMUNES — LO QUE NO DEBES HACER
 ## ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+❌ **Ignorar los comandos `git commit` prescritos en los GATES**
+→ Consecuencia: El historial del proyecto se vuelve opaco, otros agentes no pueden seguir tu progreso y se viola la trazabilidad obligatoria.
 
 ❌ **Empezar a trabajar sin pasar por GATE 1A, 1B y 1C**
 → Consecuencia: colisión con otro agente, trabajo perdido
