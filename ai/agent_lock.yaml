@@ -1,21 +1,10 @@
 # AGENT LOCK — Mutex distribuido
 schema_version: "3.0"
 min_compatible_version: "2.0"
-last_updated: "2026-03-08T23:35:00Z"
+last_updated: "2026-03-09T00:00:00Z"
 last_updated_by: "antigravity"
 
-active_agents:
-  - agent_id: "antigravity"
-    session_id: "20260308-2335-antigravity"
-    started_at: "2026-03-08T23:35:00Z"
-    last_heartbeat: "2026-03-08T23:35:00Z"
-    current_task: "TASK-035"
-    status: "working"
-    working_branch: "main"
-    base_branch: "main"
-    locked_files:
-      - "ai/tasks.yaml"
-      - "services/search-service/src/main/java/com/jrecruiter/searchservice/application/services"
-    notes: "Auditing TASK-017 (Advanced Search/Personalized Ranking)"
+active_agents: []
 
 ghost_entries: []
+note: "No active agents. TASK-035 Search Advanced Audit complete."
