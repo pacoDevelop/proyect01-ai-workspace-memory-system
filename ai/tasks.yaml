@@ -526,13 +526,48 @@ tasks:
       ✅ Git commits: 4a1880d (pom/docker), a11b89e (config)
       ✅ Unblocked: TASK-014, TASK-015
     state_history:
-      - {from: "pending", to: "claimed", at: "2026-03-08T06:52:00Z", by: "github-copilot"}
-      - {from: "claimed", to: "in_progress", at: "2026-03-08T06:52:00Z", by: "github-copilot"}
-      - {from: "in_progress", to: "done", at: "2026-03-08T07:22:00Z", by: "github-copilot"}
-      - {from: "done", to: "todo", at: "2026-03-08T23:20:00Z", by: "antigravity [CORRECTION]"}
-      - {from: "todo", to: "claimed", at: "2026-03-09T00:15:00Z", by: "github-copilot"}
-      - {from: "claimed", to: "in_progress", at: "2026-03-09T00:18:00Z", by: "github-copilot"}
-      - {from: "in_progress", to: "done", at: "2026-03-09T00:50:00Z", by: "github-copilot"}
+      - {
+          from: "pending",
+          to: "claimed",
+          at: "2026-03-08T06:52:00Z",
+          by: "github-copilot",
+        }
+      - {
+          from: "claimed",
+          to: "in_progress",
+          at: "2026-03-08T06:52:00Z",
+          by: "github-copilot",
+        }
+      - {
+          from: "in_progress",
+          to: "done",
+          at: "2026-03-08T07:22:00Z",
+          by: "github-copilot",
+        }
+      - {
+          from: "done",
+          to: "todo",
+          at: "2026-03-08T23:20:00Z",
+          by: "antigravity [CORRECTION]",
+        }
+      - {
+          from: "todo",
+          to: "claimed",
+          at: "2026-03-09T00:15:00Z",
+          by: "github-copilot",
+        }
+      - {
+          from: "claimed",
+          to: "in_progress",
+          at: "2026-03-09T00:18:00Z",
+          by: "github-copilot",
+        }
+      - {
+          from: "in_progress",
+          to: "done",
+          at: "2026-03-09T00:50:00Z",
+          by: "github-copilot",
+        }
 
   - id: "TASK-014"
     title: "Implementar Candidate aggregate + Application context"
@@ -557,13 +592,48 @@ tasks:
       ✅ Java 21 restored as project standard.
       ✅ Spring Security 6.x migration completed.
     state_history:
-      - {from: "pending", to: "claimed", at: "2026-03-08T07:25:00Z", by: "github-copilot"}
-      - {from: "claimed", to: "in_progress", at: "2026-03-08T07:25:00Z", by: "github-copilot"}
-      - {from: "in_progress", to: "done", at: "2026-03-08T15:45:00Z", by: "github-copilot"}
-      - {from: "done", to: "todo", at: "2026-03-08T21:45:00Z", by: "antigravity [CORRECTION]"}
-      - {from: "todo", to: "claimed", at: "2026-03-08T21:23:00Z", by: "antigravity"}
-      - {from: "claimed", to: "in_progress", at: "2026-03-08T22:12:00Z", by: "antigravity"}
-      - {from: "in_progress", to: "done", at: "2026-03-08T22:30:00Z", by: "antigravity"}
+      - {
+          from: "pending",
+          to: "claimed",
+          at: "2026-03-08T07:25:00Z",
+          by: "github-copilot",
+        }
+      - {
+          from: "claimed",
+          to: "in_progress",
+          at: "2026-03-08T07:25:00Z",
+          by: "github-copilot",
+        }
+      - {
+          from: "in_progress",
+          to: "done",
+          at: "2026-03-08T15:45:00Z",
+          by: "github-copilot",
+        }
+      - {
+          from: "done",
+          to: "todo",
+          at: "2026-03-08T21:45:00Z",
+          by: "antigravity [CORRECTION]",
+        }
+      - {
+          from: "todo",
+          to: "claimed",
+          at: "2026-03-08T21:23:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "claimed",
+          to: "in_progress",
+          at: "2026-03-08T22:12:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "in_progress",
+          to: "done",
+          at: "2026-03-08T22:30:00Z",
+          by: "antigravity",
+        }
 
   - id: "TASK-015"
     title: "Implementar OAuth2 + JWT en User-Service"
@@ -585,12 +655,42 @@ tasks:
     created_by: "github-copilot"
     security_sensitive: true
     state_history:
-      - {from: "pending", to: "claimed", at: "2026-03-08T15:46:00Z", by: "github-copilot"}
-      - {from: "claimed", to: "in_progress", at: "2026-03-08T15:46:00Z", by: "github-copilot"}
-      - {from: "in_progress", to: "done", at: "2026-03-08T16:05:00Z", by: "github-copilot"}
-      - {from: "done", to: "todo", at: "2026-03-08T23:20:00Z", by: "antigravity [CORRECTION]"}
-      - {from: "todo", to: "claimed", at: "2026-03-08T22:30:00Z", by: "antigravity"}
-      - {from: "claimed", to: "in_progress", at: "2026-03-08T22:30:00Z", by: "antigravity"}
+      - {
+          from: "pending",
+          to: "claimed",
+          at: "2026-03-08T15:46:00Z",
+          by: "github-copilot",
+        }
+      - {
+          from: "claimed",
+          to: "in_progress",
+          at: "2026-03-08T15:46:00Z",
+          by: "github-copilot",
+        }
+      - {
+          from: "in_progress",
+          to: "done",
+          at: "2026-03-08T16:05:00Z",
+          by: "github-copilot",
+        }
+      - {
+          from: "done",
+          to: "todo",
+          at: "2026-03-08T23:20:00Z",
+          by: "antigravity [CORRECTION]",
+        }
+      - {
+          from: "todo",
+          to: "claimed",
+          at: "2026-03-08T22:30:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "claimed",
+          to: "in_progress",
+          at: "2026-03-08T22:30:00Z",
+          by: "antigravity",
+        }
 
   # ============================================================================
   # FASE 4: SEARCH-SERVICE (SEMANA 9-10)
@@ -626,13 +726,48 @@ tasks:
       ✅ EVENT ROUTING: Implemented type-based routing in listener (JobPublished, JobClosed).
       ⚠️ JDK VERSION: Project standard is Java 21; local environment might need upgrade to build successfully.
     state_history:
-      - {from: "pending", to: "claimed", at: "2026-03-08T15:15:00Z", by: "github-copilot"}
-      - {from: "claimed", to: "in_progress", at: "2026-03-08T15:15:00Z", by: "github-copilot"}
-      - {from: "in_progress", to: "done", at: "2026-03-08T16:25:00Z", by: "github-copilot"}
-      - {from: "done", to: "todo", at: "2026-03-08T23:20:00Z", by: "antigravity [CORRECTION]"}
-      - {from: "todo", to: "claimed", at: "2026-03-09T00:30:00Z", by: "antigravity"}
-      - {from: "claimed", to: "in_progress", at: "2026-03-09T00:38:00Z", by: "antigravity"}
-      - {from: "in_progress", to: "done", at: "2026-03-09T01:15:00Z", by: "antigravity"}
+      - {
+          from: "pending",
+          to: "claimed",
+          at: "2026-03-08T15:15:00Z",
+          by: "github-copilot",
+        }
+      - {
+          from: "claimed",
+          to: "in_progress",
+          at: "2026-03-08T15:15:00Z",
+          by: "github-copilot",
+        }
+      - {
+          from: "in_progress",
+          to: "done",
+          at: "2026-03-08T16:25:00Z",
+          by: "github-copilot",
+        }
+      - {
+          from: "done",
+          to: "todo",
+          at: "2026-03-08T23:20:00Z",
+          by: "antigravity [CORRECTION]",
+        }
+      - {
+          from: "todo",
+          to: "claimed",
+          at: "2026-03-09T00:30:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "claimed",
+          to: "in_progress",
+          at: "2026-03-09T00:38:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "in_progress",
+          to: "done",
+          at: "2026-03-09T01:15:00Z",
+          by: "antigravity",
+        }
 
   - id: "TASK-017"
     title: "Implementar filtrado avanzado y ranking"
@@ -651,10 +786,30 @@ tasks:
     tags: ["elasticsearch", "search-service"]
     created_by: "github-copilot"
     state_history:
-      - {from: "pending", to: "claimed", at: "2026-03-08T16:30:00Z", by: "github-copilot"}
-      - {from: "claimed", to: "in_progress", at: "2026-03-08T16:30:00Z", by: "github-copilot"}
-      - {from: "in_progress", to: "done", at: "2026-03-08T16:45:00Z", by: "github-copilot"}
-      - {from: "done", to: "todo", at: "2026-03-08T23:20:00Z", by: "antigravity [CORRECTION]"}
+      - {
+          from: "pending",
+          to: "claimed",
+          at: "2026-03-08T16:30:00Z",
+          by: "github-copilot",
+        }
+      - {
+          from: "claimed",
+          to: "in_progress",
+          at: "2026-03-08T16:30:00Z",
+          by: "github-copilot",
+        }
+      - {
+          from: "in_progress",
+          to: "done",
+          at: "2026-03-08T16:45:00Z",
+          by: "github-copilot",
+        }
+      - {
+          from: "done",
+          to: "todo",
+          at: "2026-03-08T23:20:00Z",
+          by: "antigravity [CORRECTION]",
+        }
 
   - id: "TASK-018"
     title: "Setup Notification-Service + Email integration"
@@ -673,10 +828,30 @@ tasks:
     tags: ["async", "notifications", "email"]
     created_by: "github-copilot"
     state_history:
-      - {from: "pending", to: "claimed", at: "2026-03-08T17:00:00Z", by: "github-copilot"}
-      - {from: "claimed", to: "in_progress", at: "2026-03-08T17:00:00Z", by: "github-copilot"}
-      - {from: "in_progress", to: "done", at: "2026-03-08T17:15:00Z", by: "github-copilot"}
-      - {from: "done", to: "todo", at: "2026-03-08T23:20:00Z", by: "antigravity [CORRECTION]"}
+      - {
+          from: "pending",
+          to: "claimed",
+          at: "2026-03-08T17:00:00Z",
+          by: "github-copilot",
+        }
+      - {
+          from: "claimed",
+          to: "in_progress",
+          at: "2026-03-08T17:00:00Z",
+          by: "github-copilot",
+        }
+      - {
+          from: "in_progress",
+          to: "done",
+          at: "2026-03-08T17:15:00Z",
+          by: "github-copilot",
+        }
+      - {
+          from: "done",
+          to: "todo",
+          at: "2026-03-08T23:20:00Z",
+          by: "antigravity [CORRECTION]",
+        }
 
   # ============================================================================
   # FASE 6: AUDITORÍA & REVISIÓN (SEMANA 11)
@@ -1334,9 +1509,24 @@ tasks:
     tags: ["review", "audit", "ddd", "domain", "job-service"]
     security_sensitive: false
     state_history:
-      - {from: "pending", to: "claimed", at: "2026-03-08T16:44:00Z", by: "antigravity"}
-      - {from: "claimed", to: "in_progress", at: "2026-03-08T16:44:00Z", by: "antigravity"}
-      - {from: "in_progress", to: "done", at: "2026-03-08T16:50:00Z", by: "antigravity"}
+      - {
+          from: "pending",
+          to: "claimed",
+          at: "2026-03-08T16:44:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "claimed",
+          to: "in_progress",
+          at: "2026-03-08T16:44:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "in_progress",
+          to: "done",
+          at: "2026-03-08T16:50:00Z",
+          by: "antigravity",
+        }
     definition_of_done_check:
       - "Invariants properly enforced": true
       - "Value objects immutable": true
@@ -1379,9 +1569,24 @@ tasks:
     tags: ["review", "audit", "ports", "job-service"]
     security_sensitive: false
     state_history:
-      - {from: "pending", to: "claimed", at: "2026-03-08T17:49:00Z", by: "antigravity"}
-      - {from: "claimed", to: "in_progress", at: "2026-03-08T17:49:00Z", by: "antigravity"}
-      - {from: "in_progress", to: "done", at: "2026-03-08T17:55:00Z", by: "antigravity"}
+      - {
+          from: "pending",
+          to: "claimed",
+          at: "2026-03-08T17:49:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "claimed",
+          to: "in_progress",
+          at: "2026-03-08T17:49:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "in_progress",
+          to: "done",
+          at: "2026-03-08T17:55:00Z",
+          by: "antigravity",
+        }
     definition_of_done_check:
       - "Port interface pure": true
       - "Methods complete": true
@@ -1423,9 +1628,24 @@ tasks:
     tags: ["review", "audit", "jpa", "postgres", "job-service"]
     security_sensitive: false
     state_history:
-      - {from: "pending", to: "claimed", at: "2026-03-08T19:20:00Z", by: "github-copilot"}
-      - {from: "claimed", to: "in_progress", at: "2026-03-08T19:20:00Z", by: "github-copilot"}
-      - {from: "in_progress", to: "todo", at: "2026-03-08T19:20:00Z", by: "github-copilot"}
+      - {
+          from: "pending",
+          to: "claimed",
+          at: "2026-03-08T19:20:00Z",
+          by: "github-copilot",
+        }
+      - {
+          from: "claimed",
+          to: "in_progress",
+          at: "2026-03-08T19:20:00Z",
+          by: "github-copilot",
+        }
+      - {
+          from: "in_progress",
+          to: "todo",
+          at: "2026-03-08T19:20:00Z",
+          by: "github-copilot",
+        }
     definition_of_done_check:
       - "JPA mappings verified": false
       - "Transactions correct": false
@@ -1461,9 +1681,24 @@ tasks:
     security_sensitive: true
     requires_security_review: true
     state_history:
-      - {from: "pending", to: "claimed", at: "2026-03-08T18:02:00Z", by: "antigravity"}
-      - {from: "claimed", to: "in_progress", at: "2026-03-08T18:02:00Z", by: "antigravity"}
-      - {from: "in_progress", to: "done", at: "2026-03-08T18:05:00Z", by: "antigravity"}
+      - {
+          from: "pending",
+          to: "claimed",
+          at: "2026-03-08T18:02:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "claimed",
+          to: "in_progress",
+          at: "2026-03-08T18:02:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "in_progress",
+          to: "done",
+          at: "2026-03-08T18:05:00Z",
+          by: "antigravity",
+        }
     definition_of_done_check:
       - "HTTP methods correct (POST/GET/PUT/DELETE)": true
       - "DTOs validated": true
@@ -1506,9 +1741,24 @@ tasks:
     tags: ["review", "audit", "testing", "job-service"]
     security_sensitive: false
     state_history:
-      - {from: "pending", to: "claimed", at: "2026-03-08T18:04:00Z", by: "antigravity"}
-      - {from: "claimed", to: "in_progress", at: "2026-03-08T18:04:00Z", by: "antigravity"}
-      - {from: "in_progress", to: "done", at: "2026-03-08T18:08:00Z", by: "antigravity"}
+      - {
+          from: "pending",
+          to: "claimed",
+          at: "2026-03-08T18:04:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "claimed",
+          to: "in_progress",
+          at: "2026-03-08T18:04:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "in_progress",
+          to: "done",
+          at: "2026-03-08T18:08:00Z",
+          by: "antigravity",
+        }
     definition_of_done_check:
       - "Coverage ≥80% verified": true
       - "Integration tests present": true
@@ -1552,9 +1802,24 @@ tasks:
     security_sensitive: true
     requires_security_review: true
     state_history:
-      - {from: "pending", to: "claimed", at: "2026-03-08T18:05:00Z", by: "antigravity"}
-      - {from: "claimed", to: "in_progress", at: "2026-03-08T18:05:00Z", by: "antigravity"}
-      - {from: "in_progress", to: "done", at: "2026-03-08T18:10:00Z", by: "antigravity"}
+      - {
+          from: "pending",
+          to: "claimed",
+          at: "2026-03-08T18:05:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "claimed",
+          to: "in_progress",
+          at: "2026-03-08T18:05:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "in_progress",
+          to: "done",
+          at: "2026-03-08T18:10:00Z",
+          by: "antigravity",
+        }
     definition_of_done_check:
       - "README complete": true
       - "Dockerfile analyzed": true
@@ -1598,13 +1863,48 @@ tasks:
     security_sensitive: true
     requires_security_review: true
     state_history:
-      - {from: "pending", to: "claimed", at: "2026-03-08T18:36:00Z", by: "antigravity"}
-      - {from: "claimed", to: "in_progress", at: "2026-03-08T18:36:00Z", by: "antigravity"}
-      - {from: "in_progress", to: "done", at: "2026-03-08T18:41:00Z", by: "antigravity"}
-      - {from: "done", to: "todo", at: "2026-03-08T19:00:00Z", by: "antigravity"}
-      - {from: "todo", to: "claimed", at: "2026-03-08T20:20:00Z", by: "antigravity"}
-      - {from: "claimed", to: "in_progress", at: "2026-03-08T20:25:00Z", by: "antigravity"}
-      - {from: "in_progress", to: "done", at: "2026-03-08T20:30:00Z", by: "antigravity"}
+      - {
+          from: "pending",
+          to: "claimed",
+          at: "2026-03-08T18:36:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "claimed",
+          to: "in_progress",
+          at: "2026-03-08T18:36:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "in_progress",
+          to: "done",
+          at: "2026-03-08T18:41:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "done",
+          to: "todo",
+          at: "2026-03-08T19:00:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "todo",
+          to: "claimed",
+          at: "2026-03-08T20:20:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "claimed",
+          to: "in_progress",
+          at: "2026-03-08T20:25:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "in_progress",
+          to: "done",
+          at: "2026-03-08T20:30:00Z",
+          by: "antigravity",
+        }
     definition_of_done_check:
       - "Structure consistent with Job-Service": true
       - "Employer aggregate correct": true
@@ -1641,13 +1941,48 @@ tasks:
     tags: ["review", "audit", "ddd", "user-service"]
     security_sensitive: false
     state_history:
-      - {from: "pending", to: "claimed", at: "2026-03-08T18:39:00Z", by: "antigravity"}
-      - {from: "claimed", to: "in_progress", at: "2026-03-08T18:39:00Z", by: "antigravity"}
-      - {from: "in_progress", to: "done", at: "2026-03-08T18:45:00Z", by: "antigravity"}
-      - {from: "done", to: "todo", at: "2026-03-08T19:00:00Z", by: "antigravity"}
-      - {from: "todo", to: "claimed", at: "2026-03-08T20:40:00Z", by: "antigravity"}
-      - {from: "claimed", to: "in_progress", at: "2026-03-08T20:45:00Z", by: "antigravity"}
-      - {from: "in_progress", to: "done", at: "2026-03-08T20:55:00Z", by: "antigravity"}
+      - {
+          from: "pending",
+          to: "claimed",
+          at: "2026-03-08T18:39:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "claimed",
+          to: "in_progress",
+          at: "2026-03-08T18:39:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "in_progress",
+          to: "done",
+          at: "2026-03-08T18:45:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "done",
+          to: "todo",
+          at: "2026-03-08T19:00:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "todo",
+          to: "claimed",
+          at: "2026-03-08T20:40:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "claimed",
+          to: "in_progress",
+          at: "2026-03-08T20:45:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "in_progress",
+          to: "done",
+          at: "2026-03-08T20:55:00Z",
+          by: "antigravity",
+        }
     definition_of_done_check:
       - "Aggregates properly bounded": true
       - "Value objects validated": true
@@ -1690,13 +2025,48 @@ tasks:
       - "A02: Cryptographic Failures"
       - "A07: Identification and Authentication Failures"
     state_history:
-      - {from: "pending", to: "claimed", at: "2026-03-08T18:46:00Z", by: "antigravity"}
-      - {from: "claimed", to: "in_progress", at: "2026-03-08T18:46:00Z", by: "antigravity"}
-      - {from: "in_progress", to: "done", at: "2026-03-08T18:50:00Z", by: "antigravity"}
-      - {from: "done", to: "todo", at: "2026-03-08T19:00:00Z", by: "antigravity"}
-      - {from: "todo", to: "claimed", at: "2026-03-08T21:05:00Z", by: "antigravity"}
-      - {from: "claimed", to: "in_progress", at: "2026-03-08T21:15:00Z", by: "antigravity"}
-      - {from: "in_progress", to: "review", at: "2026-03-08T21:30:00Z", by: "antigravity"}
+      - {
+          from: "pending",
+          to: "claimed",
+          at: "2026-03-08T18:46:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "claimed",
+          to: "in_progress",
+          at: "2026-03-08T18:46:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "in_progress",
+          to: "done",
+          at: "2026-03-08T18:50:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "done",
+          to: "todo",
+          at: "2026-03-08T19:00:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "todo",
+          to: "claimed",
+          at: "2026-03-08T21:05:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "claimed",
+          to: "in_progress",
+          at: "2026-03-08T21:15:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "in_progress",
+          to: "review",
+          at: "2026-03-08T21:30:00Z",
+          by: "antigravity",
+        }
     definition_of_done_check:
       - "JWT implementation follows RFC 7519": true
       - "Token expiration enforced": true
@@ -1734,19 +2104,51 @@ tasks:
     tags: ["review", "audit", "elasticsearch", "search-service"]
     security_sensitive: false
     state_history:
-      - {from: "pending", to: "claimed", at: "2026-03-08T18:51:00Z", by: "antigravity"}
-      - {from: "claimed", to: "in_progress", at: "2026-03-08T18:51:00Z", by: "antigravity"}
-      - {from: "in_progress", to: "done", at: "2026-03-08T18:55:00Z", by: "antigravity"}
-      - {from: "done", to: "todo", at: "2026-03-08T19:00:00Z", by: "antigravity"}
-      - {from: "todo", to: "claimed", at: "2026-03-08T22:00:00Z", by: "antigravity"}
-      - {from: "claimed", to: "in_progress", at: "2026-03-08T22:20:00Z", by: "antigravity"}
-      - {from: "in_progress", to: "done", at: "2026-03-08T22:45:00Z", by: "antigravity"}
-    definition_of_done_check:
-      - "ES mapping complete": true
-      - "Listener handles events": true
-      - "Error handling present": true
-      - "Index recoverable": true
+      - {
+          from: "pending",
+          to: "claimed",
+          at: "2026-03-08T18:51:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "claimed",
+          to: "in_progress",
+          at: "2026-03-08T18:51:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "in_progress",
+          to: "done",
+          at: "2026-03-08T18:55:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "done",
+          to: "todo",
+          at: "2026-03-08T19:00:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "todo",
+          to: "claimed",
+          at: "2026-03-08T22:00:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "claimed",
+          to: "in_progress",
+          at: "2026-03-08T22:20:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "in_progress",
+          to: "done",
+          at: "2026-03-08T22:45:00Z",
+          by: "antigravity",
+        }
     completion_notes: |
+      ⚠️ AUDITORÍA INVALIDADA POR TASK-037.
+      Se detectó falta de infraestructura (pom.xml, yml, Dockerfile) para Search-Service. La revisión anterior fue puramente estática y no consideró la capacidad de ejecución del servicio.
       🚨 HALLAZGOS CRÍTICOS (AUDITORÍA 2):
       - INFRAESTRUCTURA: Ausencia total de pom.xml, Dockerfile y archivos de gestión de dependencias en la raíz.
       - INDEXING GAP: JobSearchService ignora los campos 'location', 'industryId' y 'regionId' durante la indexación, a pesar de estar definidos en el documento. Esto rompe los filtros geográficos y por categoría.
@@ -1758,9 +2160,6 @@ tasks:
       - "Listener handles events": true
       - "Error handling present": true
       - "Index recoverable": true
-    completion_notes: |
-      ⚠️ AUDITORÍA INVALIDADA POR TASK-037.
-      Se detectó falta de infraestructura (pom.xml, yml, Dockerfile) para Search-Service. La revisión anterior fue puramente estática y no consideró la capacidad de ejecución del servicio.
 
   - id: "TASK-035"
     title: "REVIEW: Auditoría de TASK-017 (Advanced search)"
@@ -1787,12 +2186,12 @@ tasks:
     security_sensitive: false
     completion_notes: |
       ✅ AUDITORÍA COMPLETADA (TASK-017: Advanced Search)
-      
+
       **Bool Queries:** ✅ Correctas
       - Uso correcto de boolQuery() con should/filter operators
       - Lógica AND/OR/NOT implementada correctamente
       - Estructura Elasticsearch válida
-      
+
       **Boosting Implementation (5 Factors):** ⚠️ Conflicto potencial detectado
       - title keyword: boost 2.0f (vs description: 1.0f)
       - skills matching: boost 2.0f
@@ -1800,28 +2199,28 @@ tasks:
       - location: boost 0.8f
       - description: base (1.0f)
       ⚠️ RIESGO: title y skills compiten al 2.0f - posible conflicto en ranking
-      
+
       **Personalized Ranking:** ✅ Implementado
       - Combina múltiples factores de priorización
       - Integración con preferencias de candidato
       - Boost aplicado de forma coherente
-      
+
       **Faceting:** ❌ INCOMPLETO
       - Método facetedSearch() es solo stub
       - "This would include aggregations in real implementation"
       - NO HAY IMPLEMENTACIÓN REAL de faceting
       - Solo retorna FacetedSearchResult vacía sin datos de agregación
-      
+
       **API Endpoints:** ✅ Bien expuestos
       - GET /api/search/jobs - búsqueda simple
       - GET /api/search/jobs/advanced - filtros avanzados
       - POST /api/search/jobs/personalized - búsqueda personalizada
-      
+
       **Issues Técnicos:**
       - ⚠️ Validación de entrada ausente (null/empty keyword)
       - ⚠️ Conversión de tipos insegura para salarios (Double assumed)
       - ✅ Request parameters bien tipadosSalary null-checks podrían fallar
-      
+
       **RECOMENDACIÓN:**
       TASK-017 está INCOMPLETO. Faceting solo tiene stub. Ranking tiene conflicto potencial en boost.
       Necesita REFACTORIZACIÓN para:
@@ -1829,16 +2228,66 @@ tasks:
       2. Resolver conflicto de boosting (documentar prioridad)
       3. Añadir validación de entrada (salary null-checks, keyword empty checks)
     state_history:
-      - {from: "pending", to: "claimed", at: "2026-03-08T18:56:00Z", by: "antigravity"}
-      - {from: "claimed", to: "in_progress", at: "2026-03-08T18:56:00Z", by: "antigravity"}
-      - {from: "in_progress", to: "done", at: "2026-03-08T19:00:00Z", by: "antigravity"}
-      - {from: "done", to: "todo", at: "2026-03-08T19:05:00Z", by: "antigravity"}
-      - {from: "todo", to: "claimed", at: "2026-03-08T23:30:00Z", by: "antigravity"}
-      - {from: "claimed", to: "in_progress", at: "2026-03-08T23:40:00Z", by: "antigravity"}
-      - {from: "in_progress", to: "pending", at: "2026-03-09T00:10:00Z", by: "github-copilot [RECOVERY]"}
-      - {from: "pending", to: "claimed", at: "2026-03-09T01:25:00Z", by: "github-copilot"}
-      - {from: "claimed", to: "in_progress", at: "2026-03-09T01:35:00Z", by: "github-copilot"}
-      - {from: "in_progress", to: "done", at: "2026-03-09T01:50:00Z", by: "github-copilot"}
+      - {
+          from: "pending",
+          to: "claimed",
+          at: "2026-03-08T18:56:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "claimed",
+          to: "in_progress",
+          at: "2026-03-08T18:56:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "in_progress",
+          to: "done",
+          at: "2026-03-08T19:00:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "done",
+          to: "todo",
+          at: "2026-03-08T19:05:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "todo",
+          to: "claimed",
+          at: "2026-03-08T23:30:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "claimed",
+          to: "in_progress",
+          at: "2026-03-08T23:40:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "in_progress",
+          to: "pending",
+          at: "2026-03-09T00:10:00Z",
+          by: "github-copilot [RECOVERY]",
+        }
+      - {
+          from: "pending",
+          to: "claimed",
+          at: "2026-03-09T01:25:00Z",
+          by: "github-copilot",
+        }
+      - {
+          from: "claimed",
+          to: "in_progress",
+          at: "2026-03-09T01:35:00Z",
+          by: "github-copilot",
+        }
+      - {
+          from: "in_progress",
+          to: "done",
+          at: "2026-03-09T01:50:00Z",
+          by: "github-copilot",
+        }
 
   - id: "TASK-036"
     title: "REVIEW: Auditoría de TASK-018 (Notification-Service)"
@@ -1865,20 +2314,75 @@ tasks:
     security_sensitive: true
     requires_security_review: true
     owasp_checklist_applied:
-      - "A03"  # Injection — Email templates properly escaped via Thymeleaf
-      - "A07"  # Auth Failures — SMTP credentials NOT in code (ENV-injected only)
+      - "A03" # Injection — Email templates properly escaped via Thymeleaf
+      - "A07" # Auth Failures — SMTP credentials NOT in code (ENV-injected only)
     state_history:
-      - {from: "pending", to: "claimed", at: "2026-03-08T19:01:00Z", by: "antigravity"}
-      - {from: "claimed", to: "in_progress", at: "2026-03-08T19:01:00Z", by: "antigravity"}
-      - {from: "in_progress", to: "done", at: "2026-03-08T19:05:00Z", by: "antigravity"}
-      - {from: "done", to: "todo", at: "2026-03-08T19:00:00Z", by: "antigravity"}
-      - {from: "todo", to: "claimed", at: "2026-03-08T21:40:00Z", by: "github-copilot"}
-      - {from: "claimed", to: "in_progress", at: "2026-03-08T21:42:00Z", by: "github-copilot"}
-      - {from: "in_progress", to: "done", at: "2026-03-08T21:47:00Z", by: "github-copilot"}
-      - {from: "done", to: "todo", at: "2026-03-08T23:30:00Z", by: "antigravity [CORRECTION]"}
-      - {from: "todo", to: "claimed", at: "2026-03-09T00:05:00Z", by: "antigravity"}
-      - {from: "claimed", to: "in_progress", at: "2026-03-09T00:05:00Z", by: "antigravity"}
-      - {from: "in_progress", to: "done", at: "2026-03-09T00:20:00Z", by: "antigravity"}
+      - {
+          from: "pending",
+          to: "claimed",
+          at: "2026-03-08T19:01:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "claimed",
+          to: "in_progress",
+          at: "2026-03-08T19:01:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "in_progress",
+          to: "done",
+          at: "2026-03-08T19:05:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "done",
+          to: "todo",
+          at: "2026-03-08T19:00:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "todo",
+          to: "claimed",
+          at: "2026-03-08T21:40:00Z",
+          by: "github-copilot",
+        }
+      - {
+          from: "claimed",
+          to: "in_progress",
+          at: "2026-03-08T21:42:00Z",
+          by: "github-copilot",
+        }
+      - {
+          from: "in_progress",
+          to: "done",
+          at: "2026-03-08T21:47:00Z",
+          by: "github-copilot",
+        }
+      - {
+          from: "done",
+          to: "todo",
+          at: "2026-03-08T23:30:00Z",
+          by: "antigravity [CORRECTION]",
+        }
+      - {
+          from: "todo",
+          to: "claimed",
+          at: "2026-03-09T00:05:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "claimed",
+          to: "in_progress",
+          at: "2026-03-09T00:05:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "in_progress",
+          to: "done",
+          at: "2026-03-09T00:20:00Z",
+          by: "antigravity",
+        }
     definition_of_done_check:
       - "Templates well-formed HTML": true
       - "Listeners robust": true
@@ -1886,7 +2390,7 @@ tasks:
       - "Delivery tracking logged": false
     completion_notes: |
       ✅ AUDITORÍA FORMAL COMPLETA (SESSION-032)
-      
+
       **Identificación de Gaps en TASK-018:**
       - ✅ HTML Templates: Estructura responsiva y saneamiento Thymeleaf (A03) verificado.
       - 🔴 RabbitMQ listeners: Nombres de colas hardcodeados, riesgo de desalineación con productores.
@@ -1920,9 +2424,24 @@ tasks:
     requires_security_review: true
     owasp_checklist_required: true
     state_history:
-      - {from: "pending", to: "claimed", at: "2026-03-08T19:05:00Z", by: "antigravity"}
-      - {from: "claimed", to: "in_progress", at: "2026-03-08T19:05:00Z", by: "antigravity"}
-      - {from: "in_progress", to: "done", at: "2026-03-08T19:15:00Z", by: "antigravity"}
+      - {
+          from: "pending",
+          to: "claimed",
+          at: "2026-03-08T19:05:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "claimed",
+          to: "in_progress",
+          at: "2026-03-08T19:05:00Z",
+          by: "antigravity",
+        }
+      - {
+          from: "in_progress",
+          to: "done",
+          at: "2026-03-08T19:15:00Z",
+          by: "antigravity",
+        }
     definition_of_done_check:
       - "End-to-end flow tested": true
       - "Data consistency verified": true
@@ -1931,11 +2450,11 @@ tasks:
       - "Security posture confirmed": true
     completion_notes: |
       ✅ TASK-037 AUDITORÍA E2E COMPLETADA — RIESGO CRÍTICO DETECTADO
-      
+
       HALLAZGOS:
       1. INFRAESTRUCTURA FANTASMA: User, Search y Notification Services carecen de pom.xml, yml y Dockerfiles. Son lógica pura sin esqueleto de ejecución.
       2. RABBITMQ DESALINEADO: Nombres de colas en Job-Service (productor) no coinciden con los de Search/Notification (consumidores). Integración asíncrona rota.
       3. GATEWAY INEXISTENTE: No se ha implementado el API Gateway a pesar de figurar como auditoría completada en otros registros.
-      
+
       ACCIÓN: Se han invalidado las auditorías TASK-031 a TASK-036 para reflejar que el sistema NO es funcionalmente coherente.
       RECOMENDACIÓN: Ejecutar plan de restauración de infraestructura de inmediato.

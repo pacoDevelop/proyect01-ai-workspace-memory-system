@@ -828,6 +828,7 @@ Cuando el humano te diga "haz la tarea X" o "trabaja en Y":
 - Próximos pasos: {qué queda por hacer o quién debe continuar}
 - Señales emitidas: {SIG-xxx o "ninguna"}
 
+
 ## Checklist de auditoría
 - [ ] GATE 0 completado (context + signals + agent_lock + git_workflow + profiles leídos)
 - [ ] Agentes fantasma detectados y limpiados si los había
