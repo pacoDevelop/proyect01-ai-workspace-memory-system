@@ -20,4 +20,21 @@ agents:
       - research
     active: true
     role: "primary-assistant"
+
+  - id: "cline"
+    name: "Cline"
+    model: "Claude Sonnet 4.5"
+    description: "AI software engineer specialized in system design, architecture, and complex problem solving"
+    specialization_tags:
+      [system-design, architecture, problem-solving, optimization, integration]
+    max_task_priority: "high"
+    capabilities:
+      - system-design
+      - architecture
+      - optimization
+      - integration
+      - analysis
+      - planning
+    active: true
+    role: "secondary-assistant"
 deactivated_agents: []
