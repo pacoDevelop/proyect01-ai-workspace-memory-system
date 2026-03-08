@@ -121,3 +121,25 @@ signals:
     read_by: []
     priority: "critical"
     requires_review: false
+
+  - id: "SIG-WORK-009"
+    type: "task_completed"
+    from: "github-copilot"
+    to: "any"
+    task_id: "TASK-007"
+    message: "TASK-007 (Implementar Job aggregate root) COMPLETED at 2026-03-08T06:45:00Z. 1050+ lines of pure domain code. 16 artifacts: 7 VOs, 3 exceptions, 5 events, 1 aggregate root. No Spring dependencies. 13x faster than estimated (23min vs 5h)."
+    created_at: "2026-03-08T06:45:00Z"
+    created_by_commit: "task-007-complete"
+    read_by: []
+    priority: "high"
+    requires_review: false
+
+  - id: "SIG-WORK-010"
+    type: "task_ready"
+    from: "system"
+    to: "any"
+    task_id: "TASK-008"
+    message: "TASK-008 (Implementar JobRepository port) is now unblocked and ready to claim. Job aggregate root complete (TASK-007). Reference: domain/aggregates/Job.java"
+    created_at: "2026-03-08T06:45:00Z"
+    read_by: []
+    priority: "critical"
