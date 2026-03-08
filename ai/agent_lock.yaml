@@ -1,10 +1,18 @@
 # AGENT LOCK — Mutex distribuido
 schema_version: "3.0"
 min_compatible_version: "2.0"
-last_updated: "2026-03-08T08:10:00Z"
-last_updated_by: "cursor-gpt"
+last_updated: "2026-03-08T16:24:00Z"
+last_updated_by: "antigravity"
 
-active_agents: []
+active_agents:
+  - id: "antigravity"
+    locked_files:
+      - "ai/agent_profiles.yaml"
+      - "ai/agent_lock.yaml"
+    locked_at: "2026-03-08T16:24:00Z"
+    heartbeat_at: "2026-03-08T16:24:00Z"
+    current_task: "AUDIT-001"
+    status: "working"
 
 ghost_entries: []
-note: "✅ SESSION-005 COMPLETED. TASK-010 through TASK-013 fully implemented. Job-Service 100% complete (Phase 2). User-Service initialized with Employer domain layer (Phase 3 start). Agent lock released. ✅ SESSION-006 COMPLETED by cursor-gpt (AI workspace consistency checks). Agent lock released."
+note: "✅ SESSION-007 IN PROGRESS by antigravity (full workspace audit + consistency verification). Previous: SESSION-006 by cursor-gpt, SESSION-005 by github-copilot."

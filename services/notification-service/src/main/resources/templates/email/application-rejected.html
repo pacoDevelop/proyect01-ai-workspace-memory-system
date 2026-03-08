@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,6 +14,7 @@
             margin: 0;
             padding: 0;
         }
+
         .container {
             max-width: 600px;
             margin: 20px auto;
@@ -21,20 +23,24 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             overflow: hidden;
         }
+
         .header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 40px 20px;
             text-align: center;
         }
+
         .header h1 {
             margin: 0;
             font-size: 24px;
             font-weight: 600;
         }
+
         .content {
             padding: 40px;
         }
+
         .status-box {
             background-color: #fce4ec;
             border-left: 4px solid #c2185b;
@@ -42,43 +48,52 @@
             margin: 20px 0;
             border-radius: 4px;
         }
+
         .status-box p {
             margin: 0;
             color: #880e4f;
             font-weight: 600;
         }
+
         .application-info {
             background-color: #f8f9fa;
             padding: 20px;
             margin: 20px 0;
             border-radius: 4px;
         }
+
         .info-row {
             margin: 12px 0;
             display: flex;
             justify-content: space-between;
         }
+
         .info-row strong {
             color: #333;
         }
+
         .info-row span {
             color: #666;
         }
+
         .feedback-section {
             background-color: #f8f9fa;
             padding: 20px;
             margin: 20px 0;
             border-radius: 4px;
         }
+
         .feedback-section h3 {
             margin-top: 0;
             color: #667eea;
         }
+
         .feedback-section p {
             color: #666;
             line-height: 1.8;
             margin: 10px 0;
         }
+
         .encouragement {
             background-color: #e3f2fd;
             border-left: 4px solid #1976d2;
@@ -86,14 +101,17 @@
             margin: 20px 0;
             border-radius: 4px;
         }
+
         .encouragement p {
             margin: 10px 0;
             color: #1565c0;
         }
+
         .button-container {
             text-align: center;
             margin: 30px 0;
         }
+
         .button {
             display: inline-block;
             background-color: #667eea;
@@ -104,27 +122,33 @@
             font-weight: 600;
             transition: background-color 0.3s;
         }
+
         .button:hover {
             background-color: #5568d3;
         }
+
         .tips-section {
             background-color: #f8f9fa;
             padding: 20px;
             margin: 20px 0;
             border-radius: 4px;
         }
+
         .tips-section h3 {
             margin-top: 0;
             color: #333;
         }
+
         .tips-section ul {
             margin: 10px 0;
             padding-left: 20px;
         }
+
         .tips-section li {
             margin: 8px 0;
             color: #666;
         }
+
         .footer {
             background-color: #f8f9fa;
             padding: 20px;
@@ -135,24 +159,26 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <!-- Header -->
         <div class="header">
             <h1>Application Status Update</h1>
         </div>
-        
+
         <!-- Content -->
         <div class="content">
             <p>Hi <span th:text="${candidateName}">John</span>,</p>
-            
-            <p>Thank you for taking the time to apply for the <strong th:text="${jobTitle}">Senior Developer</strong> position. We appreciate your interest in our company.</p>
-            
+
+            <p>Thank you for taking the time to apply for the <strong th:text="${jobTitle}">Senior Developer</strong>
+                position. We appreciate your interest in our company.</p>
+
             <!-- Status Box -->
             <div class="status-box">
                 <p>📋 Unfortunately, we have decided not to move forward with your application at this time.</p>
             </div>
-            
+
             <!-- Application Info -->
             <div class="application-info">
                 <h3 style="margin-top: 0; color: #667eea;">Application Details</h3>
@@ -165,50 +191,57 @@
                     <span th:text="${applicationId}">APP-123456</span>
                 </div>
             </div>
-            
+
             <!-- Feedback Section -->
             <div class="feedback-section">
                 <h3>What to know</h3>
-                <p>While your background and experience are impressive, we received many qualified applications for this role. 
-                Our hiring team carefully reviewed all applicants and selected candidates whose skills most closely matched 
-                the immediate requirements of this position.</p>
-                <p>This decision doesn't reflect on your qualifications or potential as a professional. 
-                We encourage you to apply for other positions that may be a better fit.</p>
+                <p>While your background and experience are impressive, we received many qualified applications for this
+                    role.
+                    Our hiring team carefully reviewed all applicants and selected candidates whose skills most closely
+                    matched
+                    the immediate requirements of this position.</p>
+                <p>This decision doesn't reflect on your qualifications or potential as a professional.
+                    We encourage you to apply for other positions that may be a better fit.</p>
             </div>
-            
+
             <!-- Encouragement -->
             <div class="encouragement">
-                <p><strong>Don't be discouraged!</strong> Many talented professionals face rejections during their search. 
-                Keep refining your skills and applying to roles that align with your experience.</p>
+                <p><strong>Don't be discouraged!</strong> Many talented professionals face rejections during their
+                    search.
+                    Keep refining your skills and applying to roles that align with your experience.</p>
             </div>
-            
+
             <!-- Tips Section -->
             <div class="tips-section">
                 <h3>📌 Tips for Future Applications</h3>
                 <ul>
-                    <li><strong>Customize your resume:</strong> Tailor it to highlight relevant experience for each position</li>
-                    <li><strong>Personalize your cover letter:</strong> Show why you're genuinely interested in the role</li>
+                    <li><strong>Customize your resume:</strong> Tailor it to highlight relevant experience for each
+                        position</li>
+                    <li><strong>Personalize your cover letter:</strong> Show why you're genuinely interested in the role
+                    </li>
                     <li><strong>Showcase projects:</strong> Include links to your portfolio or GitHub projects</li>
                     <li><strong>Continue learning:</strong> Stay updated with industry trends and new technologies</li>
                     <li><strong>Network:</strong> Build professional relationships in your field</li>
                 </ul>
             </div>
-            
+
             <!-- Explore Other Opportunities -->
             <div class="button-container">
                 <a th:href="${exploreLink}" class="button">Explore Other Opportunities</a>
             </div>
-            
-            <p>We hope to see you apply for future positions that may be a better match for your skills and experience.</p>
-            
+
+            <p>We hope to see you apply for future positions that may be a better match for your skills and experience.
+            </p>
+
             <p>Best of luck in your job search!<br>
-            The JRecruiter Team</p>
+                The JRecruiter Team</p>
         </div>
-        
+
         <!-- Footer -->
         <div class="footer">
             <p>© 2024 JRecruiter. All rights reserved.</p>
         </div>
     </div>
 </body>
+
 </html>

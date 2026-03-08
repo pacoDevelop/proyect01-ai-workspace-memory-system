@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,6 +14,7 @@
             margin: 0;
             padding: 0;
         }
+
         .container {
             max-width: 600px;
             margin: 20px auto;
@@ -21,20 +23,24 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             overflow: hidden;
         }
+
         .header {
             background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
             color: white;
             padding: 40px 20px;
             text-align: center;
         }
+
         .header h1 {
             margin: 0;
             font-size: 24px;
             font-weight: 600;
         }
+
         .content {
             padding: 40px;
         }
+
         .highlight-box {
             background-color: #fff3e0;
             border-left: 4px solid #ff9800;
@@ -42,41 +48,50 @@
             margin: 20px 0;
             border-radius: 4px;
         }
+
         .highlight-box h2 {
             margin-top: 0;
             color: #e65100;
         }
+
         .interview-details {
             background-color: #f8f9fa;
             padding: 20px;
             margin: 20px 0;
             border-radius: 4px;
         }
+
         .detail-row {
             margin: 15px 0;
             display: flex;
             align-items: flex-start;
         }
+
         .detail-icon {
             min-width: 30px;
             font-size: 18px;
             margin-right: 10px;
         }
+
         .detail-content {
             flex: 1;
         }
+
         .detail-content strong {
             display: block;
             color: #333;
             margin-bottom: 5px;
         }
+
         .detail-content span {
             color: #666;
         }
+
         .button-container {
             text-align: center;
             margin: 30px 0;
         }
+
         .button {
             display: inline-block;
             background-color: #f5576c;
@@ -87,27 +102,33 @@
             font-weight: 600;
             transition: background-color 0.3s;
         }
+
         .button:hover {
             background-color: #e63946;
         }
+
         .tips-section {
             background-color: #f8f9fa;
             padding: 20px;
             margin: 20px 0;
             border-radius: 4px;
         }
+
         .tips-section h3 {
             margin-top: 0;
             color: #333;
         }
+
         .tips-section ul {
             margin: 10px 0;
             padding-left: 20px;
         }
+
         .tips-section li {
             margin: 8px 0;
             color: #666;
         }
+
         .footer {
             background-color: #f8f9fa;
             padding: 20px;
@@ -118,25 +139,27 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <!-- Header -->
         <div class="header">
             <h1>🎉 You're Invited to Interview!</h1>
         </div>
-        
+
         <!-- Content -->
         <div class="content">
             <p>Hi <span th:text="${candidateName}">John</span>,</p>
-            
-            <p>Great news! You've been invited to interview for the <strong th:text="${jobTitle}">Senior Developer</strong> position.</p>
-            
+
+            <p>Great news! You've been invited to interview for the <strong th:text="${jobTitle}">Senior
+                    Developer</strong> position.</p>
+
             <!-- Highlight -->
             <div class="highlight-box">
                 <h2>Interview Scheduled</h2>
                 <p>Your interview has been scheduled. See details below:</p>
             </div>
-            
+
             <!-- Interview Details -->
             <div class="interview-details">
                 <div class="detail-row">
@@ -168,12 +191,12 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- Call to Action -->
             <div class="button-container">
                 <a th:href="${responseLink}" class="button">Confirm Your Attendance</a>
             </div>
-            
+
             <!-- Tips Section -->
             <div class="tips-section">
                 <h3>📌 Interview Tips</h3>
@@ -181,21 +204,23 @@
                     <li><strong>Be on time:</strong> Connect 5 minutes before your scheduled interview</li>
                     <li><strong>Prepare:</strong> Review the job description and company information</li>
                     <li><strong>Test your setup:</strong> Check your camera, microphone, and internet connection</li>
-                    <li><strong>Have questions ready:</strong> Prepare thoughtful questions about the role and company</li>
+                    <li><strong>Have questions ready:</strong> Prepare thoughtful questions about the role and company
+                    </li>
                     <li><strong>Professional appearance:</strong> Dress as you would for an in-person interview</li>
                 </ul>
             </div>
-            
+
             <p>If you need any additional information or have questions, please don't hesitate to reach out.</p>
-            
+
             <p>We're looking forward to speaking with you!<br>
-            The JRecruiter Team</p>
+                The JRecruiter Team</p>
         </div>
-        
+
         <!-- Footer -->
         <div class="footer">
             <p>© 2024 JRecruiter. All rights reserved.</p>
         </div>
     </div>
 </body>
+
 </html>

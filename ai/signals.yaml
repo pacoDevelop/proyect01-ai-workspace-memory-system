@@ -1,8 +1,18 @@
 # SIGNALS — Inter-Agent Notifications
 schema_version: "4.0"
 min_compatible_version: "4.0"
-last_updated: "2026-03-08T08:10:00Z"
+last_updated: "2026-03-08T16:24:00Z"
 signals:
+  - id: "SIG-AUDIT-001"
+    type: "info"
+    from: "antigravity"
+    to: "any"
+    message: "AUDIT-001 COMPLETE: Full workspace consistency audit performed. 15 inconsistencies found (4 critical, 6 important, 5 minor). Key issues: context.md contradictions (completed vs pending), README entregable status mismatch, missing gemini-coordinator from agent_profiles, git_workflow.md corrupted, ejemplos-nexashop/ directory missing. See walkthrough for full details."
+    created_at: "2026-03-08T16:24:00Z"
+    read_by: []
+    priority: "critical"
+    requires_review: true
+
   - id: "SIG-WORK-004"
     type: "task_completed"
     from: "github-copilot"

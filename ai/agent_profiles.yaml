@@ -56,4 +56,36 @@ agents:
     active: true
     role: "assistant"
 
+  - id: "gemini-coordinator"
+    name: "Gemini Coordinator"
+    model: "Gemini 3 Flash"
+    description: "AI coordinator specialized in task orchestration, business rule validation, and context maintenance."
+    specialization_tags:
+      [orchestration, validation, coordination, context-maintenance]
+    max_task_priority: "medium"
+    capabilities:
+      - orchestration
+      - validation
+      - context-maintenance
+      - planning
+    active: true
+    role: "coordinator"
+
+  - id: "antigravity"
+    name: "Antigravity"
+    model: "Gemini (Google DeepMind)"
+    description: "AI auditor specialized in workspace consistency verification, cross-file validation, and quality assurance of the AI memory system."
+    specialization_tags:
+      [auditing, consistency, validation, quality-assurance, workspace-maintenance]
+    max_task_priority: "critical"
+    capabilities:
+      - auditing
+      - consistency-verification
+      - cross-file-validation
+      - quality-assurance
+      - documentation
+      - research
+    active: true
+    role: "auditor"
+
 deactivated_agents: []

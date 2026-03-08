@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,6 +14,7 @@
             margin: 0;
             padding: 0;
         }
+
         .container {
             max-width: 600px;
             margin: 20px auto;
@@ -21,20 +23,24 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             overflow: hidden;
         }
+
         .header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 40px 20px;
             text-align: center;
         }
+
         .header h1 {
             margin: 0;
             font-size: 24px;
             font-weight: 600;
         }
+
         .content {
             padding: 40px;
         }
+
         .job-card {
             background-color: #f8f9fa;
             border-left: 4px solid #667eea;
@@ -42,29 +48,35 @@
             margin: 20px 0;
             border-radius: 4px;
         }
+
         .job-card h2 {
             margin-top: 0;
             color: #667eea;
             font-size: 20px;
         }
+
         .job-detail {
             margin: 10px 0;
             color: #666;
         }
+
         .job-detail strong {
             display: inline-block;
             width: 100px;
             color: #333;
         }
+
         .description {
             margin: 20px 0;
             line-height: 1.8;
             color: #555;
         }
+
         .button-container {
             text-align: center;
             margin: 30px 0;
         }
+
         .button {
             display: inline-block;
             background-color: #667eea;
@@ -75,9 +87,11 @@
             font-weight: 600;
             transition: background-color 0.3s;
         }
+
         .button:hover {
             background-color: #5568d3;
         }
+
         .footer {
             background-color: #f8f9fa;
             padding: 20px;
@@ -86,6 +100,7 @@
             color: #999;
             border-top: 1px solid #eee;
         }
+
         .divider {
             border: none;
             border-top: 1px solid #eee;
@@ -93,19 +108,20 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <!-- Header -->
         <div class="header">
             <h1>🎯 New Job Opportunity!</h1>
         </div>
-        
+
         <!-- Content -->
         <div class="content">
             <p>Hi there!</p>
-            
+
             <p>We found a job that matches your profile. Check it out below:</p>
-            
+
             <!-- Job Card -->
             <div class="job-card">
                 <h2 th:text="${jobTitle}">Senior Software Engineer</h2>
@@ -114,7 +130,7 @@
                     <span th:text="${companyName}">Acme Corp</span>
                 </div>
             </div>
-            
+
             <!-- Description -->
             <div class="description">
                 <p><strong>About this role:</strong></p>
@@ -122,20 +138,20 @@
                     We are looking for a talented developer to join our team...
                 </p>
             </div>
-            
+
             <!-- Call to Action -->
             <div class="button-container">
                 <a th:href="${jobLink}" class="button">View Job Details</a>
             </div>
-            
+
             <hr class="divider">
-            
+
             <p>If you're interested, click the button above to view the full job description and apply.</p>
-            
+
             <p>Best regards,<br>
-            The JRecruiter Team</p>
+                The JRecruiter Team</p>
         </div>
-        
+
         <!-- Footer -->
         <div class="footer">
             <p>You're receiving this email because your profile matches the job criteria.</p>
@@ -143,4 +159,5 @@
         </div>
     </div>
 </body>
+
 </html>

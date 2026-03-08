@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,6 +14,7 @@
             margin: 0;
             padding: 0;
         }
+
         .container {
             max-width: 600px;
             margin: 20px auto;
@@ -21,20 +23,24 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             overflow: hidden;
         }
+
         .header {
             background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
             color: white;
             padding: 40px 20px;
             text-align: center;
         }
+
         .header h1 {
             margin: 0;
             font-size: 24px;
             font-weight: 600;
         }
+
         .content {
             padding: 40px;
         }
+
         .congratulations-box {
             background-color: #e8f5e9;
             border-left: 4px solid #4caf50;
@@ -43,26 +49,31 @@
             border-radius: 4px;
             text-align: center;
         }
+
         .congratulations-box h2 {
             margin: 0 0 10px 0;
             font-size: 28px;
             color: #2e7d32;
         }
+
         .congratulations-box p {
             margin: 0;
             color: #388e3c;
             font-size: 16px;
         }
+
         .offer-details {
             background-color: #f8f9fa;
             padding: 20px;
             margin: 20px 0;
             border-radius: 4px;
         }
+
         .offer-details h3 {
             margin-top: 0;
             color: #11998e;
         }
+
         .detail-row {
             margin: 12px 0;
             display: flex;
@@ -70,16 +81,20 @@
             padding: 8px 0;
             border-bottom: 1px solid #eee;
         }
+
         .detail-row:last-child {
             border-bottom: none;
         }
+
         .detail-row strong {
             color: #333;
         }
+
         .detail-row span {
             color: #11998e;
             font-weight: 600;
         }
+
         .next-steps {
             background-color: #fff3e0;
             border-left: 4px solid #ff9800;
@@ -87,18 +102,22 @@
             margin: 20px 0;
             border-radius: 4px;
         }
+
         .next-steps h3 {
             margin-top: 0;
             color: #e65100;
         }
+
         .next-steps ol {
             margin: 10px 0;
             padding-left: 20px;
         }
+
         .next-steps li {
             margin: 8px 0;
             color: #666;
         }
+
         .button-container {
             text-align: center;
             margin: 30px 0;
@@ -107,6 +126,7 @@
             justify-content: center;
             flex-wrap: wrap;
         }
+
         .button {
             display: inline-block;
             padding: 12px 25px;
@@ -118,21 +138,26 @@
             cursor: pointer;
             font-size: 14px;
         }
+
         .button-primary {
             background-color: #11998e;
             color: white;
         }
+
         .button-primary:hover {
             background-color: #0d7a6a;
         }
+
         .button-secondary {
             background-color: #f0f0f0;
             color: #333;
             border: 1px solid #ddd;
         }
+
         .button-secondary:hover {
             background-color: #e0e0e0;
         }
+
         .important-note {
             background-color: #fff8e1;
             border: 1px solid #ffe082;
@@ -142,6 +167,7 @@
             font-size: 13px;
             color: #666;
         }
+
         .footer {
             background-color: #f8f9fa;
             padding: 20px;
@@ -152,25 +178,28 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <!-- Header -->
         <div class="header">
             <h1>🎊 Congratulations!</h1>
         </div>
-        
+
         <!-- Content -->
         <div class="content">
             <p>Hi <span th:text="${candidateName}">John</span>,</p>
-            
+
             <!-- Congratulations Box -->
             <div class="congratulations-box">
                 <h2>We're Excited to Offer You the Position!</h2>
-                <p>We'd like to extend an offer for the <strong th:text="${jobTitle}">Senior Developer</strong> role.</p>
+                <p>We'd like to extend an offer for the <strong th:text="${jobTitle}">Senior Developer</strong> role.
+                </p>
             </div>
-            
-            <p>We were impressed by your qualifications and professional experience. We believe you'll be a great fit for our team and are excited about the opportunity to have you join us.</p>
-            
+
+            <p>We were impressed by your qualifications and professional experience. We believe you'll be a great fit
+                for our team and are excited about the opportunity to have you join us.</p>
+
             <!-- Offer Details -->
             <div class="offer-details">
                 <h3>Offer Details</h3>
@@ -191,13 +220,14 @@
                     <span>Please respond within 5 business days</span>
                 </div>
             </div>
-            
+
             <!-- Important Note -->
             <div class="important-note">
-                ⏰ <strong>Important:</strong> Please respond to this offer by <span th:text="${offerExpiry}">January 25, 2024</span>. 
+                ⏰ <strong>Important:</strong> Please respond to this offer by <span th:text="${offerExpiry}">January 25,
+                    2024</span>.
                 If we don't hear from you by then, we may need to consider other candidates.
             </div>
-            
+
             <!-- Next Steps -->
             <div class="next-steps">
                 <h3>Next Steps</h3>
@@ -208,22 +238,24 @@
                     <li>Our HR team will contact you with next steps</li>
                 </ol>
             </div>
-            
+
             <!-- Action Buttons -->
             <div class="button-container">
                 <a th:href="${acceptLink}" class="button button-primary">✓ Accept Offer</a>
             </div>
-            
-            <p>If you have any questions about the offer or the position, please don't hesitate to reach out to our HR team. We're here to help!</p>
-            
+
+            <p>If you have any questions about the offer or the position, please don't hesitate to reach out to our HR
+                team. We're here to help!</p>
+
             <p>Welcome to the team!<br>
-            The JRecruiter Team</p>
+                The JRecruiter Team</p>
         </div>
-        
+
         <!-- Footer -->
         <div class="footer">
             <p>© 2024 JRecruiter. All rights reserved.</p>
         </div>
     </div>
 </body>
+
 </html>
