@@ -1,4 +1,19 @@
-## [2026-03-08T20:30:00Z] TASK-031: AUDITORÍA DOMINIO EMPLOYER COMPLETADA (SESSION-027)
+## [2026-03-08T20:55:00Z] TASK-032: AUDITORÍA DOMINIO CANDIDATE COMPLETADA - ERROR CRÍTICO (SESSION-028)
+
+**Type:** review-audit | **Responsible:** antigravity | **Scope:** User-Service Domain Layer (Candidate/Application)
+
+### Summary
+
+Re-auditoría de TASK-014 finalizada. Se ha detectado un **error de compilación crítico** en `Candidate.java` debido a campos finales no inicializados y un uso indebido de reflexión.
+
+**Acciones tomadas:**
+- 🔴 Identificación de error de compilación en `Candidate.java` (final fields uninitialized).
+- ✅ Validación de diseño en `Application.java` y Value Objects asociados.
+- 🔴 Ratificación de sistema no funcional por falta de infraestructura raíz.
+
+---
+
+1: ## [2026-03-08T20:30:00Z] TASK-031: AUDITORÍA DOMINIO EMPLOYER COMPLETADA (SESSION-027)
 
 **Type:** review-audit | **Responsible:** antigravity | **Scope:** User-Service Domain Layer
 
