@@ -10,13 +10,10 @@ active_agents:
     started_at: "2026-03-08T22:05:00Z"
     last_heartbeat: "2026-03-08T22:05:00Z"
     current_task: "TASK-014"
-    status: "working"
+    status: "idle"
     working_branch: "main"   # Archivos /ai/ primordialmente por ahora
     base_branch: "main"
-    locked_files:
-      - "ai/tasks.yaml"
-      - "services/user-service/src/main/java/com/jrecruiter/userservice/domain/aggregates/Candidate.java"
-      - "services/user-service/src/main/java/com/jrecruiter/userservice/application/ApplicationService.java"
+    locked_files: []
     notes: "Implementando Candidate aggregate y contexto de aplicaciones (TASK-014)."
 
 ghost_entries: []

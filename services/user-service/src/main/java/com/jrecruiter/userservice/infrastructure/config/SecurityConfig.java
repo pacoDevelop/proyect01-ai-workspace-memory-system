@@ -6,72 +6,57 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.security.config.Customizer;
 
 import java.util.Arrays;
 
 /**
- * Spring Security Configuration
+ * Spring Security Configuration for Spring Security 6.x
  * JWT + OAuth2 setup.
- * 
- * @author GitHub Copilot / TASK-015
  */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
     
-    /**
-     * Security filter chain for API endpoints
-     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .cors()
-            .and()
-            .csrf().disable()
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and()
-            .authorizeRequests()
+            .cors(Customizer.withDefaults())
+            .csrf(csrf -> csrf.disable())
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(auth -> auth
                 // Public endpoints
-                .antMatchers(HttpMethod.POST, "/api/auth/login", "/api/auth/register").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/candidates/register").permitAll()
-                .antMatchers("/actuator/health").permitAll()
+                .requestMatchers(HttpMethod.POST, "/auth/login", "/auth/register").permitAll()
+                .requestMatchers(HttpMethod.POST, "/candidates").permitAll()
+                .requestMatchers("/actuator/health").permitAll()
                 
                 // Protected endpoints
-                .antMatchers(HttpMethod.GET, "/api/candidates/**").authenticated()
-                .antMatchers(HttpMethod.POST, "/api/candidates/**").authenticated()
-                .antMatchers(HttpMethod.PUT, "/api/candidates/**").authenticated()
-                .antMatchers(HttpMethod.DELETE, "/api/candidates/**").authenticated()
-                .antMatchers(HttpMethod.GET, "/api/applications/**").authenticated()
-                .antMatchers(HttpMethod.POST, "/api/applications/**").authenticated()
+                .requestMatchers(HttpMethod.GET, "/candidates/**").authenticated()
+                .requestMatchers(HttpMethod.POST, "/candidates/**").authenticated()
+                .requestMatchers(HttpMethod.PUT, "/candidates/**").authenticated()
+                .requestMatchers(HttpMethod.DELETE, "/candidates/**").authenticated()
+                .requestMatchers(HttpMethod.GET, "/applications/**").authenticated()
+                .requestMatchers(HttpMethod.POST, "/applications/**").authenticated()
                 
                 // All other requests require authentication
                 .anyRequest().authenticated()
-            .and()
-            .oauth2ResourceServer()
-                .jwt();
+            )
+            .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
         
         return http.build();
     }
     
-    /**
-     * Password encoder
-     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
     
-    /**
-     * CORS configuration
-     */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();

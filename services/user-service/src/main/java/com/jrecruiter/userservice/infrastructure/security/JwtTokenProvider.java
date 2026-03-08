@@ -75,9 +75,8 @@ public class JwtTokenProvider {
      * Get user ID from token
      */
     public UUID getUserIdFromToken(String token) {
-        String userId = Jwts.parserBuilder()
+        String userId = Jwts.parser()
                 .setSigningKey(jwtSecret.getBytes())
-                .build()
                 .parseClaimsJws(token)
                 .getBody()
                 .get("userId", String.class);
@@ -90,9 +89,8 @@ public class JwtTokenProvider {
      */
     public boolean validateToken(String token) {
         try {
-            Jwts.parserBuilder()
+            Jwts.parser()
                     .setSigningKey(jwtSecret.getBytes())
-                    .build()
                     .parseClaimsJws(token);
             return true;
         } catch (Exception e) {

@@ -2,8 +2,8 @@ package com.jrecruiter.userservice.domain.aggregates;
 
 import java.time.LocalDateTime;
 import java.util.*;
-import com.jrecruiter.userservice.domain.valueobjects.*;
 import com.jrecruiter.userservice.domain.events.*;
+import com.jrecruiter.userservice.domain.valueobjects.*;
 
 /**
  * Aggregate Root: Candidate
@@ -26,23 +26,23 @@ public class Candidate {
     // Surrogate Key
     private final UUID candidateId;
     
-    // Value Objects
+    // Identity and Personal Info
     private final Email email;
     private final FirstName firstName;
     private final LastName lastName;
     private final PhoneNumber phoneNumber;
     
     // Profile Information
-    private final CandidateSkills skills;
-    private final ExperienceLevel experienceLevel;
-    private final DesiredLocation desiredLocation;
+    private CandidateSkills skills;
+    private ExperienceLevel experienceLevel;
+    private DesiredLocation desiredLocation;
     
     // State
     private CandidateProfileStatus status;
     private String bio;
     
     // Timestamps
-    private final LocalDateTime registeredAt;
+    private LocalDateTime registeredAt;
     private LocalDateTime profileCompletedAt;
     private LocalDateTime suspendedAt;
     private LocalDateTime deactivatedAt;
@@ -68,7 +68,7 @@ public class Candidate {
         Candidate candidate = new Candidate(candidateId, email, firstName, lastName, phoneNumber);
         
         candidate.addDomainEvent(
-            new CandidateRegisteredEvent(
+            new CandidateEvents.CandidateRegisteredEvent(
                 candidateId,
                 email.getValue(),
                 firstName.getValue(),
@@ -109,33 +109,16 @@ public class Candidate {
             );
         }
         
-        // Use reflection-like access for assignment
-        try {
-            var candidateClass = Candidate.class;
-            var skillsField = candidateClass.getDeclaredField("skills");
-            skillsField.setAccessible(true);
-            skillsField.set(this, skills);
-            
-            var expField = candidateClass.getDeclaredField("experienceLevel");
-            expField.setAccessible(true);
-            expField.set(this, experience);
-            
-            var locField = candidateClass.getDeclaredField("desiredLocation");
-            locField.setAccessible(true);
-            locField.set(this, location);
-            
-            var bioField = candidateClass.getDeclaredField("bio");
-            bioField.setAccessible(true);
-            bioField.set(this, bio == null || bio.isBlank() ? "" : bio);
-        } catch (Exception e) {
-            throw new RuntimeException("Error setting profile fields", e);
-        }
+        this.skills = skills;
+        this.experienceLevel = experience;
+        this.desiredLocation = location;
+        this.bio = bio == null || bio.isBlank() ? "" : bio;
         
         this.status = CandidateProfileStatus.ACTIVE;
         this.profileCompletedAt = LocalDateTime.now();
         
         addDomainEvent(
-            new CandidateProfileCompletedEvent(candidateId, email.getValue(), LocalDateTime.now())
+            new CandidateEvents.CandidateProfileCompletedEvent(candidateId, email.getValue(), LocalDateTime.now())
         );
     }
     
@@ -148,29 +131,13 @@ public class Candidate {
             throw new IllegalStateException("Cannot update inactive profile");
         }
         
-        try {
-            var candidateClass = Candidate.class;
-            var skillsField = candidateClass.getDeclaredField("skills");
-            skillsField.setAccessible(true);
-            skillsField.set(this, skills);
-            
-            var expField = candidateClass.getDeclaredField("experienceLevel");
-            expField.setAccessible(true);
-            expField.set(this, experience);
-            
-            var locField = candidateClass.getDeclaredField("desiredLocation");
-            locField.setAccessible(true);
-            locField.set(this, location);
-            
-            var bioField = candidateClass.getDeclaredField("bio");
-            bioField.setAccessible(true);
-            bioField.set(this, bio == null || bio.isBlank() ? "" : bio);
-        } catch (Exception e) {
-            throw new RuntimeException("Error updating profile fields", e);
-        }
+        if (skills != null) this.skills = skills;
+        if (experience != null) this.experienceLevel = experience;
+        if (location != null) this.desiredLocation = location;
+        if (bio != null) this.bio = bio;
         
         addDomainEvent(
-            new CandidateProfileUpdatedEvent(candidateId, email.getValue(), LocalDateTime.now())
+            new CandidateEvents.CandidateProfileUpdatedEvent(candidateId, email.getValue(), LocalDateTime.now())
         );
     }
     
@@ -192,7 +159,7 @@ public class Candidate {
         this.suspendedAt = LocalDateTime.now();
         
         addDomainEvent(
-            new CandidateSuspendedEvent(candidateId, email.getValue(), reason, suspendedAt)
+            new CandidateEvents.CandidateSuspendedEvent(candidateId, email.getValue(), reason, suspendedAt)
         );
     }
     
@@ -210,7 +177,7 @@ public class Candidate {
         this.suspendedAt = null;
         
         addDomainEvent(
-            new CandidateReactivatedEvent(candidateId, email.getValue(), LocalDateTime.now())
+            new CandidateEvents.CandidateReactivatedEvent(candidateId, email.getValue(), LocalDateTime.now())
         );
     }
     
@@ -230,7 +197,7 @@ public class Candidate {
         this.deactivatedAt = LocalDateTime.now();
         
         addDomainEvent(
-            new CandidateDeactivatedEvent(candidateId, email.getValue(), reason, deactivatedAt)
+            new CandidateEvents.CandidateDeactivatedEvent(candidateId, email.getValue(), reason, deactivatedAt)
         );
     }
     
@@ -315,28 +282,28 @@ public class Candidate {
         return deactivatedAt;
     }
     
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Candidate)) return false;
-        Candidate candidate = (Candidate) o;
-        return Objects.equals(candidateId, candidate.candidateId);
-    }
-    
-    @Override
-    public int hashCode() {
-        return Objects.hash(candidateId);
-    }
-    
-    @Override
-    public String toString() {
-        return "Candidate{" +
-                "candidateId=" + candidateId +
-                ", firstName=" + firstName +
-                ", lastName=" + lastName +
-                ", email=" + email +
-                ", status=" + status +
-                ", registeredAt=" + registeredAt +
-                '}';
+    /**
+     * Reconstruct candidate from persistence.
+     */
+    public static Candidate reconstruct(
+            UUID candidateId, Email email, FirstName firstName, LastName lastName,
+            PhoneNumber phoneNumber, CandidateSkills skills, ExperienceLevel experience,
+            DesiredLocation location, CandidateProfileStatus status, String bio,
+            LocalDateTime registeredAt, LocalDateTime profileCompletedAt,
+            LocalDateTime suspendedAt, LocalDateTime deactivatedAt) {
+        
+        Candidate candidate = new Candidate(candidateId, email, firstName, lastName, phoneNumber);
+        candidate.skills = skills;
+        candidate.experienceLevel = experience;
+        candidate.desiredLocation = location;
+        candidate.status = status;
+        candidate.bio = bio;
+        
+        candidate.registeredAt = registeredAt;
+        candidate.profileCompletedAt = profileCompletedAt;
+        candidate.suspendedAt = suspendedAt;
+        candidate.deactivatedAt = deactivatedAt;
+        
+        return candidate;
     }
 }

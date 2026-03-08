@@ -5,76 +5,65 @@ import java.util.UUID;
 
 /**
  * Candidate Domain Events
- * 
- * @author GitHub Copilot / TASK-014
  */
+public final class CandidateEvents {
+    private CandidateEvents() {}
 
-record CandidateRegisteredEvent(
-        UUID candidateId,
-        String email,
-        String firstName,
-        String lastName,
-        LocalDateTime occurredAt
-) implements DomainEvent {
-    @Override
-    public LocalDateTime getOccurredAt() {
-        return occurredAt;
+    public record CandidateRegisteredEvent(
+            UUID candidateId,
+            String email,
+            String firstName,
+            String lastName,
+            LocalDateTime occurredAt
+    ) implements DomainEvent {
+        @Override
+        public LocalDateTime getOccurredAt() { return occurredAt; }
     }
-}
 
-record CandidateProfileCompletedEvent(
-        UUID candidateId,
-        String email,
-        LocalDateTime occurredAt
-) implements DomainEvent {
-    @Override
-    public LocalDateTime getOccurredAt() {
-        return occurredAt;
+    public record CandidateProfileCompletedEvent(
+            UUID candidateId,
+            String email,
+            LocalDateTime occurredAt
+    ) implements DomainEvent {
+        @Override
+        public LocalDateTime getOccurredAt() { return occurredAt; }
     }
-}
 
-record CandidateProfileUpdatedEvent(
-        UUID candidateId,
-        String email,
-        LocalDateTime occurredAt
-) implements DomainEvent {
-    @Override
-    public LocalDateTime getOccurredAt() {
-        return occurredAt;
+    public record CandidateProfileUpdatedEvent(
+            UUID candidateId,
+            String email,
+            LocalDateTime occurredAt
+    ) implements DomainEvent {
+        @Override
+        public LocalDateTime getOccurredAt() { return occurredAt; }
     }
-}
 
-record CandidateSuspendedEvent(
-        UUID candidateId,
-        String email,
-        String reason,
-        LocalDateTime occurredAt
-) implements DomainEvent {
-    @Override
-    public LocalDateTime getOccurredAt() {
-        return occurredAt;
+    public record CandidateSuspendedEvent(
+            UUID candidateId,
+            String email,
+            String reason,
+            LocalDateTime occurredAt
+    ) implements DomainEvent {
+        @Override
+        public LocalDateTime getOccurredAt() { return occurredAt; }
     }
-}
 
-record CandidateReactivatedEvent(
-        UUID candidateId,
-        String email,
-        LocalDateTime occurredAt
-) implements DomainEvent {
-    @Override
-    public LocalDateTime getOccurredAt() {
-        return occurredAt;
+    public record CandidateReactivatedEvent(
+            UUID candidateId,
+            String email,
+            LocalDateTime occurredAt
+    ) implements DomainEvent {
+        @Override
+        public LocalDateTime getOccurredAt() { return occurredAt; }
     }
-}
 
-record CandidateDeactivatedEvent(
-        UUID candidateId,
-        String email,
-        String reason,
-        LocalDateTime occurredAt
-) implements DomainEvent {
-    @Override
-    public LocalDateTime getOccurredAt() {
-        return occurredAt;
+    public record CandidateDeactivatedEvent(
+            UUID candidateId,
+            String email,
+            String reason,
+            LocalDateTime occurredAt
+    ) implements DomainEvent {
+        @Override
+        public LocalDateTime getOccurredAt() { return occurredAt; }
     }
 }

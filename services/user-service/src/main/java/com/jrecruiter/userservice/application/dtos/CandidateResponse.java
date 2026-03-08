@@ -20,9 +20,7 @@ public class CandidateResponse {
     private String status;
     private String skills;
     private Integer experienceYears;
-    private String desiredCity;
-    private String desiredCountry;
-    private Boolean remoteOk;
+    private String desiredLocation;
     private String bio;
     private LocalDateTime registeredAt;
     private LocalDateTime profileCompletedAt;
@@ -54,14 +52,8 @@ public class CandidateResponse {
     public Integer getExperienceYears() { return experienceYears; }
     public void setExperienceYears(Integer experienceYears) { this.experienceYears = experienceYears; }
     
-    public String getDesiredCity() { return desiredCity; }
-    public void setDesiredCity(String desiredCity) { this.desiredCity = desiredCity; }
-    
-    public String getDesiredCountry() { return desiredCountry; }
-    public void setDesiredCountry(String desiredCountry) { this.desiredCountry = desiredCountry; }
-    
-    public Boolean getRemoteOk() { return remoteOk; }
-    public void setRemoteOk(Boolean remoteOk) { this.remoteOk = remoteOk; }
+    public String getDesiredLocation() { return desiredLocation; }
+    public void setDesiredLocation(String desiredLocation) { this.desiredLocation = desiredLocation; }
     
     public String getBio() { return bio; }
     public void setBio(String bio) { this.bio = bio; }

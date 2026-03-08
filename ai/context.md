@@ -16,16 +16,18 @@ Migrar la lógica de negocio del monolito ubicado en `/legacy` hacia microservic
 ### Completado:
 ✅ Phase 1 (TASK-001-005): Analysis & Planning — 100%
 ✅ Phase 2 (TASK-006-012): Job-Service — 100% (7/7 tasks, ~6,500 LOC, 56 tests) 
-✅ Phase 3 (TASK-013-015): User-Service Code — 100% (3/3 tasks, ~2,100 LOC, 30 tests) — ⚠️ Infrastructure missing
+✅ Phase 3 (TASK-013-015): User-Service — 100% (Infrastructure Restored)
 ✅ Phase 4 (TASK-016-017): Search-Service — 100% (Infrastructure Restored)
 ✅ Phase 5 (TASK-018): Notification-Service Code — 100% (~1,100 LOC, 6 templates) — ⚠️ Infrastructure missing
 ✅ Phase 6 (TASK-019-037): Audits & Reviews — 33/33 tasks complete, TASK-036 formalization closure done
 
 ### Auditoría Final (TASK-037):
-🔴 **Critical findings:**
-1. **INFRAESTRUCTURA FANTASMA:** User, Search, Notification Services carecen de pom.xml, yml, Dockerfiles
-2. **RABBITMQ DESALINEADO:** Nombres de colas Job-Service no coinciden con Search/Notification listeners
-3. **GATEWAY INEXISTENTE:** API Gateway no implementado
+🔴 **Critical findings (RESTORED):**
+1. ✅ USER-SERVICE INFRASTRUCTURE: pom.xml, Dockerfile, application.yml created.
+2. ✅ SEARCH-SERVICE INFRASTRUCTURE: pom.xml, Dockerfile, application.yml created.
+3. ⚠️ NOTIFICATION-SERVICE INFRASTRUCTURE: Still missing pom.xml, Dockerfile.
+4. ⚠️ RABBITMQ DESALINEADO: Nombres de colas Job-Service vs Notification listeners. (Search ALIGNED).
+5. ⚠️ GATEWAY INEXISTENTE: API Gateway no implementado.
 
 ## ▸ TAREAS PRIORITARIAS AHORA
 🔴 **RESTAURACIÓN DE INFRAESTRUCTURA (User, Search, Notification)** — CRITICAL
@@ -40,15 +42,15 @@ Migrar la lógica de negocio del monolito ubicado en `/legacy` hacia microservic
 5. **Phase 11** — Kubernetes manifests + deployment
 
 ## ▸ RECUENTO DE TAREAS
-| Fase | Tareas | Status | Auditoría | Acción |
+| Phase | Tareas | Status | Auditoría | Acción |
 |------|--------|--------|-----------|--------|
 | Análisis | TASK-001-005 | ✅ done | ✅ TASK-019-023 | Ready |
 | Job-Service | TASK-006-012 | ✅ done | ✅ TASK-024-030 | Ready |
-| User-Service | TASK-013-015 | ✅ code done | ⚠️ TASK-031-033 | Infra Required |
-| Search-Service | TASK-016-017 | ✅ code done | ⚠️ TASK-034-035 | Infra Required |
-| Notification | TASK-018 | ✅ code done | ✅ TASK-036 done | Ready (Infra) |
-| E2E Audit | TASK-037 | ✅ done | N/A | Findings Critical |
-| **TOTAL** | **37/37** | **Code: ✅ 100%** | **Audits: ✅ 100%** | **Infra: ⚠️ 0%** |
+| User-Service | TASK-013-015 | ✅ infra done | ✅ TASK-031-033 | Ready |
+| Search-Service | TASK-016-017 | ✅ infra done | ✅ TASK-034-035 | Ready |
+| Notification | TASK-018 | ✅ code done | ✅ TASK-036 done | Infra Required |
+| E2E Audit | TASK-037 | ✅ done | N/A | Partial Fixes |
+| **TOTAL** | **37/37** | **Code: ✅ 100%** | **Audits: ✅ 100%** | **Infra: ⚠️ 66%** |
 
 ## ▸ AGENTES ACTIVOS (ÚLTIMA SESIÓN)
 
