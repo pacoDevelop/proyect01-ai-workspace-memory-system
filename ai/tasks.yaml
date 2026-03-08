@@ -505,12 +505,12 @@ tasks:
       Implementar Employer aggregate con auth.
     priority: "high"
     severity: "important"
-    status: "todo"
+    status: "claimed"
     depends_on: ["TASK-012"]
     estimated_effort: "8h"
-    assigned_agent: null
-    claimed_at: "2026-03-08T06:52:00Z"
-    updated_at: "2026-03-08T23:20:00Z"
+    assigned_agent: "github-copilot"
+    claimed_at: "2026-03-09T00:15:00Z"
+    updated_at: "2026-03-09T00:15:00Z"
     tags: ["setup", "springboot", "user-service", "ddd"]
     created_by: "github-copilot"
     completion_notes: |
