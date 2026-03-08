@@ -31,12 +31,13 @@ public class JwtTokenProvider {
     private long refreshTokenExpiration; // milliseconds (default 7d)
     
     /**
-     * Generate access token
+     * Generate access token with roles
      */
-    public String generateAccessToken(UUID userId, String email) {
+    public String generateAccessToken(UUID userId, String email, java.util.Collection<String> roles) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("userId", userId.toString());
         claims.put("email", email);
+        claims.put("roles", roles);
         claims.put("type", "ACCESS");
         
         return createToken(claims, userId.toString(), jwtExpiration);
@@ -75,13 +76,29 @@ public class JwtTokenProvider {
      * Get user ID from token
      */
     public UUID getUserIdFromToken(String token) {
-        String userId = Jwts.parser()
-                .setSigningKey(jwtSecret.getBytes())
+        SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
+        String userId = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
                 .parseClaimsJws(token)
                 .getBody()
                 .get("userId", String.class);
         
         return UUID.fromString(userId);
+    }
+
+    /**
+     * Get roles from token
+     */
+    @SuppressWarnings("unchecked")
+    public java.util.List<String> getRolesFromToken(String token) {
+        SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .get("roles", java.util.List.class);
     }
     
     /**
@@ -89,8 +106,10 @@ public class JwtTokenProvider {
      */
     public boolean validateToken(String token) {
         try {
-            Jwts.parser()
-                    .setSigningKey(jwtSecret.getBytes())
+            SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
+            Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
                     .parseClaimsJws(token);
             return true;
         } catch (Exception e) {
