@@ -1,4 +1,22 @@
-## [2026-03-09T00:20:00Z] TASK-036: RE-AUDITORÍA NOTIFICATION-SERVICE COMPLETADA (SESSION-032)
+## [2026-03-09T01:15:00Z] TASK-016: INFRAESTRUCTURA SEARCH-SERVICE RESTAURADA [TASK-016]
+
+**Type:** setup-infra | **Responsible:** antigravity | **Scope:** Search-Service
+
+### Summary
+Restauración completa del microservicio "fantasma" Search-Service. Se han creado los archivos de construcción y despliegue necesarios y se ha alineado la mensajería con Job-Service.
+
+### Cambios
+- **Infraestructura:** Creados `pom.xml` (Maven), `Dockerfile` (Docker) y `application.yml` (Config).
+- **Código:** Creada `SearchServiceApplication.java` (Spring Boot Entry Point).
+- **Mensajería:** Refactorizado `JobEventListener.java` y creado `RabbitConfig.java`.
+- **Alineación:** Cambio de Topic/Multi-queue a Fanout/Single-queue (`job-search-queue`) para coincidir con `Job-Service`.
+
+### Hallazgos
+- El código heredado de Search-Service esperaba un patrón de mensajería (Topic) que no coincidía con la implementación real de `Job-Service` (Fanout). Se ha corregido en el consumidor.
+- Se requiere Java 21 para la compilación según el estándar del pom.xml.
+
+---
+
 
 **Type:** review-audit | **Responsible:** antigravity | **Scope:** Notification-Service (Logic & Templates)
 

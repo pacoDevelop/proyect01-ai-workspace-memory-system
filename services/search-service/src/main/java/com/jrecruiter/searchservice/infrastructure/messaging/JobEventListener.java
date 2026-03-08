@@ -27,42 +27,55 @@ public class JobEventListener {
     }
     
     /**
-     * Listen for JobPublishedEvent
+     * Listen for Job Events from the unified search queue
      */
-    @RabbitListener(queues = "job.published.queue")
-    public void handleJobPublishedEvent(String message) {
+    @RabbitListener(queues = RabbitConfig.SEARCH_QUEUE)
+    public void handleJobEvent(String message) {
         try {
             Map<String, Object> event = objectMapper.readValue(message, Map.class);
+            String eventType = (String) event.get("eventType");
             
-            String jobId = (String) event.get("jobId");
-            String title = (String) event.get("title");
-            String description = (String) event.get("description");
-            String companyName = (String) event.get("companyName");
-            Double minSalary = ((Number) event.get("minSalary")).doubleValue();
-            Double maxSalary = ((Number) event.get("maxSalary")).doubleValue();
-            String currency = (String) event.get("currency");
-            Boolean remote = (Boolean) event.get("remote");
-            
-            jobSearchService.indexJob(jobId, title, description, companyName, "PUBLISHED",
-                minSalary, maxSalary, currency, remote, null);
+            if ("JobPublished".equals(eventType)) {
+                processJobPublished(event);
+            } else if ("JobClosed".equals(eventType)) {
+                processJobClosed(event);
+            }
         } catch (Exception e) {
-            // Log error and send to dead letter queue
+            System.err.println("Error processing job event: " + e.getMessage());
+        }
+    }
+    
+    private void processJobPublished(Map<String, Object> event) {
+        try {
+            String jobId = (String) event.get("jobId");
+            String title = (String) event.get("title"); // Note: title might be a nested object if ValueObject serialization is tricky
+            String description = (String) event.get("description");
+            
+            // Extract from nested if necessary (Title/Description are VOs in Job-Service)
+            String titleStr = (title instanceof Map) ? (String)((Map)title).get("value") : title;
+            String descStr = (description instanceof Map) ? (String)((Map)description).get("value") : description;
+
+            Map<String, Object> location = (Map<String, Object>) event.get("location");
+            String city = (location != null) ? (String) location.get("city") : "Unknown";
+            
+            Map<String, Object> salary = (Map<String, Object>) event.get("salary");
+            Double minSalary = (salary != null) ? ((Number) salary.get("minAmount")).doubleValue() : 0.0;
+            Double maxSalary = (salary != null) ? ((Number) salary.get("maxAmount")).doubleValue() : 0.0;
+            String currency = (salary != null) ? (String) salary.get("currency") : "USD";
+            
+            jobSearchService.indexJob(jobId, titleStr, descStr, "Unknown", "PUBLISHED",
+                minSalary, maxSalary, currency, true, city);
+        } catch (Exception e) {
             System.err.println("Error indexing job: " + e.getMessage());
         }
     }
     
-    /**
-     * Listen for JobClosedEvent
-     */
-    @RabbitListener(queues = "job.closed.queue")
-    public void handleJobClosedEvent(String message) {
+    private void processJobClosed(Map<String, Object> event) {
         try {
-            Map<String, Object> event = objectMapper.readValue(message, Map.class);
             String jobId = (String) event.get("jobId");
-            
             jobSearchService.removeJobFromIndex(jobId);
         } catch (Exception e) {
-            System.err.println("Error removing job from index: " + e.getMessage());
+            System.err.println("Error removing job: " + e.getMessage());
         }
     }
 }

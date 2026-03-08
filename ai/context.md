@@ -17,7 +17,7 @@ Migrar la lógica de negocio del monolito ubicado en `/legacy` hacia microservic
 ✅ Phase 1 (TASK-001-005): Analysis & Planning — 100%
 ✅ Phase 2 (TASK-006-012): Job-Service — 100% (7/7 tasks, ~6,500 LOC, 56 tests) 
 ✅ Phase 3 (TASK-013-015): User-Service Code — 100% (3/3 tasks, ~2,100 LOC, 30 tests) — ⚠️ Infrastructure missing
-✅ Phase 4 (TASK-016-017): Search-Service Code — 100% (2/2 tasks, ~680 LOC) — ⚠️ Infrastructure missing
+✅ Phase 4 (TASK-016-017): Search-Service — 100% (Infrastructure Restored)
 ✅ Phase 5 (TASK-018): Notification-Service Code — 100% (~1,100 LOC, 6 templates) — ⚠️ Infrastructure missing
 ✅ Phase 6 (TASK-019-037): Audits & Reviews — 33/33 tasks complete, TASK-036 formalization closure done
 
