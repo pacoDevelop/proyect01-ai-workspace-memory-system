@@ -1669,16 +1669,16 @@ tasks:
       - Verificación de Spring Security config
     priority: "critical"
     severity: "blocker"
-    status: "claimed"
+    status: "in_progress"
     depends_on: ["TASK-015"]
     estimated_effort: "4h"
     assigned_agent: "antigravity"
     claimed_at: "2026-03-08T21:05:00Z"
-    started_at: null
+    started_at: "2026-03-08T21:15:00Z"
     completed_at: null
     created_at: "2026-03-08T18:30:00Z"
     created_by: "github-copilot"
-    updated_at: "2026-03-08T21:05:00Z"
+    updated_at: "2026-03-08T21:15:00Z"
     actual_effort: null
     tags: ["review", "audit", "security", "oauth2", "user-service"]
     security_sensitive: true
@@ -1689,6 +1689,8 @@ tasks:
       - {from: "claimed", to: "in_progress", at: "2026-03-08T18:46:00Z", by: "antigravity"}
       - {from: "in_progress", to: "done", at: "2026-03-08T18:50:00Z", by: "antigravity"}
       - {from: "done", to: "todo", at: "2026-03-08T19:00:00Z", by: "antigravity"}
+      - {from: "todo", to: "claimed", at: "2026-03-08T21:05:00Z", by: "antigravity"}
+      - {from: "claimed", to: "in_progress", at: "2026-03-08T21:15:00Z", by: "antigravity"}
     definition_of_done_check:
       - "JWT implementation follows RFC 7519": true
       - "Token expiration enforced": true
