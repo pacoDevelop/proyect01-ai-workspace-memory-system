@@ -105,6 +105,8 @@ Antes de continuar, confirma mentalmente:
 ## *(ejecutar cada vez que vas a empezar a trabajar en algo)*
 ## ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+> **PARALELIZACIÓN:** Múltiples agentes pueden reclamar tareas simultáneamente sin bloquearse. `ai/tasks.yaml` es modificable en paralelo por cualquier número de agentes. Los cambios se fusionan automáticamente por `TASK-{id}` acorde a las reglas de resolución en paso 0.1b.
+
 ### Paso 1.1 — Verificar que no tienes tarea activa
 Leer `agent_lock.yaml`. Si ya tienes una entrada con `status: working`:
 - **PARA. Termina esa tarea primero.**
@@ -133,7 +135,10 @@ Durante el trabajo (además de los pasos normales) deberás completar al cerrar:
 ### Paso 1.3 — Identificar archivos que vas a tocar
 Antes de reclamar, decide qué archivos necesitarás modificar.
 Revisa `agent_lock.yaml`: si alguno de esos archivos está en `locked_files` de otro agente activo:
-- **PARA. Ese archivo está reservado. Espera o elige otra tarea.**
+- **EXCEPCIÓN:** `ai/tasks.yaml` **NO bloquea**. Múltiples agentes pueden modificarlo en paralelo (merge strategy en paso 0.1b)
+- Para otros archivos (dominio/análisis): si están locked, **PARA. Ese archivo está reservado. Espera o elige otra tarea.**
+
+> **Regla de paralelización:** `ai/tasks.yaml` usa merge automático por tarea (por `id`), permitiendo N agentes simultáneamente. Solo archivos de negocio (`/ai/memory/*.md`, `/src/`, etc) son mutuamente exclusivos.
 
 ### 🔴 GATE 1A — BLOQUEANTE: Actualizar tasks.yaml
 **AHORA, antes de escribir una sola línea de código:**
@@ -168,8 +173,9 @@ Añadir tu entrada en `/ai/agent_lock.yaml` bajo `active_agents`:
   working_branch: "feat/TASK-{id}-{descripcion-corta}"   # o main si es archivo /ai/
   base_branch: "main"
   locked_files:
-    - "{path/archivo1-que-vas-a-tocar}"
-    - "{path/archivo2-que-vas-a-tocar}"
+    - "ai/tasks.yaml"  # NOTA: ai/tasks.yaml NO es bloqueante (parallelizable)
+    - "{path/archivo-negocio-1-que-vas-a-tocar}"
+    - "{path/archivo-negocio-2-que-vas-a-tocar}"
   notes: "{Una línea de qué estás haciendo}"
 ```
 Commit inmediato:
@@ -178,6 +184,11 @@ git add ai/agent_lock.yaml
 git commit -m "ai: register agent lock TASK-{id} [TASK-{id}]"
 git push origin main
 ```
+
+> **Notas sobre locked_files:**
+> - `ai/tasks.yaml`: Informativo, NO bloquea. Múltiples agentes pueden modificar simultáneamente con merge.
+> - Otros archivos: Bloqueantes. Solo 1 agente por archivo.
+> - Archivos en `/ai/memory/*.md`: Considera si necesitas lock exclusivo o si puedes trabajar en secciones disjuntas.
 
 ### 🔴 GATE 1C — BLOQUEANTE: Cambiar tarea a in_progress
 Editar `/ai/tasks.yaml`, en la tarea elegida:
