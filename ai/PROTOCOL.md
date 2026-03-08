@@ -5,7 +5,7 @@
 > **Cada gate marcado con 🔴 BLOQUEANTE significa: si no lo haces, PARA y hazlo ahora.**
 > No puedes avanzar a la siguiente fase sin completar todos los pasos de la fase actual.
 > 
-> 🔴 **REGLA DE EJECUCIÓN TÉCNICA:** Si eres una IA con acceso a terminal (`run_command`), CADA bloque de código `bash` (especialmente `git commit`) en este protocolo es una **INSTRUCCIÓN DE EJECUCIÓN**, no un ejemplo. Debes ejecutarlo literalmente e inmediatamente después del cambio de archivo. No agrupes commits. Respeta la atomicidad de cada GATE.
+> 🔴 **REGLA DE EJECUCIÓN TÉCNICA:** Si eres una IA con acceso a terminal (`run_command`), CADA bloque de código `bash` (especialmente `git commit`) en este protocolo es una **INSTRUCCIÓN DE EJECUCIÓN**, no un ejemplo. Debes ejecutarlo literalmente e inmediatamente después del cambio de archivo. No agrupes commits. Respeta la atomicidad de cada GATE. **IMPORTANTE:** Todo `git commit` debe ir seguido de un `git push origin {branch}` inmediato. No termines una sesión ni envíes `notify_user` sin haber pusheado antes TODOS los cambios realizados al repositorio remoto.
 
 ---
 
@@ -296,7 +296,7 @@ Continuar con FASE 4 (cierre de sesión).
 
 ## ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ## FASE 3 — CIERRE DE TAREA
-## *(ejecutar cuando terminas el trabajo real)*
+## *(ejecutar cuando terminas el trabajo real. SIEMPRE pushear antes de pedir revisión)*
 ## ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ### Paso 3.1 — Merge del branch de feature (si aplica)
