@@ -1793,16 +1793,16 @@ tasks:
       - Verificación de SMTP configuration
     priority: "high"
     severity: "important"
-    status: "todo"
+    status: "claimed"
     depends_on: ["TASK-018"]
     estimated_effort: "3h"
-    assigned_agent: null
-    claimed_at: null
+    assigned_agent: "github-copilot"
+    claimed_at: "2026-03-08T21:40:00Z"
     started_at: null
     completed_at: null
     created_at: "2026-03-08T18:30:00Z"
     created_by: "github-copilot"
-    updated_at: "2026-03-08T19:00:00Z"
+    updated_at: "2026-03-08T21:40:00Z"
     actual_effort: null
     tags: ["review", "audit", "notifications", "email"]
     security_sensitive: true
