@@ -105,7 +105,7 @@ signals:
     task_id: "TASK-033"
     message: "TASK-033 (Auditoría TASK-015 - OAuth2 + JWT) is available. TASK-015 already done. Ready to claim."
     created_at: "2026-03-08T18:45:00Z"
-    read_by: []
+    read_by: ["antigravity"]
     priority: "high"
 
   - id: "SIG-AUDIT-024"
