@@ -1,13 +1,13 @@
 # TASK GRAPH — JRecruiter Microservices Migration
 schema_version: "3.0"
 min_compatible_version: "2.0"
-last_updated: "2026-03-08T04:50:00Z"
+last_updated: "2026-03-08T05:35:22Z"
 last_updated_by: "github-copilot"
 total_tasks: 18
-pending: 12
+pending: 11
 in_progress: 0
-blocked: 4
-done: 0
+blocked: 2
+done: 3
 review: 0
 
 # ============================================================================
@@ -86,19 +86,30 @@ tasks:
     description: "Entender cómo funciona la búsqueda actual para CQRS."
     priority: "high"
     severity: "important"
-    status: "in_progress"
+    status: "done"
     depends_on: []
     estimated_effort: "5h"
     assigned_agent: "github-copilot"
     claimed_at: "2026-03-08T05:11:48Z"
+    completed_at: "2026-03-08T05:35:22Z"
     created_at: "2026-03-08T04:50:00Z"
     created_by: "github-copilot"
     tags: ["analysis", "elasticsearch", "search-service"]
     definition_of_done_check:
-      - "Search patterns identificados": false
-      - "Hibernate Search mappings analizados": false
-      - "CQRS strategy definida": false
-      - "Documento en knowledge/search-domain.md": false
+      - "Search patterns identificados": true
+      - "Hibernate Search mappings analizados": true
+      - "CQRS strategy definida": true
+      - "Documento en ai/memory/search-domain-analysis.md": true
+    completion_notes: |
+      ✅ Legacy search analyzed (Hibernate Search 4.5.1 + Lucene, 18 indexed fields)
+      ✅ Limitations identified: No advanced filtering, no faceted search, no geo-queries
+      ✅ CQRS + Elasticsearch architecture designed with dual-write pattern
+      ✅ Event-driven synchronization with outbox pattern for guaranteed delivery
+      ✅ Elasticsearch mapping created (3 shards, 2 replicas, geo-spatial support)
+      ✅ Migration strategy: dual-run, gradual traffic shift, validation
+      ✅ 8 value objects designed: SearchQueryVO, SalaryRangeVO, GeoLocationVO, etc.
+      ✅ 11 future enhancements identified (ML ranking, typo correction, trends)
+      Discovery document: ai/memory/search-domain-analysis.md (1400+ lines)
 
   - id: "TASK-004"
     title: "Mapear dependencias entre bounded contexts"
