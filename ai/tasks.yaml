@@ -222,6 +222,7 @@ tasks:
     completed_at: "2026-03-08T06:15:00Z"
     created_at: "2026-03-08T04:50:00Z"
     tags: ["setup", "springboot", "job-service", "docker", "migrations"]
+    created_by: "github-copilot"
     progress_notes: |
       ✅ Maven structure corrected to standard: src/main/java/, src/main/resources/, src/test/java/
       ✅ pom.xml created: Spring Boot 3.4, Java 21, all dependencies (JPA, RabbitMQ, Security, Actuator, Flyway, etc)
@@ -315,6 +316,7 @@ tasks:
     completed_at: "2026-03-08T06:45:00Z"
     created_at: "2026-03-08T04:50:00Z"
     tags: ["ddd", "domain", "job-service"]
+    created_by: "github-copilot"
     progress_notes: |
       ✅ TASK-007 CLAIMED at 2026-03-08T06:22:00Z
       ✅ Created domain/valueobjects/ package (7 files)
@@ -369,6 +371,7 @@ tasks:
     completed_at: "2026-03-08T07:05:00Z"
     created_at: "2026-03-08T04:50:00Z"
     tags: ["ddd", "ports", "job-service"]
+    created_by: "github-copilot"
     completion_notes: |
       ✅ TASK-008 COMPLETED - 23 minutes (2h estimated)
       ✅ domain/repositories/JobRepository.java (287 lines)
@@ -397,6 +400,7 @@ tasks:
     completed_at: "2026-03-08T07:05:00Z"
     created_at: "2026-03-08T04:50:00Z"
     tags: ["infrastructure", "jpa", "postgresql", "job-service"]
+    created_by: "github-copilot"
     completion_notes: |
       ✅ TASK-009 COMPLETED - 19 minutes (6h estimated = 19x faster)
       ✅ infrastructure/persistence/JobJpaEntity.java (370 lines)
@@ -437,6 +441,7 @@ tasks:
     completed_at: "2026-03-08T07:10:00Z"
     created_at: "2026-03-08T04:50:00Z"
     tags: ["rest", "api", "validation", "job-service"]
+    created_by: "github-copilot"
     completion_notes: |
       ✅ JobController implementado con endpoints REST completos para CRUD de ofertas.
       ✅ DTOs con Bean Validation y mapeo limpio hacia la capa de aplicación.
@@ -459,6 +464,7 @@ tasks:
     completed_at: "2026-03-08T07:18:00Z"
     created_at: "2026-03-08T04:50:00Z"
     tags: ["testing", "junit5", "testcontainers", "job-service"]
+    created_by: "github-copilot"
     completion_notes: |
       ✅ Suite de tests de dominio para Job aggregate (value objects, invariantes y transiciones de estado).
       ✅ Tests de integración de JobRepository con TestContainers + PostgreSQL real.
@@ -482,6 +488,7 @@ tasks:
     completed_at: "2026-03-08T07:22:00Z"
     created_at: "2026-03-08T04:50:00Z"
     tags: ["documentation", "docker", "cicd", "job-service"]
+    created_by: "github-copilot"
     completion_notes: |
       ✅ Documentación de arquitectura de Job-Service y flujo end-to-end incluida en README/SETUP.
       ✅ Dockerfile multistage listo para producción y usado por el pipeline de CI/CD.
@@ -507,6 +514,7 @@ tasks:
     completed_at: "2026-03-08T07:22:00Z"
     created_at: "2026-03-08T04:50:00Z"
     tags: ["setup", "springboot", "user-service", "ddd"]
+    created_by: "github-copilot"
     definition_of_done_check:
       - "User-Service structure created": true
       - "Value objects implemented": true
@@ -555,6 +563,7 @@ tasks:
     created_at: "2026-03-08T04:50:00Z"
     completed_at: "2026-03-08T15:45:00Z"
     tags: ["ddd", "user-service"]
+    created_by: "github-copilot"
     completion_notes: |
       ✅ Candidate aggregate (260 LOC)
       ✅ Application aggregate (180 LOC)
@@ -581,6 +590,7 @@ tasks:
     created_at: "2026-03-08T04:50:00Z"
     completed_at: "2026-03-08T16:05:00Z"
     tags: ["security", "oauth2", "jwt", "user-service"]
+    created_by: "github-copilot"
     completion_notes: |
       ✅ JwtTokenProvider (120 LOC) - token generation + validation
       ✅ PasswordHashingService (30 LOC) - BCrypt hashing
@@ -609,6 +619,7 @@ tasks:
     created_at: "2026-03-08T04:50:00Z"
     completed_at: "2026-03-08T16:25:00Z"
     tags: ["elasticsearch", "cqrs", "search-service"]
+    created_by: "github-copilot"
     completion_notes: |
       ✅ JobSearchDocument (120 LOC) - 13 fields indexed
       ✅ JobSearchRepository (50 LOC) - Spring Data ES CRUD
@@ -633,6 +644,7 @@ tasks:
     created_at: "2026-03-08T04:50:00Z"
     completed_at: "2026-03-08T16:45:00Z"
     tags: ["elasticsearch", "search-service"]
+    created_by: "github-copilot"
     completion_notes: |
       ✅ AdvancedSearchService (150 LOC) - bool queries with boosting
       ✅ SearchController (120 LOC) - 3 REST endpoints
@@ -656,6 +668,7 @@ tasks:
     created_at: "2026-03-08T04:50:00Z"
     completed_at: "2026-03-08T17:15:00Z"
     tags: ["async", "notifications", "email"]
+    created_by: "github-copilot"
     completion_notes: |
       ✅ NotificationService (320 LOC) - 6 notification methods
       ✅ NotificationEventListener (160 LOC) - 5 RabbitMQ listeners

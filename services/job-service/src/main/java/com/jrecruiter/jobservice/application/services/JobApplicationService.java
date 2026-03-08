@@ -70,7 +70,8 @@ public class JobApplicationService {
                 request.getLocation().getStateProvince(),
                 request.getLocation().getPostalCode(),
                 request.getLocation().getCountry(),
-                request.getLocation().getCountryCode()
+                request.getLocation().getCountryCode(),
+                Boolean.TRUE.equals(request.getLocation().getRemote())
         );
         
         JobSalary salary = JobSalary.of(
@@ -82,9 +83,9 @@ public class JobApplicationService {
         
         OfferedBy offeredBy = OfferedBy.valueOf(request.getOfferedBy());
         
-        // Create aggregate root (in DRAFT status by factory method)
+        // Calculate sequence number per employer (for human-friendly universalId)
         Job job = Job.createDraft(
-                jobRepository.countByEmployerId(employerId) + 1,
+                (int) (jobRepository.countByEmployerId(employerId) + 1),
                 employerId,
                 request.getIndustryId(),
                 request.getRegionId(),
@@ -245,27 +246,73 @@ public class JobApplicationService {
     /**
      * Update job details (only for DRAFT jobs).
      * 
+     * Constructs new Value Objects from request and uses Job.reconstruct() to create
+     * an updated version while maintaining domain invariants.
+     * 
      * @param jobId the job UUID
-     * @param request the update request
+     * @param request the update request with new values
      * @return the updated job response
+     * @throws IllegalStateException if job is not in DRAFT status
      */
     public JobResponse updateJob(UUID jobId, UpdateJobRequest request) {
         Job job = jobRepository.findById(jobId)
                 .orElseThrow(() -> new NoSuchElementException("Job not found: " + jobId));
         
-        if (job.isClosed()) {
-            throw new IllegalStateException("Cannot update a closed job");
-        }
-        
-        // Note: In real scenario, might create updateFromRequest() method on Job
-        // For now, we throw if not draft
+        // Only DRAFT jobs can be updated
         if (job.getStatus() != JobPostingStatus.DRAFT) {
-            throw new IllegalStateException("Cannot update published job");
+            throw new IllegalStateException("Cannot update job: only DRAFT jobs can be updated. Current status: " + job.getStatus());
         }
         
-        // Update would reconstruct the job with new values
-        // This is simplified - in production might use builder pattern
-        Job saved = jobRepository.save(job);
+        // Build updated value objects from request
+        JobTitle updatedTitle = request.getTitle() != null ? JobTitle.of(request.getTitle()) : job.getTitle();
+        JobDescription updatedDescription = request.getDescription() != null ? JobDescription.of(request.getDescription()) : job.getDescription();
+        CompanyName updatedCompanyName = request.getCompanyName() != null ? CompanyName.of(request.getCompanyName()) : job.getCompanyName();
+        
+        JobLocation updatedLocation = job.getLocation();
+        if (request.getLocation() != null) {
+            updatedLocation = JobLocation.withAddress(
+                    request.getLocation().getStreet(),
+                    request.getLocation().getCity(),
+                    request.getLocation().getStateProvince(),
+                    request.getLocation().getPostalCode(),
+                    request.getLocation().getCountry(),
+                    request.getLocation().getCountryCode(),
+                    Boolean.TRUE.equals(request.getLocation().getRemote())
+            );
+        }
+        
+        JobSalary updatedSalary = job.getSalary();
+        if (request.getSalary() != null) {
+            updatedSalary = JobSalary.of(
+                    request.getSalary().getMinAmount(),
+                    request.getSalary().getMaxAmount(),
+                    request.getSalary().getCurrency(),
+                    request.getSalary().getFrequency()
+            );
+        }
+        
+        // Reconstruct job with updated values, preserving identity and timestamps
+        Job updatedJob = Job.reconstruct(
+                job.getJobId(),
+                job.getUniversalId(),
+                job.getEmployerId(),
+                request.getIndustryId() != null ? request.getIndustryId() : job.getIndustryId(),
+                request.getRegionId() != null ? request.getRegionId() : job.getRegionId(),
+                updatedTitle,
+                updatedDescription,
+                updatedCompanyName,
+                updatedLocation,
+                updatedSalary,
+                job.getOfferedBy(),
+                job.getStatus(),
+                job.getCreatedAt(),
+                job.getPublishedAt(),
+                job.getClosedAt(),
+                Instant.now()  // Update timestamp
+        );
+        
+        // Persist updated job
+        Job saved = jobRepository.save(updatedJob);
         
         return mapToResponse(saved);
     }

@@ -43,7 +43,7 @@ public class Job {
     
     // IDENTITY
     private final UUID jobId;          // Surrogate key (database PK)
-    private final UUID universalId;    // Business identifier (external systems)
+    private final String universalId;  // Business identifier (external systems)
     private final UUID employerId;     // Reference to employer (no FK in DB)
     
     // CORE DATA (Immutable after creation)
@@ -53,10 +53,8 @@ public class Job {
     private final JobLocation location;
     private final JobSalary salary;
     private final OfferedBy offeredBy;
-    private final String industryId;   // Reference to industry (denormalized)
-    private final String industryName;
-    private final String regionId;     // Reference to region (denormalized)
-    private final String regionName;
+    private final UUID industryId;     // Reference to industry
+    private final UUID regionId;       // Reference to region
     
     // MUTABLE STATE
     private JobPostingStatus status;
@@ -74,29 +72,26 @@ public class Job {
     
     /**
      * Factory method: Create a new job in DRAFT status.
-     * 
-     * All invariants are validated. No events are emitted yet.
-     * 
-     * @throws InvalidJobException if any invariant is violated
+     *
+     * Genera internamente:
+     * - `jobId` (UUID) como PK.
+     * - `universalId` (String) derivado del employer + secuencia.
+     *
+     * @param sequenceNumber Número secuencial por empleador (para universalId).
+     * @throws InvalidJobException si algún invariante se viola.
      */
     public static Job createDraft(
-            UUID jobId,
-            UUID universalId,
+            int sequenceNumber,
             UUID employerId,
+            UUID industryId,
+            UUID regionId,
             JobTitle title,
             JobDescription description,
             CompanyName companyName,
             JobLocation location,
             JobSalary salary,
-            OfferedBy offeredBy,
-            String industryId,
-            String industryName,
-            String regionId,
-            String regionName) {
-        
-        // Validate all required fields
-        Objects.requireNonNull(jobId, "jobId cannot be null");
-        Objects.requireNonNull(universalId, "universalId cannot be null");
+            OfferedBy offeredBy) {
+
         Objects.requireNonNull(employerId, "employerId cannot be null");
         Objects.requireNonNull(title, "title cannot be null");
         Objects.requireNonNull(description, "description cannot be null");
@@ -104,59 +99,78 @@ public class Job {
         Objects.requireNonNull(location, "location cannot be null");
         Objects.requireNonNull(salary, "salary cannot be null");
         Objects.requireNonNull(offeredBy, "offeredBy cannot be null");
-        
-        // industryId and regionId can be null (not required)
-        
+
+        if (sequenceNumber <= 0) {
+            throw new InvalidJobException("sequenceNumber must be positive");
+        }
+
+        UUID jobId = UUID.randomUUID();
+        String universalId = "JOB-" + employerId.toString().substring(0, 8) + "-" + sequenceNumber;
+
         Job job = new Job(
-            jobId, universalId, employerId,
-            title, description, companyName, location, salary, offeredBy,
-            industryId, industryName, regionId, regionName
+                jobId,
+                universalId,
+                employerId,
+                industryId,
+                regionId,
+                title,
+                description,
+                companyName,
+                location,
+                salary,
+                offeredBy
         );
-        
+
         job.status = JobPostingStatus.DRAFT;
         job.createdAt = Instant.now();
-        job.updatedAt = Instant.now();
-        
+        job.updatedAt = job.createdAt;
+
         return job;
     }
     
     /**
-     * Factory method: Reconstruct a job from database (event sourcing scenario).
+     * Factory method: Reconstruct a job from database (event sourcing / persistence).
      * 
      * Used when loading persisted job from repository.
      */
     public static Job reconstruct(
             UUID jobId,
-            UUID universalId,
+            String universalId,
             UUID employerId,
+            UUID industryId,
+            UUID regionId,
             JobTitle title,
             JobDescription description,
             CompanyName companyName,
             JobLocation location,
             JobSalary salary,
             OfferedBy offeredBy,
-            String industryId,
-            String industryName,
-            String regionId,
-            String regionName,
             JobPostingStatus status,
             Instant createdAt,
             Instant publishedAt,
             Instant closedAt,
             Instant updatedAt) {
-        
+
         Job job = new Job(
-            jobId, universalId, employerId,
-            title, description, companyName, location, salary, offeredBy,
-            industryId, industryName, regionId, regionName
+                jobId,
+                universalId,
+                employerId,
+                industryId,
+                regionId,
+                title,
+                description,
+                companyName,
+                location,
+                salary,
+                offeredBy
         );
-        
+
         job.status = status;
         job.createdAt = createdAt;
         job.publishedAt = publishedAt;
         job.closedAt = closedAt;
-        job.updatedAt = updatedAt;
-        
+        job.updatedAt = updatedAt != null ? updatedAt : createdAt;
+
         return job;
     }
     
@@ -164,37 +178,30 @@ public class Job {
     // PRIVATE CONSTRUCTOR
     // ========================================================================
     
-    /**
-     * Private constructor. Use factory methods to create instances.
-     */
     private Job(
             UUID jobId,
-            UUID universalId,
+            String universalId,
             UUID employerId,
+            UUID industryId,
+            UUID regionId,
             JobTitle title,
             JobDescription description,
             CompanyName companyName,
             JobLocation location,
             JobSalary salary,
-            OfferedBy offeredBy,
-            String industryId,
-            String industryName,
-            String regionId,
-            String regionName) {
-        
-        this.jobId = jobId;
-        this.universalId = universalId;
-        this.employerId = employerId;
-        this.title = title;
-        this.description = description;
-        this.companyName = companyName;
-        this.location = location;
-        this.salary = salary;
-        this.offeredBy = offeredBy;
+            OfferedBy offeredBy) {
+
+        this.jobId = Objects.requireNonNull(jobId, "jobId cannot be null");
+        this.universalId = Objects.requireNonNull(universalId, "universalId cannot be null");
+        this.employerId = Objects.requireNonNull(employerId, "employerId cannot be null");
         this.industryId = industryId;
-        this.industryName = industryName;
         this.regionId = regionId;
-        this.regionName = regionName;
+        this.title = Objects.requireNonNull(title, "title cannot be null");
+        this.description = Objects.requireNonNull(description, "description cannot be null");
+        this.companyName = Objects.requireNonNull(companyName, "companyName cannot be null");
+        this.location = Objects.requireNonNull(location, "location cannot be null");
+        this.salary = Objects.requireNonNull(salary, "salary cannot be null");
+        this.offeredBy = Objects.requireNonNull(offeredBy, "offeredBy cannot be null");
         this.domainEvents = new ArrayList<>();
     }
     
@@ -365,7 +372,7 @@ public class Job {
         return jobId;
     }
     
-    public UUID getUniversalId() {
+    public String getUniversalId() {
         return universalId;
     }
     
@@ -397,20 +404,12 @@ public class Job {
         return offeredBy;
     }
     
-    public String getIndustryId() {
+    public UUID getIndustryId() {
         return industryId;
     }
     
-    public String getIndustryName() {
-        return industryName;
-    }
-    
-    public String getRegionId() {
+    public UUID getRegionId() {
         return regionId;
-    }
-    
-    public String getRegionName() {
-        return regionName;
     }
     
     public JobPostingStatus getStatus() {

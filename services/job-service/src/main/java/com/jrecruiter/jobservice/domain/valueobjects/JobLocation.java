@@ -5,102 +5,214 @@ import java.util.Objects;
 
 /**
  * Value Object: Job Location
- * 
- * Represents the job location with address and geographic coordinates.
- * Immutable and self-validating.
- * 
- * @author GitHub Copilot / TASK-007
+ *
+ * Representa la localización de una oferta de empleo.
+ * Modelo alineado con:
+ * - DTOs de API (`CreateJobRequest.LocationRequest`, `JobResponse.LocationResponse`)
+ * - Entidad JPA `JobLocationEmbeddable`
+ *
+ * Invariantes:
+ * - `country` y `countryCode` obligatorios.
+ * - Si hay coordenadas, deben estar en los rangos válidos.
+ * - Se permite:
+ *   - Sólo dirección física.
+ *   - Sólo coordenadas (por ejemplo, remoto puro).
+ *   - Ambas.
  */
-public record JobLocation(
-    String address1,
-    String address2,
-    String city,
-    String state,
-    String postalCode,
-    String country,
-    String website,
-    String phone,
-    String email,
-    BigDecimal latitude,
-    BigDecimal longitude,
-    Boolean usesMap
-) {
-    
-    public static final int MAX_ADDRESS = 100;
-    public static final int MAX_CITY = 50;
-    public static final int MAX_PHONE = 20;
-    
-    /**
-     * Creates a new JobLocation with validation.
-     * 
-     * At least one of:
-     * - address1 + city + state must be provided (physical address)
-     * - latitude + longitude must be provided (coordinates)
-     * 
-     * @throws IllegalArgumentException if validation fails
-     */
-    public JobLocation {
-        Objects.requireNonNull(country, "Country cannot be null");
-        
-        if (country.length() > 50) {
+public final class JobLocation {
+
+    private final String street;
+    private final String city;
+    private final String stateProvince;
+    private final String postalCode;
+    private final String country;
+    private final String countryCode;
+    private final BigDecimal latitude;
+    private final BigDecimal longitude;
+    private final boolean remote;
+
+    private JobLocation(
+            String street,
+            String city,
+            String stateProvince,
+            String postalCode,
+            String country,
+            String countryCode,
+            BigDecimal latitude,
+            BigDecimal longitude,
+            boolean remote) {
+
+        this.country = Objects.requireNonNull(country, "Country cannot be null");
+        this.countryCode = Objects.requireNonNull(countryCode, "Country code cannot be null");
+
+        if (country.length() > 100) {
             throw new IllegalArgumentException("Country name too long");
         }
-        
-        // Validate that we have either address OR coordinates
-        boolean hasAddress = address1 != null && !address1.trim().isEmpty() 
-                          && city != null && !city.trim().isEmpty()
-                          && state != null && !state.trim().isEmpty();
-        
-        boolean hasCoordinates = latitude != null && longitude != null
-                              && latitude.doubleValue() >= -90 && latitude.doubleValue() <= 90
-                              && longitude.doubleValue() >= -180 && longitude.doubleValue() <= 180;
-        
+        if (countryCode.length() != 2) {
+            throw new IllegalArgumentException("Country code must be ISO 3166-1 alpha-2 (2 chars)");
+        }
+
+        boolean hasAddress = (city != null && !city.isBlank())
+                || (street != null && !street.isBlank())
+                || (postalCode != null && !postalCode.isBlank());
+
+        boolean hasCoordinates = latitude != null && longitude != null;
+
+        if (hasCoordinates) {
+            double lat = latitude.doubleValue();
+            double lon = longitude.doubleValue();
+            if (lat < -90 || lat > 90) {
+                throw new IllegalArgumentException("Latitude must be between -90 and 90");
+            }
+            if (lon < -180 || lon > 180) {
+                throw new IllegalArgumentException("Longitude must be between -180 and 180");
+            }
+        }
+
         if (!hasAddress && !hasCoordinates) {
             throw new IllegalArgumentException(
-                "Job location must have either physical address (address1, city, state) or coordinates (latitude, longitude)"
-            );
+                    "Job location must have at least some address fields or valid coordinates");
         }
-        
-        // Validate address fields if provided
-        if (address1 != null && address1.length() > MAX_ADDRESS) {
-            throw new IllegalArgumentException("Address1 too long");
-        }
-        if (city != null && city.length() > MAX_CITY) {
-            throw new IllegalArgumentException("City name too long");
-        }
-        if (phone != null && phone.length() > MAX_PHONE) {
-            throw new IllegalArgumentException("Phone number too long");
-        }
+
+        this.street = street;
+        this.city = city;
+        this.stateProvince = stateProvince;
+        this.postalCode = postalCode;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.remote = remote;
     }
-    
+
     /**
-     * Creates a JobLocation with physical address only (no coordinates).
+     * Crea una localización basada sólo en dirección física.
      */
-    public static JobLocation ofAddress(
-            String address1, String address2, String city, String state,
-            String postalCode, String country, String website, String phone, String email) {
-        return new JobLocation(address1, address2, city, state, postalCode, country,
-            website, phone, email, null, null, false);
+    public static JobLocation withAddress(
+            String street,
+            String city,
+            String stateProvince,
+            String postalCode,
+            String country,
+            String countryCode) {
+        return new JobLocation(
+                street,
+                city,
+                stateProvince,
+                postalCode,
+                country,
+                countryCode,
+                null,
+                null,
+                false
+        );
     }
-    
+
     /**
-     * Creates a JobLocation with coordinates only (no physical address).
+     * Crea una localización con dirección y flag de remoto.
      */
-    public static JobLocation ofCoordinates(
-            String country, BigDecimal latitude, BigDecimal longitude,
-            String website, String phone, String email) {
-        return new JobLocation(null, null, null, null, null, country,
-            website, phone, email, latitude, longitude, true);
+    public static JobLocation withAddress(
+            String street,
+            String city,
+            String stateProvince,
+            String postalCode,
+            String country,
+            String countryCode,
+            boolean remote) {
+        return new JobLocation(
+                street,
+                city,
+                stateProvince,
+                postalCode,
+                country,
+                countryCode,
+                null,
+                null,
+                remote
+        );
     }
-    
+
     /**
-     * Creates a JobLocation with both address and coordinates.
+     * Crea una localización basada sólo en coordenadas.
      */
-    public static JobLocation ofBoth(
-            String address1, String address2, String city, String state,
-            String postalCode, String country, BigDecimal latitude, BigDecimal longitude,
-            String website, String phone, String email) {
-        return new JobLocation(address1, address2, city, state, postalCode, country,
-            website, phone, email, latitude, longitude, true);
+    public static JobLocation withCoordinates(
+            String country,
+            String countryCode,
+            BigDecimal latitude,
+            BigDecimal longitude,
+            boolean remote) {
+        return new JobLocation(
+                null,
+                null,
+                null,
+                null,
+                country,
+                countryCode,
+                latitude,
+                longitude,
+                remote
+        );
+    }
+
+    /**
+     * Crea una localización con dirección y coordenadas.
+     */
+    public static JobLocation withAddressAndCoordinates(
+            String street,
+            String city,
+            String stateProvince,
+            String postalCode,
+            String country,
+            String countryCode,
+            BigDecimal latitude,
+            BigDecimal longitude,
+            boolean remote) {
+        return new JobLocation(
+                street,
+                city,
+                stateProvince,
+                postalCode,
+                country,
+                countryCode,
+                latitude,
+                longitude,
+                remote
+        );
+    }
+
+    // Getters alineados con DTOs y embeddable
+
+    public String getStreet() {
+        return street;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public String getStateProvince() {
+        return stateProvince;
+    }
+
+    public String getPostalCode() {
+        return postalCode;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public String getCountryCode() {
+        return countryCode;
+    }
+
+    public BigDecimal getLatitude() {
+        return latitude;
+    }
+
+    public BigDecimal getLongitude() {
+        return longitude;
+    }
+
+    public boolean isRemote() {
+        return remote;
     }
 }

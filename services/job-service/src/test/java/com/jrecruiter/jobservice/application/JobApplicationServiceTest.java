@@ -70,7 +70,15 @@ class JobApplicationServiceTest {
                 JobTitle.of("Senior Architect"),
                 JobDescription.of("Leading microservices architecture and team development"),
                 CompanyName.of("ArchitectureCorp"),
-                JobLocation.withAddress("999 Tech St", "San Jose", "CA", "95110", "United States", "US"),
+                JobLocation.withAddress(
+                        "999 Tech St",
+                        "San Jose",
+                        "CA",
+                        "95110",
+                        "United States",
+                        "US",
+                        false
+                ),
                 JobSalary.of(
                         new BigDecimal("180000"),
                         new BigDecimal("220000"),

@@ -26,18 +26,8 @@ git push origin main
 ```
 
 ## Convenciones de commits
-- feat: new feature
-- fix: bug fix
-- ai: changes to /ai/ workspace files
-- human: human contribution
-- [MERGE-RESOLUTION]: resolved merge conflict
-```
-
-echo -e "  ${GREEN}✓${NC} git_workflow.md"
-
-# ideas.md
-cat > "$AI_DIR/ideas.md" << 'EOF'
-# IDEAS BACKLOG
-
-> Parking lot de ideas no maduras. Máximo 20 ideas activas.
-
+- `feat:` new feature
+- `fix:` bug fix
+- `ai:` changes to /ai/ workspace files
+- `human:` human contribution
+- `[MERGE-RESOLUTION]:` resolved merge conflict

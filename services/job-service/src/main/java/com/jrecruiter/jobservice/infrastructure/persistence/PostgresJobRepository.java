@@ -310,7 +310,8 @@ public class PostgresJobRepository implements JobRepository {
                 entity.getLocation().getStateProvince(),
                 entity.getLocation().getPostalCode(),
                 entity.getLocation().getCountry(),
-                entity.getLocation().getCountryCode()
+                entity.getLocation().getCountryCode(),
+                entity.getLocation().isRemote()
         );
         
         JobSalary salary = JobSalary.of(
