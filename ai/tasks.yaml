@@ -4,8 +4,8 @@ min_compatible_version: "2.0"
 last_updated: "2026-03-08T18:30:00Z"
 last_updated_by: "github-copilot"
 total_tasks: 37
-pending: 19
-in_progress: 0
+pending: 18
+in_progress: 1
 blocked: 0
 done: 18
 review: 0
@@ -692,17 +692,20 @@ tasks:
       - Calidad del documento discovery
     priority: "high"
     severity: "important"
-    status: "claimed"
+    status: "in_progress"
     depends_on: ["TASK-001"]
     estimated_effort: "3h"
     assigned_agent: "github-copilot"
     claimed_at: "2026-03-08T18:30:00Z"
+    started_at: "2026-03-08T18:30:00Z"
     created_at: "2026-03-08T18:30:00Z"
     created_by: "github-copilot"
+    updated_at: "2026-03-08T18:30:00Z"
     tags: ["review", "audit", "analysis", "job-service"]
     security_sensitive: false
     state_history:
       - {from: "pending", to: "claimed", at: "2026-03-08T18:30:00Z", by: "github-copilot"}
+      - {from: "claimed", to: "in_progress", at: "2026-03-08T18:30:00Z", by: "github-copilot"}
     definition_of_done_check:
       - "Mapeo verified contra legacy code": false
       - "Value objects validados": false
