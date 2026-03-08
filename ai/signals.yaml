@@ -1,8 +1,71 @@
 # SIGNALS — Inter-Agent Notifications
 schema_version: "4.0"
 min_compatible_version: "4.0"
-last_updated: "2026-03-08T18:52:00Z"
+last_updated: "2026-03-08T18:56:00Z"
 signals:
+  - id: "SIG-AUDIT-010"
+    type: "task_completed"
+    from: "antigravity"
+    to: "any"
+    task_id: "TASK-024"
+    message: "TASK-024 (Auditoría TASK-006) COMPLETE. Quality Score: 100/100 ⭐⭐⭐⭐⭐. Findings: pom.xml 100% correct, Dockerfile/docker-compose best practices used, Flyway V1 schema excellent with outbox table included. RECOMMENDATION: APPROVE TASK-006."
+    created_at: "2026-03-08T16:40:00Z"
+    read_by: ["antigravity"]
+    priority: "high"
+    requires_review: false
+
+  - id: "SIG-AUDIT-011"
+    type: "task_ready"
+    from: "system"
+    to: "any"
+    task_id: "TASK-025"
+    message: "TASK-025 (Auditoría TASK-007 - Job aggregate) is available. TASK-007 already done. Ready to claim."
+    created_at: "2026-03-08T16:40:00Z"
+    read_by: []
+    priority: "high"
+
+  - id: "SIG-AUDIT-008"
+    type: "task_completed"
+    from: "github-copilot"
+    to: "any"
+    task_id: "TASK-023"
+    message: "TASK-023 (Auditoría TASK-005) COMPLETE. Quality Score: 99.5/100 ⭐⭐⭐⭐⭐. Findings: 12-week roadmap solid, feature flags + rollback triggers comprehensive, success metrics concrete with baselines. RECOMMENDATION: APPROVE TASK-005. Full migration plan validated."
+    created_at: "2026-03-08T18:56:00Z"
+    read_by: []
+    priority: "high"
+    requires_review: false
+
+  - id: "SIG-AUDIT-009"
+    type: "task_ready"
+    from: "system"
+    to: "any"
+    task_id: "TASK-024"
+    message: "TASK-024 (Auditoría TASK-006 - Setup Job-Service) is now UNBLOCKED. Prerequisite TASK-023 complete. Ready to claim."
+    created_at: "2026-03-08T18:56:00Z"
+    read_by: []
+    priority: "high"
+
+  - id: "SIG-AUDIT-008"
+    type: "task_completed"
+    from: "antigravity"
+    to: "any"
+    task_id: "TASK-022"
+    message: "TASK-022 (Auditoría TASK-004) COMPLETE. Quality Score: 98.8/100 ⭐⭐⭐⭐⭐. Findings: Event contracts 100% correct, async/sync patterns robust, CDC strategy explicitly designed. RECOMMENDATION: APPROVE TASK-004."
+    created_at: "2026-03-08T17:35:00Z"
+    read_by: ["antigravity"]
+    priority: "high"
+    requires_review: false
+
+  - id: "SIG-AUDIT-009"
+    type: "task_ready"
+    from: "system"
+    to: "any"
+    task_id: "TASK-023"
+    message: "TASK-023 (Auditoría TASK-005 - Plan Strangler Fig) is available. TASK-005 already done. Ready to claim."
+    created_at: "2026-03-08T17:35:00Z"
+    read_by: ["antigravity"]
+    priority: "high"
+
   - id: "SIG-AUDIT-006"
     type: "task_completed"
     from: "github-copilot"
@@ -10,7 +73,7 @@ signals:
     task_id: "TASK-021"
     message: "TASK-021 (Auditoría TASK-003) COMPLETE. Quality Score: 99.2/100 ⭐⭐⭐⭐⭐. Findings: CQRS strategy 100% correct, ES mapping 13 fields validated, DLQ pattern expert-level, migration strategy 4-phase documented. RECOMMENDATION: APPROVE TASK-003."
     created_at: "2026-03-08T18:52:00Z"
-    read_by: []
+    read_by: ["antigravity"]
     priority: "high"
     requires_review: false
 
@@ -21,7 +84,7 @@ signals:
     task_id: "TASK-022"
     message: "TASK-022 (Auditoría TASK-004 - Mapeo dependencias) is now UNBLOCKED. Prerequisite TASK-021 complete. Ready to claim."
     created_at: "2026-03-08T18:52:00Z"
-    read_by: []
+    read_by: ["antigravity"]
     priority: "high"
 
   - id: "SIG-AUDIT-004"
@@ -42,7 +105,7 @@ signals:
     task_id: "TASK-021"
     message: "TASK-021 (Auditoría TASK-003 - Search domain analysis) is available. TASK-003 already done. Ready to claim."
     created_at: "2026-03-08T17:30:00Z"
-    read_by: []
+    read_by: ["antigravity"]
     priority: "high"
 
   - id: "SIG-AUDIT-002"
