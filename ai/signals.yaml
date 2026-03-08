@@ -10,7 +10,31 @@ signals:
     task_id: "TASK-035"
     message: "TASK-035 (Auditoría de Advanced Search - TASK-017) COMPLETE ✅. Bool queries correct. Boosting conflict detected (title 2.0f vs skills 2.0f). Faceting INCOMPLETE (stub only). RECOMMENDATION: TASK-017 requires refactoring. Quality Score: 7/10."
     created_at: "2026-03-09T01:50:00Z"
-    read_by: ["github-copilot"]
+    read_by: ["github-copilot", "antigravity"]
+    priority: "high"
+    requires_review: true
+
+  - id: "SIG-UNBLOCK-015"
+    type: "task_unblocked"
+    from: "antigravity"
+    to: "any"
+    task_id: "TASK-015"
+    message: "TASK-014 COMPLETE. TASK-015 (Security/Auth) is now unblocked."
+    created_at: "2026-03-08T22:30:00Z"
+    read_by: []
+    priority: "high"
+    requires_review: false
+
+  - id: "SIG-UNBLOCK-018"
+    type: "task_unblocked"
+    from: "antigravity"
+    to: "any"
+    task_id: "TASK-018"
+    message: "TASK-014 COMPLETE. TASK-018 dependency met."
+    created_at: "2026-03-08T22:30:00Z"
+    read_by: []
+    priority: "medium"
+    requires_review: false
     priority: "high"
     requires_review: true
 

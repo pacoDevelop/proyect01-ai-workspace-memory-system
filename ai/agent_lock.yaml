@@ -6,18 +6,17 @@ last_updated_by: "github-copilot"
 
 active_agents:
   - agent_id: "antigravity"
-    session_id: "20260308-2158-antigravity"
-    started_at: "2026-03-08T22:05:00Z"
-    last_heartbeat: "2026-03-08T22:05:00Z"
-    current_task: "TASK-014"
+    session_id: "20260308-2230-antigravity"
+    started_at: "2026-03-08T22:30:00Z"
+    last_heartbeat: "2026-03-08T22:30:00Z"
+    current_task: "TASK-015"
     status: "working"
-    working_branch: "main"   # Archivos /ai/ primordialmente por ahora
+    working_branch: "feat/TASK-015-security-auth"
     base_branch: "main"
     locked_files:
-      - "ai/tasks.yaml"
-      - "services/user-service/src/main/java/com/jrecruiter/userservice/domain/aggregates/Candidate.java"
-      - "services/user-service/src/main/java/com/jrecruiter/userservice/application/ApplicationService.java"
-    notes: "Implementando Candidate aggregate y contexto de aplicaciones (TASK-014)."
+      - "services/user-service/src/main/java/com/jrecruiter/userservice/infrastructure/config/SecurityConfig.java"
+      - "services/user-service/src/main/java/com/jrecruiter/userservice/infrastructure/security/JwtTokenProvider.java"
+    notes: "Implementando OAuth2 + JWT en User-Service (TASK-015)."
 
 ghost_entries: []
 
