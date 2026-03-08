@@ -1,3 +1,23 @@
+## [2026-03-09T00:50:00Z] TASK-013: INFRAESTRUCTURA USER-SERVICE COMPLETADA (SESSION-031)
+
+**Type:** infrastructure | **Responsible:** github-copilot | **Scope:** User-Service Bootstrap
+
+### Summary
+
+Restauración de infraestructura User-Service completada exitosamente. Se crean todos los artefactos necesarios para compilación y despliegue.
+
+**Acciones tomadas:**
+- ✅ Creación de `pom.xml` (220 líneas) - Spring Boot 3.4.0 ecosystem
+- ✅ Creación de `Dockerfile` - Multi-stage, rootless Alpine, healthcheck
+- ✅ Creación de `application.yml` - Perfiles dev/prod, JWT, RabbitMQ, PostgreSQL
+- ✅ Creación de `docker-compose.yml` raíz - Job-Service + User-Service + infraestructura compartida
+- ✅ Git: Commits 4a1880d (infrastructure), a11b89e (config), b47050e (TASK done)
+- ✅ Desbloqueado: TASK-014, TASK-015
+
+**Estado:** ✅ Completado | **Duración:** 32 min
+
+---
+
 ## [2026-03-09T00:20:00Z] TASK-036: RE-AUDITORÍA NOTIFICATION-SERVICE COMPLETADA (SESSION-032)
 
 **Type:** review-audit | **Responsible:** antigravity | **Scope:** Notification-Service (Logic & Templates)

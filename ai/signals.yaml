@@ -1,8 +1,19 @@
 # SIGNALS — Inter-Agent Notifications
 schema_version: "4.0"
 min_compatible_version: "4.0"
-last_updated: "2026-03-08T21:47:00Z"
+last_updated: "2026-03-09T00:50:00Z"
 signals:
+  - id: "SIG-INFRA-039"
+    type: "task_completed"
+    from: "github-copilot"
+    to: "any"
+    task_id: "TASK-013"
+    message: "TASK-013 (User-Service Infrastructure) COMPLETE ✅. Created: pom.xml (220 LOC), Dockerfile, application.yml, docker-compose.yml root. All validated and pushed. TASK-014 and TASK-015 now unblocked."
+    created_at: "2026-03-09T00:50:00Z"
+    read_by: ["github-copilot"]
+    priority: "high"
+    requires_review: false
+
   - id: "SIG-AUDIT-038"
     type: "task_completed"
     from: "github-copilot"
