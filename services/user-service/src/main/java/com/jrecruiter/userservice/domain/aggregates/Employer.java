@@ -64,7 +64,7 @@ public class Employer {
             companyRegistration, phoneNumber);
         
         employer.addDomainEvent(
-            new EmployerRegisteredEvent(
+            new EmployerEvents.EmployerRegisteredEvent(
                 employerId,
                 email.getValue(),
                 employerName.getValue(),
@@ -103,7 +103,7 @@ public class Employer {
         this.verifiedAt = LocalDateTime.now();
         
         addDomainEvent(
-            new EmployerVerifiedEvent(employerId, email.getValue(), LocalDateTime.now())
+            new EmployerEvents.EmployerVerifiedEvent(employerId, email.getValue(), LocalDateTime.now())
         );
     }
     
@@ -125,7 +125,7 @@ public class Employer {
         this.suspendedAt = LocalDateTime.now();
         
         addDomainEvent(
-            new EmployerSuspendedEvent(employerId, email.getValue(), reason, 
+            new EmployerEvents.EmployerSuspendedEvent(employerId, email.getValue(), reason, 
                 suspendedAt)
         );
     }
@@ -145,7 +145,7 @@ public class Employer {
         this.suspendedAt = null; // Clear suspension time
         
         addDomainEvent(
-            new EmployerReactivatedEvent(employerId, email.getValue(), 
+            new EmployerEvents.EmployerReactivatedEvent(employerId, email.getValue(), 
                 LocalDateTime.now())
         );
     }
@@ -166,7 +166,7 @@ public class Employer {
         this.deactivatedAt = LocalDateTime.now();
         
         addDomainEvent(
-            new EmployerDeactivatedEvent(employerId, email.getValue(), reason, 
+            new EmployerEvents.EmployerDeactivatedEvent(employerId, email.getValue(), reason, 
                 deactivatedAt)
         );
     }

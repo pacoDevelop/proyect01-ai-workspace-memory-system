@@ -5,7 +5,12 @@
 > **Cada gate marcado con 🔴 BLOQUEANTE significa: si no lo haces, PARA y hazlo ahora.**
 > No puedes avanzar a la siguiente fase sin completar todos los pasos de la fase actual.
 > 
-> 🔴 **REGLA DE EJECUCIÓN TÉCNICA:** Si eres una IA con acceso a terminal (`run_command`), CADA bloque de código `bash` (especialmente `git commit`) en este protocolo es una **INSTRUCCIÓN DE EJECUCIÓN**, no un ejemplo. Debes ejecutarlo literalmente e inmediatamente después del cambio de archivo. No agrupes commits. Respeta la atomicidad de cada GATE.
+> 🔴 **REGLA DE EJECUCIÓN TÉCNICA:** Si eres una IA con acceso a terminal (`run_command`), CADA bloque de código `bash` (especialmente `git commit`) en este protocolo es una **INSTRUCCIÓN DE EJECUCIÓN**, no un ejemplo. Debes ejecutarlo literalmente e inmediatamente después del cambio de archivo. No agrupes commits. Respeta la atomicidad de cada GATE. **IMPORTANTE:** Todo `git commit` debe ir seguido de un `git push origin {branch}` inmediato. No termines una sesión ni envíes `notify_user` sin haber pusheado antes TODOS los cambios realizados al repositorio remoto.
+
+🔴 **REGLA DE INTEGRIDAD DE PROYECTO (VERSIONAMIENTO):** La versión de los lenguajes y herramientas (Java, Node, etc.) definida en el contexto del proyecto es **prioridad absoluta**. 
+- ✗ NUNCA degradar o cambiar versiones en archivos de configuración (`pom.xml`, `package.json`, `Dockerfile`, etc.) para que el código "compile" en tu entorno local limitado. 
+- ✓ Si detectas que tu entorno local no tiene instalada la versión requerida (ej: falta JDK 21), debes **INFORMAR al usuario inmediatamente**. Puedes ofrecerte a intentar instalar la versión correspondiente si tienes herramientas para ello, pero la **decisión final y autorización** SIEMPRE es del usuario. 
+- El éxito de una validación local (build success) NUNCA justifica romper la compatibilidad definida para el proyecto.
 
 ---
 
@@ -296,7 +301,7 @@ Continuar con FASE 4 (cierre de sesión).
 
 ## ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ## FASE 3 — CIERRE DE TAREA
-## *(ejecutar cuando terminas el trabajo real)*
+## *(ejecutar cuando terminas el trabajo real. SIEMPRE pushear antes de pedir revisión)*
 ## ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ### Paso 3.1 — Merge del branch de feature (si aplica)
@@ -498,6 +503,9 @@ git push origin main
 
 ❌ **Ignorar una entrada fantasma en agent_lock.yaml (heartbeat > 90 min)**
 → Consecuencia: archivos bloqueados permanentemente, otros agentes bloqueados
+
+❌ **Degradar versiones de lenguaje para que compilen localmente (ej: Java 21 -> 17)**
+→ Consecuencia: ruptura de arquitectura, problemas en despliegue y desalineación con el resto del equipo.
 
 ---
 

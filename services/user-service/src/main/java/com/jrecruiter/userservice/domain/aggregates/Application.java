@@ -2,145 +2,144 @@ package com.jrecruiter.userservice.domain.aggregates;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import com.jrecruiter.userservice.domain.events.*;
 
 /**
  * Aggregate Root: Application (Job Application)
  * 
  * Represents a candidate's application to a job posting.
- * Bridges Candidate and Job contexts.
- * 
- * Status States:
- * - DRAFT: Application started but not submitted
- * - SUBMITTED: Sent to employer
- * - UNDER_REVIEW: Employer reviewing
- * - INTERVIEW: Candidate invited to interview
- * - REJECTED: Application rejected
- * - ACCEPTED: Application accepted / job offered
- * - WITHDRAWN: Candidate withdrew
- * 
- * @author GitHub Copilot / TASK-014
  */
 public class Application {
     
+    public enum ApplicationStatus {
+        DRAFT,
+        SUBMITTED,
+        UNDER_REVIEW,
+        INTERVIEW,
+        OFFERED,
+        ACCEPTED,
+        REJECTED,
+        WITHDRAWN
+    }
+
     private final UUID applicationId;
     private final UUID candidateId;
     private final UUID jobId;
-    private final LocalDateTime submittedAt;
-    private ApplicationStatus status;
+    
     private String coverLetter;
-    private LocalDateTime statusChangedAt;
+    private ApplicationStatus status;
     private String rejectionReason;
     
-    public enum ApplicationStatus {
-        DRAFT, SUBMITTED, UNDER_REVIEW, INTERVIEW, REJECTED, ACCEPTED, WITHDRAWN
-    }
+    private LocalDateTime submittedAt;
+    private LocalDateTime statusChangedAt;
     
-    /**
-     * Factory method: Create new application
-     */
-    public static Application createApplication(UUID candidateId, UUID jobId, String coverLetter) {
-        if (candidateId == null) throw new IllegalArgumentException("Candidate ID required");
-        if (jobId == null) throw new IllegalArgumentException("Job ID required");
+    private final List<DomainEvent> domainEvents = new ArrayList<>();
+
+    public static Application submit(UUID appId, UUID candidateId, UUID jobId, String coverLetter) {
+        Application app = new Application(appId, candidateId, jobId, coverLetter);
+        app.status = ApplicationStatus.SUBMITTED;
+        app.submittedAt = LocalDateTime.now();
+        app.statusChangedAt = app.submittedAt;
         
-        return new Application(
-            UUID.randomUUID(),
-            candidateId,
-            jobId,
-            coverLetter == null ? "" : coverLetter,
-            LocalDateTime.now()
+        app.addDomainEvent(
+            new ApplicationEvents.ApplicationSubmittedEvent(
+                appId, candidateId, jobId, app.submittedAt
+            )
         );
+        return app;
     }
-    
-    private Application(UUID applicationId, UUID candidateId, UUID jobId, 
-                       String coverLetter, LocalDateTime submittedAt) {
+
+    private Application(UUID applicationId, UUID candidateId, UUID jobId, String coverLetter) {
         this.applicationId = applicationId;
         this.candidateId = candidateId;
         this.jobId = jobId;
         this.coverLetter = coverLetter;
-        this.submittedAt = submittedAt;
         this.status = ApplicationStatus.DRAFT;
-        this.statusChangedAt = submittedAt;
     }
-    
-    /**
-     * Submit application to employer
-     */
-    public void submit() {
-        if (status != ApplicationStatus.DRAFT) {
-            throw new IllegalStateException("Can only submit DRAFT applications");
-        }
-        this.status = ApplicationStatus.SUBMITTED;
-        this.statusChangedAt = LocalDateTime.now();
-    }
-    
-    /**
-     * Employer puts application under review
-     */
-    public void reviewApplication() {
+
+    public void review() {
         if (status != ApplicationStatus.SUBMITTED) {
-            throw new IllegalStateException("Can only review SUBMITTED applications");
+            throw new IllegalStateException("Can only review submitted applications");
         }
-        this.status = ApplicationStatus.UNDER_REVIEW;
-        this.statusChangedAt = LocalDateTime.now();
+        transitionTo(ApplicationStatus.UNDER_REVIEW, null);
     }
-    
-    /**
-     * Invite candidate to interview
-     */
-    public void inviteToInterview() {
+
+    public void scheduleInterview() {
         if (status != ApplicationStatus.UNDER_REVIEW) {
-            throw new IllegalStateException("Can only invite from UNDER_REVIEW status");
+            throw new IllegalStateException("Can only schedule interview from UNDER_REVIEW");
         }
-        this.status = ApplicationStatus.INTERVIEW;
-        this.statusChangedAt = LocalDateTime.now();
+        transitionTo(ApplicationStatus.INTERVIEW, null);
     }
-    
-    /**
-     * Reject application
-     */
+
     public void reject(String reason) {
-        if (status == ApplicationStatus.REJECTED || status == ApplicationStatus.WITHDRAWN) {
-            throw new IllegalStateException(
-                String.format("Cannot reject %s application", status)
-            );
+        if (status == ApplicationStatus.ACCEPTED || status == ApplicationStatus.WITHDRAWN) {
+            throw new IllegalStateException("Cannot reject terminated application");
         }
-        this.status = ApplicationStatus.REJECTED;
         this.rejectionReason = reason;
-        this.statusChangedAt = LocalDateTime.now();
+        transitionTo(ApplicationStatus.REJECTED, reason);
     }
-    
-    /**
-     * Accept application (offer job)
-     */
+
     public void accept() {
         if (status != ApplicationStatus.INTERVIEW && status != ApplicationStatus.UNDER_REVIEW) {
-            throw new IllegalStateException("Can only accept from INTERVIEW or UNDER_REVIEW status");
+            throw new IllegalStateException("Can only accept from INTERVIEW or UNDER_REVIEW");
         }
-        this.status = ApplicationStatus.ACCEPTED;
-        this.statusChangedAt = LocalDateTime.now();
+        transitionTo(ApplicationStatus.ACCEPTED, null);
     }
-    
-    /**
-     * Candidate withdraws application
-     */
+
     public void withdraw() {
         if (status == ApplicationStatus.WITHDRAWN || status == ApplicationStatus.REJECTED) {
-            throw new IllegalStateException("Cannot withdraw already terminated application");
+            throw new IllegalStateException("Cannot withdraw terminated application");
         }
-        this.status = ApplicationStatus.WITHDRAWN;
-        this.statusChangedAt = LocalDateTime.now();
+        
+        LocalDateTime now = LocalDateTime.now();
+        addDomainEvent(new ApplicationEvents.ApplicationWithdrawnEvent(applicationId, candidateId, now));
+        transitionTo(ApplicationStatus.WITHDRAWN, "Withdrawn by candidate");
     }
-    
-    /**
-     * Update cover letter (DRAFT only)
-     */
+
+    private void transitionTo(ApplicationStatus nextStatus, String reason) {
+        ApplicationStatus oldStatus = this.status;
+        this.status = nextStatus;
+        this.statusChangedAt = LocalDateTime.now();
+        
+        addDomainEvent(
+            new ApplicationEvents.ApplicationStatusChangedEvent(
+                applicationId, oldStatus, nextStatus, reason, statusChangedAt
+            )
+        );
+    }
+
     public void updateCoverLetter(String coverLetter) {
         if (status != ApplicationStatus.DRAFT) {
             throw new IllegalStateException("Can only update DRAFT applications");
         }
         this.coverLetter = coverLetter == null ? "" : coverLetter;
     }
-    
+
+    private void addDomainEvent(DomainEvent event) {
+        domainEvents.add(event);
+    }
+
+    public List<DomainEvent> getDomainEvents() {
+        return Collections.unmodifiableList(domainEvents);
+    }
+
+    public void clearDomainEvents() {
+        domainEvents.clear();
+    }
+
+    // Reconstruction method
+    public static Application reconstruct(UUID applicationId, UUID candidateId, UUID jobId, 
+                                        String coverLetter, ApplicationStatus status, 
+                                        String rejectionReason, LocalDateTime submittedAt, 
+                                        LocalDateTime statusChangedAt) {
+        Application app = new Application(applicationId, candidateId, jobId, coverLetter);
+        app.status = status;
+        app.rejectionReason = rejectionReason;
+        app.submittedAt = submittedAt;
+        app.statusChangedAt = statusChangedAt;
+        return app;
+    }
+
     // Accessors
     public UUID getApplicationId() { return applicationId; }
     public UUID getCandidateId() { return candidateId; }
@@ -150,28 +149,4 @@ public class Application {
     public LocalDateTime getSubmittedAt() { return submittedAt; }
     public LocalDateTime getStatusChangedAt() { return statusChangedAt; }
     public String getRejectionReason() { return rejectionReason; }
-    
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Application)) return false;
-        Application that = (Application) o;
-        return Objects.equals(applicationId, that.applicationId);
-    }
-    
-    @Override
-    public int hashCode() {
-        return Objects.hash(applicationId);
-    }
-    
-    @Override
-    public String toString() {
-        return "Application{" +
-                "applicationId=" + applicationId +
-                ", candidateId=" + candidateId +
-                ", jobId=" + jobId +
-                ", status=" + status +
-                ", submittedAt=" + submittedAt +
-                '}';
-    }
 }
