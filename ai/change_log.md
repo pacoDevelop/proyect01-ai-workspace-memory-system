@@ -1,3 +1,27 @@
+## [2026-03-09T02:00:00Z] RECOVERY: Ghost agent cleanup — TASK-015 unblocked [RECOVERY]
+
+**Type:** recovery | **Responsible:** github-copilot | **Scope:** Agent lifecycle management
+
+### Summary
+
+Ghost agent `antigravity` detected in agent_lock.yaml (heartbeat timestamp: 2026-03-08T22:30:00Z, duration >90 minutes without update). Executed FASE 0 Paso 0.2b protocol: cleaned ghost entry and recovered TASK-015 from blocked state.
+
+### Actions Taken
+
+- ✅ Moved `antigravity` from `active_agents` to `ghost_entries` in agent_lock.yaml
+- ✅ Recovered TASK-015 status: `in_progress` → `pending` (OAuth2 + JWT implementation)
+- ✅ Cleared assignment: `assigned_agent: antigravity` → `null`
+- ✅ Updated state_history with recovery transition
+- ✅ Emitted recovery signal SIG-RECOVERY-001
+
+### Impact
+
+- TASK-015 now available for claiming by next agent
+- No data loss or task corruption detected
+- Blocked resources (SecurityConfig.java, JwtTokenProvider.java) released
+
+---
+
 ## [2026-03-09T01:50:00Z] TASK-035: AUDITORÍA TASK-017 (ADVANCED SEARCH) COMPLETADA [TASK-035]
 
 **Type:** review-audit | **Responsible:** github-copilot | **Scope:** Search-Service Advanced Search Implementation

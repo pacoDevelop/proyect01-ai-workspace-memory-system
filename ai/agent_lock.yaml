@@ -1,23 +1,20 @@
 # AGENT LOCK — Mutex distribuido
 schema_version: "3.0"
 min_compatible_version: "2.0"
-last_updated: "2026-03-09T01:52:00Z"
+last_updated: "2026-03-09T02:00:00Z"
 last_updated_by: "github-copilot"
 
-active_agents:
+active_agents: []
+
+ghost_entries:
   - agent_id: "antigravity"
     session_id: "20260308-2230-antigravity"
     started_at: "2026-03-08T22:30:00Z"
     last_heartbeat: "2026-03-08T22:30:00Z"
-    current_task: "TASK-015"
-    status: "working"
-    working_branch: "feat/TASK-015-security-auth"
-    base_branch: "main"
-    locked_files:
-      - "services/user-service/src/main/java/com/jrecruiter/userservice/infrastructure/config/SecurityConfig.java"
-      - "services/user-service/src/main/java/com/jrecruiter/userservice/infrastructure/security/JwtTokenProvider.java"
-    notes: "Implementando OAuth2 + JWT en User-Service (TASK-015)."
+    last_task: "TASK-015"
+    detected_at: "2026-03-09T02:00:00Z"
+    reason: "heartbeat timeout (>90 minutes without update)"
+    cleaned_by: "github-copilot [FASE-0.2b]"
+    cleaned_at: "2026-03-09T02:00:00Z"
 
-ghost_entries: []
-
-note: "Clean state after TASK-035 audit completion"
+note: "Ghost agent antigravity cleaned at 2026-03-09T02:00:00Z"
