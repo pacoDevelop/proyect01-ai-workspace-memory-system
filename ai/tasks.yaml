@@ -1,13 +1,13 @@
 schema_version: "3.0"
 min_compatible_version: "2.0"
-last_updated: "2026-03-08T20:55:00Z"
+last_updated: "2026-03-08T21:30:00Z"
 last_updated_by: "antigravity"
 total_tasks: 37
-pending: 5
+pending: 4
 in_progress: 0
 blocked: 0
 done: 32
-review: 0
+review: 1
 
 # ============================================================================
 # FASE 1: ANÁLISIS & PLANIFICACIÓN (SEMANA 1-2)
@@ -1669,21 +1669,25 @@ tasks:
       - Verificación de Spring Security config
     priority: "critical"
     severity: "blocker"
-    status: "in_progress"
+    status: "review"
     depends_on: ["TASK-015"]
     estimated_effort: "4h"
     assigned_agent: "antigravity"
     claimed_at: "2026-03-08T21:05:00Z"
     started_at: "2026-03-08T21:15:00Z"
-    completed_at: null
+    completed_at: "2026-03-08T21:30:00Z"
     created_at: "2026-03-08T18:30:00Z"
     created_by: "github-copilot"
-    updated_at: "2026-03-08T21:15:00Z"
-    actual_effort: null
+    updated_at: "2026-03-08T21:30:00Z"
+    actual_effort: "0.25h"
     tags: ["review", "audit", "security", "oauth2", "user-service"]
     security_sensitive: true
     requires_security_review: true
     owasp_checklist_required: true
+    owasp_checklist_applied:
+      - "A01: Broken Access Control"
+      - "A02: Cryptographic Failures"
+      - "A07: Identification and Authentication Failures"
     state_history:
       - {from: "pending", to: "claimed", at: "2026-03-08T18:46:00Z", by: "antigravity"}
       - {from: "claimed", to: "in_progress", at: "2026-03-08T18:46:00Z", by: "antigravity"}
@@ -1691,14 +1695,19 @@ tasks:
       - {from: "done", to: "todo", at: "2026-03-08T19:00:00Z", by: "antigravity"}
       - {from: "todo", to: "claimed", at: "2026-03-08T21:05:00Z", by: "antigravity"}
       - {from: "claimed", to: "in_progress", at: "2026-03-08T21:15:00Z", by: "antigravity"}
+      - {from: "in_progress", to: "review", at: "2026-03-08T21:30:00Z", by: "antigravity"}
     definition_of_done_check:
       - "JWT implementation follows RFC 7519": true
       - "Token expiration enforced": true
-      - "Refresh token rotation": true
+      - "Refresh token rotation": false
       - "CORS properly configured": true
     completion_notes: |
-      ⚠️ AUDITORÍA INVALIDADA POR TASK-037.
-      Se detectó falta de infraestructura (pom.xml, yml, Dockerfile) para User-Service. La revisión anterior fue puramente estática y no consideró la capacidad de ejecución del servicio.
+      🚨 RIESGOS DE SEGURIDAD IDENTIFICADOS:
+      - A02 (Cryptographic Failures): Secreto de JWT hardcodeado por defecto en JwtTokenProvider.java.
+      - A07 (Auth Failures): El flujo de refresco de tokens genera access tokens con el claim 'email' VACÍO, lo cual romperá la autorización basada en JWT que dependa de dicho campo.
+      - A07: Falta de rotación de Refresh Tokens. El mismo token se puede re-usar N veces hasta su expiración.
+      - General: El servicio no es compilable/ejecutable debido a la falta de archivos de infraestructura (pom.xml, etc).
+      - Recomendación: Marcada para REVIEW por ser security_sensitive. RECHAZAR aprobación hasta parchear el secreto y el email claim.
 
   - id: "TASK-034"
     title: "REVIEW: Auditoría de TASK-016 (Search-Service + ES)"
