@@ -1,0 +1,60 @@
+# SIGNALS — Canal de notificaciones asíncronas entre agentes
+# Leer al inicio de sesión. Marcar como read después de procesar.
+# Las señales no reemplazan tasks.yaml — son notificaciones, no estado.
+
+schema_version: "4.0"
+min_compatible_version: "4.0"
+last_updated: "{YYYY-MM-DDTHH:MM:SSZ}"
+
+signals:
+  
+  - id: "SIG-{id}"
+    type: "task_unblocked"  # Ver tipos permitidos abajo
+    from: "{agent-name | [HUMAN] human-name}"
+    to: "any"              # "any" | "{specific-agent-name}"
+    task_id: "TASK-{id}"
+    message: >
+      {Mensaje corto, máximo 2 líneas. Qué información importante hay aquí.
+       Las señales notifican, no ordenan. El mensaje es informativo.}
+    created_at: "{YYYY-MM-DDTHH:MM:SSZ}"
+    
+    # Quién ya leyó esta señal
+    read_by:
+      # - {agent: "{agent-name}", at: "{YYYY-MM-DDTHH:MM:SSZ}"}
+
+---
+
+## TIPOS DE SEÑAL PERMITIDOS
+
+- **task_unblocked**    — Una tarea que dependía de otra ahora está disponible
+- **review_requested**  — Tarea en estado review esperando al reviewer
+- **review_approved**   — Reviewer aprobó, tarea marcada done
+- **review_rejected**   — Reviewer rechazó, tarea devuelta a in_progress con feedback
+- **task_reopened**     — Tarea done fue reabierta
+- **warning**           — Alerta urgente para todos los agentes (seguridad, bloqueo, etc)
+- **info**              — Información general no urgente
+- **recovery**          — Un agente limpió estado corrupto o fantasma
+
+---
+
+## PROTOCOLO DE SEÑALES
+
+### Al inicio de sesión:
+1. Leer signals.yaml
+2. Filtrar: donde to=="any" O to==tu-nombre Y read_by no te incluye
+3. Procesar cada señal según su tipo
+4. Añadirte a read_by de las que procesaste
+
+### Al emitir una señal:
+- Nuevo SIG-{id} con numero incremental
+- Campo message: máximo 2 líneas, sin instrucciones
+- to: "any" para avisos generales, to:{agent} para dirigidas
+
+### Señales OBLIGATORIAS de emitir:
+- Al terminar tarea que tiene bloqueadas a otras: **task_unblocked**
+- Al pasar tarea a review: **review_requested**
+- Al detectar problema que afecta otros agentes: **warning**
+
+### Archivado automático:
+- Señales con created_at > 7 días se mueven a /ai/archive/signals/
+- Se hacen referencia pero no activas en el array principal

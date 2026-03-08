@@ -1,0 +1,68 @@
+# AGENT LOCK — Mutex distribuido para coordinación entre agentes
+# ⚠️  LEER ANTES DE EMPEZAR. REGISTRARSE ANTES DE EDITAR CUALQUIER ARCHIVO.
+# Timeout de entrada: 90 minutos sin heartbeat = entrada fantasma (eliminable)
+# ⚠️  LÍMITE: Máximo 1 tarea en claimed/in_progress por agente. Sin excepciones.
+
+schema_version: "3.0"
+min_compatible_version: "2.0"
+last_updated: "{YYYY-MM-DDTHH:MM:SSZ}"
+last_updated_by: "{agent-name}"
+
+# ACTIVE AGENTS — Agentes trabajando ahora
+active_agents:
+  - agent_id: "{agent-identifier}"
+    session_id: "{YYYYMMDD-HHMMSS-agent-name}"
+    started_at: "{YYYY-MM-DDTHH:MM:SSZ}"
+    last_heartbeat: "{YYYY-MM-DDTHH:MM:SSZ}"  # Actualizar cada ~15 minutos
+    current_task: "{TASK-{id}}"
+    status: "working"  # working | paused | finalizing
+    
+    # Git workflow
+    working_branch: "feat/TASK-{id}-{short-desc}"
+    base_branch: "main"
+    merge_strategy: "squash"  # squash | merge | rebase
+    
+    # Archivos bajo reserva de este agente
+    locked_files:
+      - "{path/to/file1}"
+      - "{path/to/file2}"
+    
+    notes: "{Contexto breve de qué está haciendo este agente}"
+
+# GHOST ENTRIES — Agentes detectados como inactivos (>90 min sin heartbeat)
+# Se mantienen como auditoría antes de ser eliminados.
+ghost_entries:
+  # - agent_id: "{agent-que-falló}"
+  #   detected_at: "{YYYY-MM-DDTHH:MM:SSZ}"
+  #   last_heartbeat_was: "{YYYY-MM-DDTHH:MM:SSZ}"
+  #   cleaned_by: "{agent-que-limpió}"
+  #   cleaned_at: "{YYYY-MM-DDTHH:MM:SSZ}"
+
+---
+
+## ANTI-COLLISION PROTOCOL
+
+### Antes de editar un archivo:
+1. Leer este archivo completo
+2. Verificar que el archivo NO está en `locked_files` de otro agente con heartbeat activo
+3. Si está bloqueado: esperar, contactar al agente propietario, o escalar
+4. Si el heartbeat del propietario lleva > 90 min sin actualizar: agente muerto, limpiar
+
+### Al registrarte (primera vez):
+1. `git pull --rebase origin main` — obtener estado más reciente
+2. Añadir tu entrada a `active_agents` ANTES de empezar a trabajar
+3. Tus `locked_files` son tu "reserva exclusiva" — nadie más puede tocar esos archivos
+4. Regla absoluta: si ya tienes 1 tarea en claimed/in_progress, NO puedes reclamar otra
+
+### Heartbeat:
+- Actualizar `last_heartbeat` cada ~15 minutos mientras trabajas activamente
+- Indica a otros agentes que sigues vivo y que los archivos siguen reservados
+- Si fallas/crasheas sin actualizar heartbeat, otros agentes pueden limpiar después de 90 min
+
+### Resolución de conflictos de merge en este archivo:
+Si git reporta conflict en agent_lock.yaml:
+1. NO hacer merge automático
+2. Leer ambas versiones completas
+3. Para cada agent entrys: prevalece la entrada más reciente (por `last_heartbeat` o `started_at`)
+4. Registrar la resolución como entrada en /ai/change_log.md [MERGE-RESOLUTION]
+5. Regla: NUNCA perder una tarea ni invalidar una sesión activa en la resolución

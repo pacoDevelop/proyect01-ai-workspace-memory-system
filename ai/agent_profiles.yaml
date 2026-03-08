@@ -1,0 +1,23 @@
+# AGENT PROFILES
+schema_version: "5.0"
+min_compatible_version: "4.0"
+last_updated: "2026-03-08T02:36:40Z"
+last_updated_by: "init-script"
+agents:
+  - id: "github-copilot"
+    name: "GitHub Copilot"
+    model: "Claude Haiku 4.5"
+    description: "AI programming assistant for code generation, analysis, debugging, and implementation"
+    specialization_tags:
+      [code-generation, debugging, implementation, analysis, architecture]
+    max_task_priority: "critical"
+    capabilities:
+      - code-writing
+      - code-review
+      - debugging
+      - refactoring
+      - documentation
+      - research
+    active: true
+    role: "primary-assistant"
+deactivated_agents: []

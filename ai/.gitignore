@@ -1,0 +1,10 @@
+# Los archivos /ai/ son parte del repositorio y se commitean
+# Pero archive/ contiene backups de archivos archivados (históricos)
+archive/sessions/*.md
+archive/*.log
+
+# Archivos temporales
+*.swp
+*.swo
+*~
+.DS_Store

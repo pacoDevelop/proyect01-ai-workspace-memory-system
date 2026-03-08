@@ -1,0 +1,111 @@
+# TASK GRAPH — Grafo completo de tareas del proyecto
+# Estados: pending | claimed | in_progress | blocked | review | done | cancelled | reopened
+# Prioridades: critical | high | medium | low | escalated
+# ⚠️  Máximo 1 tarea en claimed/in_progress por agente a la vez.
+
+schema_version: "3.0"
+min_compatible_version: "2.0"
+last_updated: "{YYYY-MM-DDTHH:MM:SSZ}"
+total_tasks: {number}
+pending: {number}
+in_progress: {number}
+blocked: {number}
+done: {number}
+
+tasks:
+
+  - id: "TASK-{id}"
+    title: "{Título claro y accionable}"
+    description: >
+      {Descripción de 2-4 líneas. Qué hay que hacer, por qué,
+      contexto necesario para el agente que lo va a hacer.}
+    goal: "{Resultado observable y verificable al terminar}"
+    
+    # Especialización y clasificación
+    tags:
+      - "{domain1}"
+      - "{domain2}"
+    
+    # Prioridad y timeline
+    priority: "medium"  # critical | high | medium | low | escalated
+    status: "pending"   # pending | claimed | in_progress | blocked | review | done | cancelled | reopened
+    due_date: "{YYYY-MM-DD}"  # Opcional
+    auto_escalate_after: "3d"  # Opcional: escalar si no avanza en X tiempo
+    escalated_at: null  # Se rellena automáticamente por script de validación
+    
+    # Dependencias en el grafo
+    depends_on: []
+    blocks: []
+    
+    # Trazabilidad
+    related_files:
+      - "{path/to/file}"
+      - "{path/to/another}"
+    related_decisions:
+      - "DEC-{id}"
+    related_memory_shards:
+      - "{shard-name}.md"
+    
+    # Asignación y seguimiento
+    assigned_agent: null
+    claimed_at: null
+    started_at: null
+    updated_at: "{YYYY-MM-DDTHH:MM:SSZ}"
+    created_at: "{YYYY-MM-DDTHH:MM:SSZ}"
+    created_by: "{agent-name | [HUMAN] human-name}"
+    
+    # Definition of Done — qué debe cumplir para marcar como done
+    definition_of_done:
+      - "{Criterio 1 — debe ser verificable}"
+      - "{Criterio 2}"
+      - "{Criterio 3}"
+    
+    # Revisión
+    review_required: false
+    reviewer: null  # agent-name | [HUMAN] human-name | "any-agent"
+    review_criteria: >
+      {Qué debe verificar el reviewer antes de aprobar}
+    reviewed_at: null
+    reviewed_by: null
+    
+    # Tiempo
+    estimated_effort: "{Xh | Xd}"
+    actual_effort: null
+    
+    # Notas contexto
+    notes: "{Cualquier contexto adicional, referencias, o cuidados especiales}"
+    
+    # Seguridad del código (solo si aplica)
+    security_sensitive: false
+    security_tags: []  # auth | crypto | api | data-privacy | permissions
+    requires_security_review: false
+    threat_model_reference: null  # DEC-{id}
+    owasp_checklist_applied: null  # Se rellena al cerrar: [A01, A02, A07]
+    
+    # Historial de cambios de estado
+    state_history:
+      - {from: null, to: "pending", at: "{YYYY-MM-DDTHH:MM:SSZ}", by: "{creator}"}
+    
+    # Si fue reabierta desde done
+    reopened_history: []
+    # - reopened_at: "{YYYY-MM-DDTHH:MM:SSZ}"
+    #   reopened_by: "{agent|[HUMAN]-name}"
+    #   reopened_reason: "{Motivo: bug encontrado, cambio de requisitos, etc}"
+    #   previous_done_at: "{YYYY-MM-DDTHH:MM:SSZ}"
+
+---
+
+## ALGORITMO DE SELECCIÓN DE TAREA
+
+Ver sección "Cómo un agente identifica su próxima tarea" en la especificación.
+
+1. ¿Tienes 1 tarea activa? Termínala primero
+2. Leer /ai/signals.yaml → desbloqueos o reviews para ti
+3. Filtrar: status=pending, assigned_agent=null
+4. Eliminar con depends_on no resueltos
+5. Filtrar por tus specialization_tags si tienes perfil
+6. Ordenar: critical > escalated > high > medium > low
+7. Cambiar status: pending → claimed
+8. Registrarse en agent_lock.yaml
+9. Crear sesión en /ai/sessions/
+10. Cambiar status: claimed → in_progress

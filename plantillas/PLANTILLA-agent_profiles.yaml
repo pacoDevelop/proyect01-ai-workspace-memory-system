@@ -1,0 +1,79 @@
+# AGENT PROFILES — Identidades autorizadas y capacidades de cada agente
+# ⚠️  SOLO modificable por humanos. Los agentes leen pero NO escriben este archivo.
+# Un agent_id en agent_lock.yaml que no esté aquí = agente no autorizado.
+
+schema_version: "5.0"
+min_compatible_version: "4.0"
+last_updated: "{YYYY-MM-DDTHH:MM:SSZ}"
+last_updated_by: "human-admin"
+
+# AUTHORIZED AGENTS — Fuente de verdad para identidades legítimas
+agents:
+  - id: "{agent-identifier-1}"
+    description: "{Descripción clara de qué tipo de tareas hace este agente}"
+
+    # Especialización — ayuda a filtrar tareas relevantes
+    specialization_tags:
+      - "{domain1}"
+      - "{domain2}"
+      - "{domain3}"
+
+    # Restricciones — qué tipos de tareas NO puede tomar
+    cannot_work_on:
+      - "{area-prohibida-1}"
+      - "{area-prohibida-2}"
+
+    # Preferencias técnicas
+    preferred_languages:
+      - "{lang1}"
+      - "{lang2}"
+
+    # Control de acceso — qué tan críticas pueden ser sus tareas
+    max_task_priority: "critical" # critical | high | medium | low
+
+    # Aprobaciones requeridas para ciertos tipos de cambios
+    requires_review_for:
+      - "{tipo-cambio-sensible-1}"
+      - "{tipo-cambio-sensible-2}"
+
+    # Meta
+    created_at: "{YYYY-MM-DDTHH:MM:SSZ}"
+    created_by: "{human-name}"
+    active: true
+
+  - id: "{agent-identifier-2}"
+    description: "{Descripción de segundo agente}"
+    specialization_tags:
+      - "{domain1}"
+    cannot_work_on: []
+    preferred_languages: []
+    max_task_priority: "high"
+    requires_review_for: []
+    created_at: "{YYYY-MM-DDTHH:MM:SSZ}"
+    created_by: "{human-name}"
+    active: true
+
+---
+## DEACTIVATED AGENTS — Historial de agentes retirados
+# Nunca eliminar, solo marcar como inactivo. Auditoría.
+
+deactivated_agents:
+  # - id: "{agent-anterior}"
+  #   reason: "{Motivo por el que se retiró}"
+  #   deactivated_at: "{YYYY-MM-DDTHH:MM:SSZ}"
+  #   deactivated_by: "{human-name}"
+
+---
+## VALIDATION RULES
+
+### Para agentes IA al leer este archivo:
+- Solo agentes presentes en el array `agents` con `active: true` son legítimos
+- Si tu agent_id no está aquí: DETENER, reportar [SECURITY-ALERT] en change_log
+- Tu agent_id debe coincidir EXACTAMENTE con el id declarado aquí
+- Si detectas un agent_id en agent_lock.yaml NO presente: [SECURITY-ALERT]
+
+### Para humanos al mantener este archivo:
+- Cambiar `active: false` cuando se retire un agente, nunca eliminar
+- Documentar `reason` y `deactivated_by` para auditoría
+- Nueva aprobación requerida para cambiar specialization_tags
+- Si un agente se reaactiva: crear entrada nueva, no "undeletar"
