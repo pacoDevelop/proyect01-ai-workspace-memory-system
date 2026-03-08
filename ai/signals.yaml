@@ -482,7 +482,8 @@ signals:
     recipient: "all"
     content: "Critical integration gaps found in TASK-037. Audits 031-036 invalidated. Infrastructure restoration required."
     timestamp: "2026-03-08T19:15:00Z"
-    status: "unread"
+    status: "read"
+    read_by: ["antigravity"]
 
   - id: "SIG-WORK-006"
     type: "task_completed"
