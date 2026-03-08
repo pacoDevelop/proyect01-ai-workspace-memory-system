@@ -58,26 +58,47 @@ tasks:
     description: "Extraer lógica de usuarios/empleadores del legacy."
     priority: "high"
     severity: "important"
-    status: "pending"
+    status: "done"
     depends_on: []
     estimated_effort: "6h"
-    assigned_agent: null
+    assigned_agent: "github-copilot"
+    claimed_at: "2026-03-08T05:06:48Z"
+    completed_at: "2026-03-08T05:11:03Z"
     created_at: "2026-03-08T04:50:00Z"
     created_by: "github-copilot"
     tags: ["analysis", "ddd", "user-service"]
+    definition_of_done_check:
+      - "User aggregate mapeado": true
+      - "Value objects identificados": true
+      - "Invariantes documentados": true
+      - "Documento en knowledge/user-domain.md": true
+    completion_notes: |
+      ✅ User aggregate extracted from legacy (User.java, 957 lines analyzed)
+      ✅ 5 value objects identified: UserCredentials, UserProfile, UserContact, UserStatus, UserRole
+      ✅ 7 invariants documented (registration, verification, role management)
+      ✅ Role-based Access Control (RBAC) analyzed with UserToRole link table
+      ✅ Employer vs Candidate roles identified with business rules
+      ✅ Missing Application context discovered and designed
+      Discovery document: ai/memory/user-domain-analysis.md
 
   - id: "TASK-003"
     title: "Análisis de Search domain (full-text, filtrado)"
     description: "Entender cómo funciona la búsqueda actual para CQRS."
     priority: "high"
     severity: "important"
-    status: "pending"
+    status: "in_progress"
     depends_on: []
     estimated_effort: "5h"
-    assigned_agent: null
+    assigned_agent: "github-copilot"
+    claimed_at: "2026-03-08T05:11:48Z"
     created_at: "2026-03-08T04:50:00Z"
     created_by: "github-copilot"
     tags: ["analysis", "elasticsearch", "search-service"]
+    definition_of_done_check:
+      - "Search patterns identificados": false
+      - "Hibernate Search mappings analizados": false
+      - "CQRS strategy definida": false
+      - "Documento en knowledge/search-domain.md": false
 
   - id: "TASK-004"
     title: "Mapear dependencias entre bounded contexts"
