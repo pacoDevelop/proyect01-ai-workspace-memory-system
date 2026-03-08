@@ -1,4 +1,19 @@
-## [2026-03-08T19:15:00Z] TASK-037: AUDITORÍA E2E COMPLETADA - CRÍTICA (SESSION-026)
+## [2026-03-08T20:30:00Z] TASK-031: AUDITORÍA DOMINIO EMPLOYER COMPLETADA (SESSION-027)
+
+**Type:** review-audit | **Responsible:** antigravity | **Scope:** User-Service Domain Layer
+
+### Summary
+
+Re-auditoría de TASK-013 finalizada tras invalidación. Se confirma la excelencia técnica de la capa de dominio, pero se ratifica la ausencia de infraestructura raíz (Maven/Docker).
+
+**Acciones tomadas:**
+- ✅ Validación de invariantes de negocio en `Employer.java`.
+- ✅ Verificación de contratos de VOs y eventos de dominio.
+- 🔴 Identificación de requerimiento de restauración de infraestructura.
+
+---
+
+1: ## [2026-03-08T19:15:00Z] TASK-037: AUDITORÍA E2E COMPLETADA - CRÍTICA (SESSION-026)
 
 **Type:** review-audit | **Responsible:** antigravity | **Scope:** End-to-End Integration & Strangler Fig
 
