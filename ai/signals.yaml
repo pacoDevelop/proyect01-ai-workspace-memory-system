@@ -87,3 +87,25 @@ signals:
     created_at: "2026-03-08T04:55:00Z"
     read_by: []
     priority: "critical"
+
+  - id: "SIG-WORK-006"
+    type: "task_completed"
+    from: "github-copilot"
+    to: "any"
+    task_id: "TASK-006"
+    message: "TASK-006 (Job-Service Spring Boot Skeleton) COMPLETE with comprehensive fixes. All 6 critical infrastructure issues resolved: spring.profiles.active, Dockerfile curl, RabbitMQ service added, docker-compose rewritten, Prometheus cleaned, Flyway migrations created. Infrastructure production-ready."
+    created_at: "2026-03-08T06:20:00Z"
+    created_by_commit: "task-006-infrastr-fixes"
+    read_by: []
+    priority: "critical"
+    requires_review: false
+
+  - id: "SIG-WORK-007"
+    type: "task_ready"
+    from: "system"
+    to: "any"
+    task_id: "TASK-007"
+    message: "TASK-007 (Implementar Job aggregate root) is now unblocked and ready to claim. All domain analysis complete (TASK-001), infrastructure ready (TASK-006). Reference docs: ai/memory/jobs-domain-analysis.md"
+    created_at: "2026-03-08T06:20:00Z"
+    read_by: []
+    priority: "critical"
