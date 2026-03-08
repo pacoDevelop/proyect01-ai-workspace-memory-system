@@ -1,10 +1,10 @@
 # TASK GRAPH — JRecruiter Microservices Migration
 schema_version: "3.0"
 min_compatible_version: "2.0"
-last_updated: "2026-03-08T17:30:00Z"
+last_updated: "2026-03-08T18:30:00Z"
 last_updated_by: "github-copilot"
-total_tasks: 18
-pending: 0
+total_tasks: 37
+pending: 19
 in_progress: 0
 blocked: 0
 done: 18
@@ -677,3 +677,495 @@ tasks:
       Total TASK-018 LOC: 1,100+ lines
       Features: HTML email templates, event-driven notifications, RabbitMQ integration
       Commit: 5th TASK-018 commit
+
+  # ============================================================================
+  # FASE 6: AUDITORÍA & REVISIÓN (SEMANA 11)
+  # ============================================================================
+
+  - id: "TASK-019"
+    title: "REVIEW: Auditoría de TASK-001 (Análisis Job domain)"
+    description: |
+      Verificar que el análisis de Job domain fue completo:
+      - Correctitud del mapeo Job aggregate → legacy
+      - Validación de value objects identificados
+      - Integridad de invariantes documentadas
+      - Calidad del documento discovery
+    priority: "high"
+    severity: "important"
+    status: "claimed"
+    depends_on: ["TASK-001"]
+    estimated_effort: "3h"
+    assigned_agent: "github-copilot"
+    claimed_at: "2026-03-08T18:30:00Z"
+    created_at: "2026-03-08T18:30:00Z"
+    created_by: "github-copilot"
+    tags: ["review", "audit", "analysis", "job-service"]
+    security_sensitive: false
+    state_history:
+      - {from: "pending", to: "claimed", at: "2026-03-08T18:30:00Z", by: "github-copilot"}
+    definition_of_done_check:
+      - "Mapeo verified contra legacy code": false
+      - "Value objects validados": false
+      - "Invariantes revisadas": false
+      - "Discovery doc audited": false
+
+  - id: "TASK-020"
+    title: "REVIEW: Auditoría de TASK-002 (Análisis User domain)"
+    description: |
+      Verificar integridad del análisis User domain:
+      - Correctitud del mapeo User aggregate → legacy
+      - Validación de 5 value objects extraídos
+      - Revisión de 7 invariantes RBAC
+      - Calidad del documento analysis
+    priority: "high"
+    severity: "important"
+    status: "pending"
+    depends_on: ["TASK-002"]
+    estimated_effort: "3h"
+    assigned_agent: null
+    claimed_at: null
+    created_at: "2026-03-08T18:30:00Z"
+    created_by: "github-copilot"
+    tags: ["review", "audit", "analysis", "user-service"]
+    security_sensitive: false
+    definition_of_done_check:
+      - "Mapeo verified": false
+      - "Value objects validated": false
+      - "RBAC strategy reviewed": false
+      - "Document quality checked": false
+
+  - id: "TASK-021"
+    title: "REVIEW: Auditoría de TASK-003 (Análisis Search domain)"
+    description: |
+      Revisar integridad del análisis Search domain:
+      - Validación de CQRS strategy diseñada
+      - Verificación de Elasticsearch mapping
+      - Revisión de migration strategy (dual-write)
+      - Auditoría del DLQ pattern
+    priority: "high"
+    severity: "important"
+    status: "pending"
+    depends_on: ["TASK-003"]
+    estimated_effort: "3h"
+    assigned_agent: null
+    claimed_at: null
+    created_at: "2026-03-08T18:30:00Z"
+    created_by: "github-copilot"
+    tags: ["review", "audit", "analysis", "search-service"]
+    security_sensitive: false
+    definition_of_done_check:
+      - "CQRS strategy verified": false
+      - "ES mapping validated": false
+      - "Migration plan reviewed": false
+      - "DLQ pattern checked": false
+
+  - id: "TASK-022"
+    title: "REVIEW: Auditoría de TASK-004 (Mapeo dependencias)"
+    description: |
+      Verificar correctitud del diagrama de dependencias:
+      - Validación de event contracts (12 events)
+      - Revisión de async/sync patterns
+      - Auditoría de API Gateway routing
+      - Validación de CDC strategy
+    priority: "critical"
+    severity: "important"
+    status: "pending"
+    depends_on: ["TASK-004"]
+    estimated_effort: "4h"
+    assigned_agent: null
+    claimed_at: null
+    created_at: "2026-03-08T18:30:00Z"
+    created_by: "github-copilot"
+    tags: ["review", "audit", "architecture", "all-services"]
+    security_sensitive: false
+    definition_of_done_check:
+      - "Event contracts validated": false
+      - "Communication patterns reviewed": false
+      - "API Gateway config checked": false
+      - "CDC strategy verified": false
+
+  - id: "TASK-023"
+    title: "REVIEW: Auditoría de TASK-005 (Plan Strangler Fig)"
+    description: |
+      Revisar integridad del plan de migración:
+      - Validación de 12-week roadmap
+      - Verificación de feature flags implementation
+      - Auditoría de rollback triggers
+      - Revisión de success metrics
+    priority: "critical"
+    severity: "important"
+    status: "pending"
+    depends_on: ["TASK-005"]
+    estimated_effort: "4h"
+    assigned_agent: null
+    claimed_at: null
+    created_at: "2026-03-08T18:30:00Z"
+    created_by: "github-copilot"
+    tags: ["review", "audit", "planning", "migration"]
+    security_sensitive: false
+    definition_of_done_check:
+      - "Roadmap timeline verified": false
+      - "Feature flags logic checked": false
+      - "Rollback procedure tested": false
+      - "Metrics baseline confirmed": false
+
+  - id: "TASK-024"
+    title: "REVIEW: Auditoría de TASK-006 (Setup Job-Service)"
+    description: |
+      Verificar infraestructura Job-Service:
+      - Validación de pom.xml dependencies
+      - Revisión de application.yml profiles
+      - Auditoría de Dockerfile y docker-compose
+      - Verificación de Flyway migrations
+    priority: "critical"
+    severity: "blocker"
+    status: "pending"
+    depends_on: ["TASK-006"]
+    estimated_effort: "3h"
+    assigned_agent: null
+    claimed_at: null
+    created_at: "2026-03-08T18:30:00Z"
+    created_by: "github-copilot"
+    tags: ["review", "audit", "infrastructure", "docker", "job-service"]
+    security_sensitive: false
+    definition_of_done_check:
+      - "pom.xml verified against DEC-002": false
+      - "Profiles correctly configured": false
+      - "Docker healthchecks working": false
+      - "Flyway migrations executable": false
+
+  - id: "TASK-025"
+    title: "REVIEW: Auditoría de TASK-007 (Job aggregate)"
+    description: |
+      Auditoría de calidad del Job aggregate root:
+      - Validación de invariantes en constructores
+      - Revisión de value objects implementation
+      - Auditoría de domain events
+      - Verificación de (NO Spring dependencies)
+    priority: "critical"
+    severity: "important"
+    status: "pending"
+    depends_on: ["TASK-007"]
+    estimated_effort: "4h"
+    assigned_agent: null
+    claimed_at: null
+    created_at: "2026-03-08T18:30:00Z"
+    created_by: "github-copilot"
+    tags: ["review", "audit", "ddd", "domain", "job-service"]
+    security_sensitive: false
+    definition_of_done_check:
+      - "Invariants properly enforced": false
+      - "Value objects immutable": false
+      - "Domain events correct": false
+      - "Zero Spring imports": false
+
+  - id: "TASK-026"
+    title: "REVIEW: Auditoría de TASK-008 (JobRepository port)"
+    description: |
+      Revisar contrato de JobRepository:
+      - Validación de interfaz sin implementación
+      - Verificación de métodos según especificación
+      - Auditoría de exception handling
+      - Revisión de documentación/Javadoc
+    priority: "high"
+    severity: "important"
+    status: "pending"
+    depends_on: ["TASK-008"]
+    estimated_effort: "2h"
+    assigned_agent: null
+    claimed_at: null
+    created_at: "2026-03-08T18:30:00Z"
+    created_by: "github-copilot"
+    tags: ["review", "audit", "ports", "job-service"]
+    security_sensitive: false
+    definition_of_done_check:
+      - "Port interface pure": false
+      - "Methods complete": false
+      - "Exceptions documented": false
+      - "Javadoc present": false
+
+  - id: "TASK-027"
+    title: "REVIEW: Auditoría de TASK-009 (PostgreSQL JPA adapter)"
+    description: |
+      Auditoría de infraestructura PostgreSQL:
+      - Validación de JPA mappings (Job ↔ JobJpaEntity)
+      - Revisión de transaction boundaries
+      - Auditoría de optimistic locking
+      - Verificación de performance indexes
+    priority: "high"
+    severity: "important"
+    status: "pending"
+    depends_on: ["TASK-009"]
+    estimated_effort: "3h"
+    assigned_agent: null
+    claimed_at: null
+    created_at: "2026-03-08T18:30:00Z"
+    created_by: "github-copilot"
+    tags: ["review", "audit", "jpa", "postgres", "job-service"]
+    security_sensitive: false
+    definition_of_done_check:
+      - "JPA mappings verified": false
+      - "Transactions correct": false
+      - "Locks implemented": false
+      - "Indexes present": false
+
+  - id: "TASK-028"
+    title: "REVIEW: Auditoría de TASK-010 (Job REST Controller)"
+    description: |
+      Revisar calidad del REST layer:
+      - Validación de endpoints HTTP semantics
+      - Revisión de DTOs y validaciones Bean
+      - Auditoría de error handling (404/400/409)
+      - Verificación de API documentation
+    priority: "high"
+    severity: "important"
+    status: "pending"
+    depends_on: ["TASK-010"]
+    estimated_effort: "3h"
+    assigned_agent: null
+    claimed_at: null
+    created_at: "2026-03-08T18:30:00Z"
+    created_by: "github-copilot"
+    tags: ["review", "audit", "rest", "api", "job-service"]
+    security_sensitive: true
+    requires_security_review: true
+    definition_of_done_check:
+      - "HTTP methods correct (POST/GET/PUT/DELETE)": false
+      - "DTOs validated": false
+      - "Error responses proper": false
+      - "API documented": false
+
+  - id: "TASK-029"
+    title: "REVIEW: Auditoría de TASK-011 (Tests coverage)"
+    description: |
+      Revisar cobertura y calidad de tests:
+      - Validación de unit test coverage ≥80%
+      - Revisión de integration tests con TestContainers
+      - Auditoría de test isolation
+      - Verificación de CI/CD test execution
+    priority: "high"
+    severity: "important"
+    status: "pending"
+    depends_on: ["TASK-011"]
+    estimated_effort: "3h"
+    assigned_agent: null
+    claimed_at: null
+    created_at: "2026-03-08T18:30:00Z"
+    created_by: "github-copilot"
+    tags: ["review", "audit", "testing", "job-service"]
+    security_sensitive: false
+    definition_of_done_check:
+      - "Coverage ≥80% verified": false
+      - "Integration tests present": false
+      - "Tests isolated": false
+      - "CI runs tests": false
+
+  - id: "TASK-030"
+    title: "REVIEW: Auditoría de TASK-012 (Docs + CI/CD)"
+    description: |
+      Revisar documentación y pipeline:
+      - Validación de README completeness
+      - Auditoría de Dockerfile multistage
+      - Revisión de GitHub Actions workflow
+      - Verificación de security scanning (OWASP)
+    priority: "high"
+    severity: "important"
+    status: "pending"
+    depends_on: ["TASK-012"]
+    estimated_effort: "3h"
+    assigned_agent: null
+    claimed_at: null
+    created_at: "2026-03-08T18:30:00Z"
+    created_by: "github-copilot"
+    tags: ["review", "audit", "documentation", "cicd", "job-service"]
+    security_sensitive: true
+    requires_security_review: true
+    definition_of_done_check:
+      - "README complete": false
+      - "Dockerfile analyzed": false
+      - "GitHub Actions workflow correct": false
+      - "Security scanning enabled": false
+
+  - id: "TASK-031"
+    title: "REVIEW: Auditoría de TASK-013 (User-Service + Employer)"
+    description: |
+      Revisar User-Service infrastructure:
+      - Validación de structure (parallels Job-Service)
+      - Revisión de Employer aggregate design
+      - Auditoría de 4 value objects
+      - Verificación de RBAC state machine
+    priority: "high"
+    severity: "important"
+    status: "pending"
+    depends_on: ["TASK-013"]
+    estimated_effort: "3h"
+    assigned_agent: null
+    claimed_at: null
+    created_at: "2026-03-08T18:30:00Z"
+    created_by: "github-copilot"
+    tags: ["review", "audit", "ddd", "user-service"]
+    security_sensitive: true
+    requires_security_review: true
+    definition_of_done_check:
+      - "Structure consistent with Job-Service": false
+      - "Employer aggregate correct": false
+      - "Value objects immutable": false
+      - "State machine validated": false
+
+  - id: "TASK-032"
+    title: "REVIEW: Auditoría de TASK-014 (Candidate aggregate)"
+    description: |
+      Revisar Candidate aggregate + Application context:
+      - Validación de 2 aggregates (Candidate, Application)
+      - Revisión de 6 value objects
+      - Auditoría de domain events
+      - Verificación de repository contracts
+    priority: "high"
+    severity: "important"
+    status: "pending"
+    depends_on: ["TASK-014"]
+    estimated_effort: "3h"
+    assigned_agent: null
+    claimed_at: null
+    created_at: "2026-03-08T18:30:00Z"
+    created_by: "github-copilot"
+    tags: ["review", "audit", "ddd", "user-service"]
+    security_sensitive: false
+    definition_of_done_check:
+      - "Aggregates properly bounded": false
+      - "Value objects validated": false
+      - "Events comprehensive": false
+      - "Repositories documented": false
+
+  - id: "TASK-033"
+    title: "REVIEW: Auditoría de TASK-015 (OAuth2 + JWT)"
+    description: |
+      Revisar seguridad de auth implementation:
+      - Validación de JWT token generation
+      - Auditoría de HS512 signing
+      - Revisión de refresh token mechanism
+      - Verificación de Spring Security config
+    priority: "critical"
+    severity: "blocker"
+    status: "pending"
+    depends_on: ["TASK-015"]
+    estimated_effort: "4h"
+    assigned_agent: null
+    claimed_at: null
+    created_at: "2026-03-08T18:30:00Z"
+    created_by: "github-copilot"
+    tags: ["review", "audit", "security", "oauth2", "user-service"]
+    security_sensitive: true
+    requires_security_review: true
+    owasp_checklist_required: true
+    definition_of_done_check:
+      - "JWT implementation follows RFC 7519": false
+      - "Token expiration enforced": false
+      - "Refresh token rotation": false
+      - "CORS properly configured": false
+
+  - id: "TASK-034"
+    title: "REVIEW: Auditoría de TASK-016 (Search-Service + ES)"
+    description: |
+      Revisar Search-Service indexing:
+      - Validación de Elasticsearch mapping (13 fields)
+      - Auditoría de RabbitMQ listener
+      - Revisión de event consumption
+      - Verificación de index health
+    priority: "high"
+    severity: "important"
+    status: "pending"
+    depends_on: ["TASK-016"]
+    estimated_effort: "3h"
+    assigned_agent: null
+    claimed_at: null
+    created_at: "2026-03-08T18:30:00Z"
+    created_by: "github-copilot"
+    tags: ["review", "audit", "elasticsearch", "search-service"]
+    security_sensitive: false
+    definition_of_done_check:
+      - "ES mapping complete": false
+      - "Listener handles events": false
+      - "Error handling present": false
+      - "Index recoverable": false
+
+  - id: "TASK-035"
+    title: "REVIEW: Auditoría de TASK-017 (Advanced search)"
+    description: |
+      Revisar complejidad de búsqueda avanzada:
+      - Validación de bool queries construction
+      - Auditoría de query-time boosting (5 factors)
+      - Revisión de personalized ranking
+      - Verificación de faceting implementation
+    priority: "high"
+    severity: "important"
+    status: "pending"
+    depends_on: ["TASK-017"]
+    estimated_effort: "3h"
+    assigned_agent: null
+    claimed_at: null
+    created_at: "2026-03-08T18:30:00Z"
+    created_by: "github-copilot"
+    tags: ["review", "audit", "elasticsearch", "search-service"]
+    security_sensitive: false
+    definition_of_done_check:
+      - "Bool queries correct": false
+      - "Boosting factors validated": false
+      - "Ranking algorithm works": false
+      - "Faceting responses correct": false
+
+  - id: "TASK-036"
+    title: "REVIEW: Auditoría de TASK-018 (Notification-Service)"
+    description: |
+      Revisar implementación de notificaciones:
+      - Validación de 6 email templates
+      - Auditoría de RabbitMQ listeners (5 events)
+      - Revisión de Thymeleaf rendering
+      - Verificación de SMTP configuration
+    priority: "high"
+    severity: "important"
+    status: "pending"
+    depends_on: ["TASK-018"]
+    estimated_effort: "3h"
+    assigned_agent: null
+    claimed_at: null
+    created_at: "2026-03-08T18:30:00Z"
+    created_by: "github-copilot"
+    tags: ["review", "audit", "notifications", "email"]
+    security_sensitive: true
+    requires_security_review: true
+    definition_of_done_check:
+      - "Templates well-formed HTML": false
+      - "Listeners robust": false
+      - "SMTP credentials secure": false
+      - "Delivery tracking logged": false
+
+  - id: "TASK-037"
+    title: "REVIEW: Auditoría de integración end-to-end"
+    description: |
+      Auditoría final de integración entre todos los servicios:
+      - Validación de event flow completo (Job → Search → Notification)
+      - Revisión de data consistency entre servicios
+      - Auditoría del Strangler Fig migration
+      - Verificación de API Gateway routing
+      - Testing end-to-end scenarios
+    priority: "critical"
+    severity: "blocker"
+    status: "pending"
+    depends_on: ["TASK-036"]
+    estimated_effort: "8h"
+    assigned_agent: null
+    claimed_at: null
+    created_at: "2026-03-08T18:30:00Z"
+    created_by: "github-copilot"
+    tags: ["review", "audit", "integration", "e2e", "all-services"]
+    security_sensitive: true
+    requires_security_review: true
+    owasp_checklist_required: true
+    definition_of_done_check:
+      - "End-to-end flow tested": false
+      - "Data consistency verified": false
+      - "Migration strategy validated": false
+      - "API Gateway functional": false
+      - "Security posture confirmed": false
+
