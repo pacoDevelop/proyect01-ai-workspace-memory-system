@@ -1,0 +1,233 @@
+name: Job-Service CI/CD Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'services/job-service/**'
+      - '.github/workflows/job-service-cicd.yml'
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'services/job-service/**'
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: jrecruiter/job-service
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Build & Test
+    
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_DB: jrecruiter
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+      
+      rabbitmq:
+        image: rabbitmq:3.13-management-alpine
+        env:
+          RABBITMQ_DEFAULT_USER: guest
+          RABBITMQ_DEFAULT_PASS: guest
+        options: >-
+          --health-cmd rabbitmq-diagnostics -q ping
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5672:5672
+          - 15672:15672
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+      
+      - name: 🔧 Setup JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+      
+      - name: 🏗️ Build with Maven
+        run: |
+          cd services/job-service
+          mvn clean package -DskipTests
+      
+      - name: 🧪 Run Unit Tests
+        run: |
+          cd services/job-service
+          mvn test -Dtest="*Test" -DfailIfNoTests=false
+      
+      - name: 🔌 Run Integration Tests
+        run: |
+          cd services/job-service
+          mvn verify -Dtest="*IntegrationTest" -DfailIfNoTests=false
+        env:
+          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/jrecruiter
+          SPRING_DATASOURCE_USERNAME: postgres
+          SPRING_DATASOURCE_PASSWORD: postgres
+          SPRING_RABBITMQ_HOST: localhost
+          SPRING_RABBITMQ_PORT: 5672
+      
+      - name: 📊 Generate Code Coverage
+        run: |
+          cd services/job-service
+          mvn jacoco:report
+      
+      - name: 📤 Upload Coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          files: services/job-service/target/site/jacoco/jacoco.xml
+          flags: job-service
+          fail_ci_if_error: false
+      
+      - name: 🔍 SonarQube Analysis (if configured)
+        run: |
+          cd services/job-service
+          mvn sonar:sonar \
+            -Dsonar.projectKey=job-service \
+            -Dsonar.host.url=${{ secrets.SONARQUBE_HOST }} \
+            -Dsonar.login=${{ secrets.SONARQUBE_TOKEN }} || echo "SonarQube not configured, skipping"
+      
+      - name: 🗑️ OWASP Dependency Check
+        run: |
+          cd services/job-service
+          mvn org.owasp:dependency-check-maven:check || echo "⚠️ Vulnerabilities detected. Review before merge."
+
+  security-scan:
+    runs-on: ubuntu-latest
+    name: Security Scanning
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+      
+      - name: 🔐 Run Trivy Filesystem Scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: 'services/job-service'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+      
+      - name: 📤 Upload Trivy results to GitHub Security
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-results.sarif'
+  
+  docker-build:
+    needs: build
+    runs-on: ubuntu-latest
+    name: Build & Push Docker Image
+    if: github.event_name == 'push'
+    
+    permissions:
+      contents: read
+      packages: write
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+      
+      - name: 🔧 Setup JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+      
+      - name: 🏗️ Build JAR with Maven
+        run: |
+          cd services/job-service
+          mvn clean package -DskipTests
+      
+      - name: 🐳 Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      
+      - name: 🔑 Log in to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: 📝 Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=sha,prefix={{branch}}-
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=raw,value=latest,enable={{is_default_branch}}
+      
+      - name: 🏗️ Build and Push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: services/job-service
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      
+      - name: 🔍 Run Trivy on Docker Image
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          format: 'sarif'
+          output: 'trivy-image-results.sarif'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      
+      - name: 📤 Upload Trivy image results
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-image-results.sarif'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+  notify:
+    needs: [build, security-scan, docker-build]
+    runs-on: ubuntu-latest
+    name: Notify Status
+    if: always()
+    
+    steps:
+      - name: ✅ Workflow Completed
+        run: |
+          echo "Job-Service CI/CD Pipeline Completed"
+          echo "Build Status: ${{ needs.build.result }}"
+          echo "Security Scan Status: ${{ needs.security-scan.result }}"
+          echo "Docker Build Status: ${{ needs.docker-build.result }}"
+      
+      - name: 📢 Notify Slack (if configured)
+        uses: slackapi/slack-github-action@v1
+        if: failure()
+        with:
+          webhook-url: ${{ secrets.SLACK_WEBHOOK }}
+          payload: |
+            {
+              "text": "❌ Job-Service CI/CD Pipeline Failed",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*Job-Service Build Failed*\n${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                  }
+                }
+              ]
+            }

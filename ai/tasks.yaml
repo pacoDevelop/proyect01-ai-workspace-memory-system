@@ -257,18 +257,18 @@ tasks:
       - "Base test class": true
     completion_notes: |
       ✅ TASK-006 COMPLETE & VALIDATED — Job-Service skeleton at 100% with all infrastructure fixes
-      
+
       **Comprehensive Infrastructure Audit Completed:**
-      
+
       **CRITICAL FIXES APPLIED:**
       1. ✅ Removed spring.profiles.active from application-dev/test/prod.yml (circular reference bug)
       2. ✅ Added curl to Dockerfile (Alpine Alpine base didn't include curl for healthchecks)
       3. ✅ RabbitMQ service missing from docker-compose - ADDED with full configuration
       4. ✅ Environment variables incorrect (DATABASE_URL → SPRING_DATASOURCE_URL)
       5. ✅ prometheus.yml referencing non-existent services (node-exporter, alertmanagers) - CLEANED
-      
+
       **Project Structure: Maven best-practices with proper separation of concerns**
-      
+
       **What's Included:**
       - Complete Maven pom.xml with Spring Boot 3.4 + Java 21 compatibility
       - 35+ production-grade dependencies (Web, JPA, RabbitMQ, Security, Monitoring, Testing)
@@ -282,7 +282,7 @@ tasks:
       - Test infrastructure with JUnit 5, Mockito, TestContainers, RestAssured
       - Complete docker-compose with PostgreSQL, RabbitMQ, Prometheus, Grafana (all healthchecks)
       - SETUP.md quick-start guide with all scenarios
-      
+
       **Infrastructure Status Verified:**
       | Component | Status | Tests |
       |-----------|--------|-------|
@@ -292,7 +292,7 @@ tasks:
       | Database Migrations | ✅ READY | Flyway V1 applied on startup |
       | Health Checks | ✅ READY | All services have health endpoints |
       | RabbitMQ | ✅ READY | AMQP on :5672, UI on :15672 |
-      
+
       **Ready for Next Phase:**
       → TASK-007: Implement Job aggregate root with DDD patterns
       → Can now: docker-compose up -d && curl http://localhost:8080/actuator/health
