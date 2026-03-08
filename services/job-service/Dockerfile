@@ -10,6 +10,9 @@ FROM eclipse-temurin:21-jre-alpine
 ARG JAR_FILE=target/*.jar
 COPY --from=build /app/${JAR_FILE} app.jar
 
+# Install curl for healthcheck
+RUN apk add --no-cache curl
+
 # Create non-root user
 RUN addgroup -S jrecruiter && adduser -S jrecruiter -G jrecruiter
 USER jrecruiter

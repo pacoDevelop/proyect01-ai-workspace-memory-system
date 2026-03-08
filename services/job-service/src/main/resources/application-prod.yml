@@ -1,0 +1,83 @@
+spring:
+  datasource:
+    url: ${DATASOURCE_URL:jdbc:postgresql://postgres:5432/jrecruiter}
+    username: ${DB_USERNAME:job_service}
+    password: ${DB_PASSWORD:changeme}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 30
+      minimum-idle: 10
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+        jdbc:
+          batch_size: 30
+        order_inserts: true
+        order_updates: true
+
+  rabbitmq:
+    host: ${RABBITMQ_HOST:rabbitmq}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USERNAME:job_service}
+    password: ${RABBITMQ_PASSWORD:changeme}
+    connection-timeout: 10000
+    listener:
+      simple:
+        concurrency: 10
+        max-concurrency: 20
+        prefetch: 1
+        acknowledge-mode: manual
+
+logging:
+  level:
+    root: WARN
+    com.jrecruiter: INFO
+    org.springframework.security: WARN
+  file:
+    name: /var/log/jrecruiter/job-service.log
+    max-size: 100MB
+    max-history: 30
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+server:
+  port: 8080
+  error:
+    include-message: never
+    include-binding-errors: never
+    include-stacktrace: never
+    include-exception: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: when-authorized
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+# Production-specific settings
+business:
+  features:
+    dual-write-enabled: ${DUAL_WRITE_ENABLED:false}
+    feature-flags-enabled: true
+  consistency:
+    check-interval-minutes: 5
+    auto-remediation-enabled: true
+  security:
+    cors:
+      allowed-origins: ${CORS_ALLOWED_ORIGINS:https://jrecruiter.com}
+      allow-credentials: true

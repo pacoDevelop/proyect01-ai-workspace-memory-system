@@ -5,59 +5,118 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    container_name: job-service
     ports:
       - "8080:8080"
     environment:
-      - DATABASE_URL=jdbc:postgresql://postgres:5432/jrecruiter
-      - DATABASE_USERNAME=job_service
-      - DATABASE_PASSWORD=password
+      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/jrecruiter
+      - SPRING_DATASOURCE_USERNAME=job_service
+      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.postgresql.Driver
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=validate
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=guest
+      - SPRING_RABBITMQ_PASSWORD=guest
       - JWT_SECRET=development_secret_key_change_in_production
-      - LOG_LEVEL=INFO
+      - JWT_EXPIRATION=86400000
+      - LOGGING_LEVEL_COM_JRECRUITER=DEBUG
+      - LOGGING_LEVEL_ROOT=INFO
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     networks:
       - jrecruiter-network
     volumes:
       - ./logs:/app/logs
-      - ./config:/app/config
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
   postgres:
     image: postgres:15-alpine
+    container_name: postgres
     ports:
       - "5432:5432"
     environment:
       - POSTGRES_DB=jrecruiter
       - POSTGRES_USER=job_service
       - POSTGRES_PASSWORD=password
+      - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/01-init-db.sql
     networks:
       - jrecruiter-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U job_service -d jrecruiter"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  rabbitmq:
+    image: rabbitmq:3.13-management-alpine
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+      - RABBITMQ_DEFAULT_VHOST=/jrecruiter
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - jrecruiter-network
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
 
   prometheus:
     image: prom/prometheus:latest
+    container_name: prometheus
     ports:
       - "9090:9090"
     volumes:
       - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
     networks:
       - jrecruiter-network
+    depends_on:
+      - job-service
 
   grafana:
     image: grafana/grafana:latest
+    container_name: grafana
     ports:
       - "3000:3000"
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_SECURITY_ADMIN_USER=admin
     volumes:
       - grafana_data:/var/lib/grafana
-      - ./config/grafana:/etc/grafana/provisioning
     networks:
       - jrecruiter-network
+    depends_on:
+      - prometheus
 
 volumes:
   postgres_data:
+  rabbitmq_data:
+  prometheus_data:
   grafana_data:
 
 networks:

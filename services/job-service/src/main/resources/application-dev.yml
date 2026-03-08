@@ -1,0 +1,52 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/jrecruiter_dev
+    username: job_service_dev
+    password: dev_password
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+logging:
+  level:
+    root: INFO
+    com.jrecruiter: DEBUG
+    org.springframework.security: DEBUG
+    org.hibernate.SQL: DEBUG
+  file:
+    name: logs/job-service-dev.log
+
+server:
+  port: 8080
+  error:
+    include-message: always
+    include-binding-errors: always
+    include-stacktrace: always
+    include-exception: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+# Development-specific settings
+business:
+  features:
+    dual-write-enabled: false
+    feature-flags-enabled: true
+  consistency:
+    check-interval-minutes: 5
+    auto-remediation-enabled: false
