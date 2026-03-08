@@ -1,40 +1,56 @@
 package com.jrecruiter.userservice.infrastructure.security;
 
+import com.jrecruiter.userservice.infrastructure.persistence.jpa.entities.UserCredentialsJpaEntity;
+import com.jrecruiter.userservice.infrastructure.persistence.jpa.repositories.UserCredentialsJpaRepository;
+import com.jrecruiter.userservice.infrastructure.web.dto.AuthResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * Authentication Service
  * Handles login, token refresh, and credential validation.
- * 
- * @author GitHub Copilot / TASK-015
  */
 @Service
 public class AuthenticationService {
     
     private final JwtTokenProvider jwtTokenProvider;
-    private final PasswordHashingService passwordHashingService;
+    private final AuthenticationManager authenticationManager;
+    private final UserCredentialsJpaRepository repository;
     
     @Autowired
     public AuthenticationService(JwtTokenProvider jwtTokenProvider, 
-                               PasswordHashingService passwordHashingService) {
+                               AuthenticationManager authenticationManager,
+                               UserCredentialsJpaRepository repository) {
         this.jwtTokenProvider = jwtTokenProvider;
-        this.passwordHashingService = passwordHashingService;
+        this.authenticationManager = authenticationManager;
+        this.repository = repository;
     }
     
     /**
      * Authenticate and generate tokens
      */
-    public AuthenticationResponse authenticate(UUID userId, String email, String password, String storedHash) {
-        if (!passwordHashingService.verifyPassword(password, storedHash)) {
-            throw new RuntimeException("Invalid credentials");
-        }
+    public AuthResponse authenticate(String email, String password) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(email, password)
+        );
+
+        UserCredentialsJpaEntity credentials = repository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found after successful authentication"));
+
+        java.util.List<String> roles = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
+
+        String accessToken = jwtTokenProvider.generateAccessToken(credentials.getUserId(), email, roles);
+        String refreshToken = jwtTokenProvider.generateRefreshToken(credentials.getUserId());
         
-        String accessToken = jwtTokenProvider.generateAccessToken(userId, email);
-        String refreshToken = jwtTokenProvider.generateRefreshToken(userId);
-        
-        return new AuthenticationResponse(accessToken, refreshToken, userId);
+        return new AuthResponse(accessToken, refreshToken, credentials.getUserId(), email);
     }
     
     /**
@@ -46,25 +62,7 @@ public class AuthenticationService {
         }
         
         UUID userId = jwtTokenProvider.getUserIdFromToken(refreshToken);
-        return jwtTokenProvider.generateAccessToken(userId, "");
-    }
-    
-    /**
-     * Authentication Response DTO
-     */
-    public static class AuthenticationResponse {
-        private final String accessToken;
-        private final String refreshToken;
-        private final UUID userId;
-        
-        public AuthenticationResponse(String accessToken, String refreshToken, UUID userId) {
-            this.accessToken = accessToken;
-            this.refreshToken = refreshToken;
-            this.userId = userId;
-        }
-        
-        public String getAccessToken() { return accessToken; }
-        public String getRefreshToken() { return refreshToken; }
-        public UUID getUserId() { return userId; }
+        java.util.List<String> roles = jwtTokenProvider.getRolesFromToken(refreshToken);
+        return jwtTokenProvider.generateAccessToken(userId, "", roles);
     }
 }
