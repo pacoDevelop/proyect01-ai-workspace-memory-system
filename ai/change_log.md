@@ -50,3 +50,27 @@ Auditoría de TASK-018 finalizada. Se ratifica la calidad del código lógico pe
 - **Queue Gap:** No coinciden nombres de colas con el productor. (Arreglado en SESSION-033 para Search, pendiente para Notification).
 
 ---
+
+## [2026-03-08T22:15:00Z] TASK-014: REFACTOR CANDIDATE AGGREGATE & APPLICATION CONTEXT [TASK-014]
+
+**Type:** refactor | **Responsible:** antigravity | **Scope:** User-Service Domain & Persistence
+
+### Summary
+Refactor integral del agregado `Candidate` para eliminar reflexión y aseguramiento de persistencia. Implementación del ciclo de vida de `Application`.
+
+### Cambios
+- **Dominio:** Eliminada reflexión en `Candidate`. Añadido soporte para eventos de dominio en `Application`.
+- **Eventos:** Creados `CandidateEvents`, `ApplicationEvents`, `EmployerEvents` (wrapped records).
+- **Infra:** Creadas entidades JPA manuales y adaptadores Postgres. Script Flyway V1.
+- **Seguridad:** Migración a Spring Security 6.x y actualización de JWT Provider.
+
+---
+
+## [2026-03-08T22:20:00Z] PROTOCOL-UPDATE: MANDATORY REMOTE PUSH [SESSION-034]
+
+**Type:** docs | **Responsible:** antigravity | **Scope:** /ai/ Protocol
+
+### Summary
+Se actualizó `PROTOCOL.md` para exigir que todo commit de una IA vaya seguido de un push inmediato al repositorio remoto.
+
+---
