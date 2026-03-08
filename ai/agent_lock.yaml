@@ -1,10 +1,23 @@
 # AGENT LOCK — Mutex distribuido
 schema_version: "3.0"
 min_compatible_version: "2.0"
-last_updated: "2026-03-08T20:35:00Z"
+last_updated: "2026-03-08T20:41:00Z"
 last_updated_by: "antigravity"
 
-active_agents: []
+active_agents:
+  - agent_id: "antigravity"
+    session_id: "20260308-2041-antigravity-session-028"
+    started_at: "2026-03-08T20:41:00Z"
+    last_heartbeat: "2026-03-08T20:41:00Z"
+    current_task: "TASK-032"
+    status: "working"
+    working_branch: "main"
+    base_branch: "main"
+    locked_files:
+      - "ai/tasks.yaml"
+      - "services/user-service/src/main/java/com/jrecruiter/userservice/domain/aggregates/Candidate.java"
+      - "services/user-service/src/main/java/com/jrecruiter/userservice/domain/aggregates/Application.java"
+    notes: "Reviewing Candidate and Application aggregates (TASK-014)."
 
 ghost_entries: []
-note: "No active agents. TASK-031 Audit complete."
+note: "SESSION-028 in progress: antigravity auditing TASK-032"
