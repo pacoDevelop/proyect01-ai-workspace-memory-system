@@ -1759,16 +1759,16 @@ tasks:
       - Verificación de faceting implementation
     priority: "high"
     severity: "important"
-    status: "pending"
+    status: "claimed"
     depends_on: ["TASK-034"]
     estimated_effort: "3h"
-    assigned_agent: null
-    claimed_at: null
+    assigned_agent: "github-copilot"
+    claimed_at: "2026-03-09T01:25:00Z"
     started_at: null
     completed_at: null
     created_at: "2026-03-08T18:30:00Z"
     created_by: "github-copilot"
-    updated_at: "2026-03-09T00:10:00Z"
+    updated_at: "2026-03-09T01:25:00Z"
     actual_effort: null
     tags: ["review", "audit", "elasticsearch", "search-service"]
     security_sensitive: false
