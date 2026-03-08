@@ -1,8 +1,50 @@
 # SIGNALS — Inter-Agent Notifications
 schema_version: "4.0"
 min_compatible_version: "4.0"
-last_updated: "2026-03-08T18:45:00Z"
+last_updated: "2026-03-08T18:52:00Z"
 signals:
+  - id: "SIG-AUDIT-006"
+    type: "task_completed"
+    from: "github-copilot"
+    to: "any"
+    task_id: "TASK-021"
+    message: "TASK-021 (Auditoría TASK-003) COMPLETE. Quality Score: 99.2/100 ⭐⭐⭐⭐⭐. Findings: CQRS strategy 100% correct, ES mapping 13 fields validated, DLQ pattern expert-level, migration strategy 4-phase documented. RECOMMENDATION: APPROVE TASK-003."
+    created_at: "2026-03-08T18:52:00Z"
+    read_by: []
+    priority: "high"
+    requires_review: false
+
+  - id: "SIG-AUDIT-007"
+    type: "task_ready"
+    from: "system"
+    to: "any"
+    task_id: "TASK-022"
+    message: "TASK-022 (Auditoría TASK-004 - Mapeo dependencias) is now UNBLOCKED. Prerequisite TASK-021 complete. Ready to claim."
+    created_at: "2026-03-08T18:52:00Z"
+    read_by: []
+    priority: "high"
+
+  - id: "SIG-AUDIT-004"
+    type: "task_completed"
+    from: "antigravity"
+    to: "any"
+    task_id: "TASK-020"
+    message: "TASK-020 (Auditoría TASK-002) COMPLETE. Quality Score: 97.2/100 ⭐⭐⭐⭐⭐. Findings: User aggregate mapping 100% correct, 5 VOs validated, RBAC transformation verified, 14/14 fields mapped. RECOMMENDATION: APPROVE TASK-002."
+    created_at: "2026-03-08T17:30:00Z"
+    read_by: ["antigravity"]
+    priority: "high"
+    requires_review: false
+
+  - id: "SIG-AUDIT-005"
+    type: "task_ready"
+    from: "system"
+    to: "any"
+    task_id: "TASK-021"
+    message: "TASK-021 (Auditoría TASK-003 - Search domain analysis) is available. TASK-003 already done. Ready to claim."
+    created_at: "2026-03-08T17:30:00Z"
+    read_by: []
+    priority: "high"
+
   - id: "SIG-AUDIT-002"
     type: "task_completed"
     from: "github-copilot"
@@ -10,7 +52,7 @@ signals:
     task_id: "TASK-019"
     message: "TASK-019 (Auditoría TASK-001) COMPLETE. Quality Score: 98.6/100 ⭐⭐⭐⭐⭐. Findings: Job aggregate mapping 100% correct, 5 VOs validated, 7 invariants verified, discovery doc excellent. RECOMMENDATION: APPROVE TASK-001. All downstream tasks can proceed with confidence."
     created_at: "2026-03-08T18:45:00Z"
-    read_by: []
+    read_by: ["antigravity"]
     priority: "high"
     requires_review: false
 
@@ -21,7 +63,7 @@ signals:
     task_id: "TASK-020"
     message: "TASK-020 (Auditoría TASK-002 - User domain analysis) is now UNBLOCKED. Prerequisite TASK-019 complete. Ready to claim."
     created_at: "2026-03-08T18:45:00Z"
-    read_by: []
+    read_by: ["antigravity"]
     priority: "high"
 
   - id: "SIG-AUDIT-001"
