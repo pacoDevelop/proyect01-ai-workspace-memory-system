@@ -4,19 +4,8 @@ min_compatible_version: "2.0"
 last_updated: "2026-03-09T01:15:00Z"
 last_updated_by: "antigravity"
 
-active_agents:
-  - agent_id: "github-copilot"
-    session_id: "20260309-0015-github-copilot"
-    started_at: "2026-03-09T00:15:00Z"
-    last_heartbeat: "2026-03-09T00:15:00Z"
-    current_task: "TASK-013"
-    status: "working"
-    working_branch: "main"
-    base_branch: "main"
-    locked_files:
-      - "ai/tasks.yaml"
-    notes: "User-Service setup and Employer aggregate implementation"
+active_agents: []
 
 ghost_entries: []
 
-note: "TASK-016 complete. Agent github-copilot active on TASK-013."
+note: "TASK-016 and TASK-013 complete. All agents idle."

@@ -505,18 +505,26 @@ tasks:
       Implementar Employer aggregate con auth.
     priority: "high"
     severity: "important"
-    status: "in_progress"
+    status: "done"
     depends_on: ["TASK-012"]
     estimated_effort: "8h"
-    assigned_agent: "github-copilot"
+    assigned_agent: null
     claimed_at: "2026-03-09T00:15:00Z"
     started_at: "2026-03-09T00:18:00Z"
-    updated_at: "2026-03-09T00:18:00Z"
+    finalized_at: "2026-03-09T00:50:00Z"
+    updated_at: "2026-03-09T00:50:00Z"
     tags: ["setup", "springboot", "user-service", "ddd"]
     created_by: "github-copilot"
     completion_notes: |
-      ✅ User-Service logic implemented - LOGICAL ONLY
-      ⚠️ Missing Infrastructure (pom.xml, Dockerfile)
+      ✅ User-Service Code: 100% (25+ Java files, Employer/Candidate aggregates)
+      ✅ Infrastructure Complete:
+        - pom.xml: 220+ lines, Spring Boot 3.4.0 ecosystem
+        - Dockerfile: Multi-stage, rootless Alpine, healthcheck
+        - application.yml: dev/prod profiles, JWT, RabbitMQ, PostgreSQL
+        - docker-compose.yml: root centralized (job-service + user-service + shared infra)
+      ✅ Maven validation passed
+      ✅ Git commits: 4a1880d (pom/docker), a11b89e (config)
+      ✅ Unblocked: TASK-014, TASK-015
     state_history:
       - {from: "pending", to: "claimed", at: "2026-03-08T06:52:00Z", by: "github-copilot"}
       - {from: "claimed", to: "in_progress", at: "2026-03-08T06:52:00Z", by: "github-copilot"}
@@ -524,6 +532,7 @@ tasks:
       - {from: "done", to: "todo", at: "2026-03-08T23:20:00Z", by: "antigravity [CORRECTION]"}
       - {from: "todo", to: "claimed", at: "2026-03-09T00:15:00Z", by: "github-copilot"}
       - {from: "claimed", to: "in_progress", at: "2026-03-09T00:18:00Z", by: "github-copilot"}
+      - {from: "in_progress", to: "done", at: "2026-03-09T00:50:00Z", by: "github-copilot"}
 
   - id: "TASK-014"
     title: "Implementar Candidate aggregate + Application context"
