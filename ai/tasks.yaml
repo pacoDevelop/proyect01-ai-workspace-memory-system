@@ -1,10 +1,311 @@
-# TASK GRAPH
+# TASK GRAPH — JRecruiter Microservices Migration
 schema_version: "3.0"
 min_compatible_version: "2.0"
-last_updated: "2026-03-08T02:36:40Z"
-total_tasks: 0
-pending: 0
+last_updated: "2026-03-08T04:50:00Z"
+last_updated_by: "github-copilot"
+total_tasks: 18
+pending: 12
 in_progress: 0
-blocked: 0
+blocked: 4
 done: 0
-tasks: []
+review: 0
+
+# ============================================================================
+# FASE 1: ANÁLISIS & PLANIFICACIÓN (SEMANA 1-2)
+# ============================================================================
+
+tasks:
+  - id: "TASK-001"
+    title: "Análisis de Bounded Contexts y extracción de Job domain"
+    description: |
+      Analizar el monolito en /legacy/ para identificar límites claros del Job Context.
+      - Mapear Job aggregate root y sus entities
+      - Identificar value objects (Salary, Location, Skill)
+      - Documentar invariantes del negocio
+    priority: "critical"
+    severity: "blocker"
+    status: "pending"
+    depends_on: []
+    estimated_effort: "8h"
+    assigned_agent: null
+    created_at: "2026-03-08T04:50:00Z"
+    created_by: "github-copilot"
+    tags: ["analysis", "ddd", "job-service"]
+    definition_of_done_check:
+      - "Job aggregate mapeado"
+      - "Value objects identificados"
+      - "Invariantes documentados"
+      - "Documento en knowledge/jobs-domain.md"
+
+  - id: "TASK-002"
+    title: "Análisis de User domain (Employer + Candidate)"
+    description: "Extraer lógica de usuarios/empleadores del legacy."
+    priority: "high"
+    severity: "important"
+    status: "pending"
+    depends_on: []
+    estimated_effort: "6h"
+    assigned_agent: null
+    created_at: "2026-03-08T04:50:00Z"
+    created_by: "github-copilot"
+    tags: ["analysis", "ddd", "user-service"]
+
+  - id: "TASK-003"
+    title: "Análisis de Search domain (full-text, filtrado)"
+    description: "Entender cómo funciona la búsqueda actual para CQRS."
+    priority: "high"
+    severity: "important"
+    status: "pending"
+    depends_on: []
+    estimated_effort: "5h"
+    assigned_agent: null
+    created_at: "2026-03-08T04:50:00Z"
+    created_by: "github-copilot"
+    tags: ["analysis", "elasticsearch", "search-service"]
+
+  - id: "TASK-004"
+    title: "Mapear dependencias entre bounded contexts"
+    description: |
+      Dibujar diagrama de cómo comunican Job, User, Search, Notification, Application.
+      Definir contratos (DTOs, Events).
+    priority: "critical"
+    severity: "blocker"
+    status: "pending"
+    depends_on: ["TASK-001", "TASK-002", "TASK-003"]
+    estimated_effort: "4h"
+    assigned_agent: null
+    created_at: "2026-03-08T04:50:00Z"
+    tags: ["analysis", "architecture", "ddd"]
+
+  - id: "TASK-005"
+    title: "Plan detallado de migración Strangler Fig"
+    description: |
+      Crear roadmap exacto con hitos, timelines, y rollback plans.
+      Incluir API Gateway routing rules.
+    priority: "critical"
+    severity: "blocker"
+    status: "pending"
+    depends_on: ["TASK-004"]
+    estimated_effort: "3h"
+    assigned_agent: null
+    created_at: "2026-03-08T04:50:00Z"
+    tags: ["planning", "architecture", "migration"]
+
+  # ============================================================================
+  # FASE 2: JOB-SERVICE (SEMANA 3-5)
+  # ============================================================================
+
+  - id: "TASK-006"
+    title: "Setup esqueleto Job-Service (Spring Boot 3.4)"
+    description: |
+      Crear estructura Maven con:
+      - domain/, application/, infrastructure/ packages
+      - pom.xml con dependencies correctas
+      - application.yml y profiles
+      - README con setup instrucciones
+    priority: "critical"
+    severity: "blocker"
+    status: "pending"
+    depends_on: ["TASK-005"]
+    estimated_effort: "3h"
+    assigned_agent: null
+    created_at: "2026-03-08T04:50:00Z"
+    tags: ["setup", "springboot", "job-service"]
+
+  - id: "TASK-007"
+    title: "Implementar Job aggregate root (domain)"
+    description: |
+      Crear domain/aggregates/Job.java con:
+      - Invariantes de negocio en constructores
+      - Value objects (Salary, Location, JobStatus)
+      - Factory methods (publish(), close())
+      - NO debe depender de SpringFramework
+    priority: "critical"
+    severity: "important"
+    status: "pending"
+    depends_on: ["TASK-006"]
+    estimated_effort: "5h"
+    assigned_agent: null
+    created_at: "2026-03-08T04:50:00Z"
+    tags: ["ddd", "domain", "job-service"]
+    definition_of_done_check:
+      - "Job.java compila sin Spring"
+      - "Invariantes testeados"
+      - "Javadoc completado"
+
+  - id: "TASK-008"
+    title: "Implementar JobRepository (port)"
+    description: |
+      domain/repositories/JobRepository.java (interfaz).
+      Definir contrato CRUD y búsquedas del dominio.
+    priority: "high"
+    severity: "important"
+    status: "pending"
+    depends_on: ["TASK-007"]
+    estimated_effort: "2h"
+    assigned_agent: null
+    created_at: "2026-03-08T04:50:00Z"
+    tags: ["ddd", "ports", "job-service"]
+
+  - id: "TASK-009"
+    title: "Implementar PostgreSQL adapter (JPA)"
+    description: |
+      infrastructure/persistence/PostgresJobRepository.java
+      - Mapeos JPA (Job → JobJpaEntity)
+      - Queries parametrizadas
+      - Transacciones y locks
+    priority: "high"
+    severity: "important"
+    status: "pending"
+    depends_on: ["TASK-008"]
+    estimated_effort: "6h"
+    assigned_agent: null
+    created_at: "2026-03-08T04:50:00Z"
+    tags: ["infrastructure", "jpa", "postgresql", "job-service"]
+
+  - id: "TASK-010"
+    title: "Implementar Job REST Controller"
+    description: |
+      infrastructure/rest/JobController.java con endpoints:
+      - POST /api/jobs (crear)
+      - GET /api/jobs/:id
+      - PUT /api/jobs/:id (actualizar)
+      - DELETE /api/jobs/:id (cerrar)
+      DTOs con validación Bean Validation.
+    priority: "high"
+    severity: "important"
+    status: "pending"
+    depends_on: ["TASK-009"]
+    estimated_effort: "4h"
+    assigned_agent: null
+    created_at: "2026-03-08T04:50:00Z"
+    tags: ["rest", "api", "validation", "job-service"]
+
+  - id: "TASK-011"
+    title: "Crear tests: unit + integration"
+    description: |
+      - Unit tests para Job aggregate (uso Mockito)
+      - Integration tests para JobRepository (TestContainers PostgreSQL)
+      - Test coverage: min 80%
+    priority: "high"
+    severity: "important"
+    status: "pending"
+    depends_on: ["TASK-010"]
+    estimated_effort: "8h"
+    assigned_agent: null
+    created_at: "2026-03-08T04:50:00Z"
+    tags: ["testing", "junit5", "testcontainers", "job-service"]
+
+  - id: "TASK-012"
+    title: "Documentar Job-Service y setup CI/CD GitHub Actions"
+    description: |
+      - README.md con architecture diagram
+      - Dockerfile multistage
+      - .github/workflows/build.yml (Maven + Tests)
+      - Security scanning (OWASP Dependency Check)
+    priority: "high"
+    severity: "important"
+    status: "pending"
+    depends_on: ["TASK-011"]
+    estimated_effort: "5h"
+    assigned_agent: null
+    created_at: "2026-03-08T04:50:00Z"
+    tags: ["documentation", "docker", "cicd", "job-service"]
+
+  # ============================================================================
+  # FASE 3: USER-SERVICE (SEMANA 6-8)
+  # ============================================================================
+
+  - id: "TASK-013"
+    title: "Setup User-Service + Employer aggregate"
+    description: |
+      Crear structure similar a Job-Service.
+      Implementar Employer aggregate con auth.
+    priority: "high"
+    severity: "important"
+    status: "pending"
+    depends_on: ["TASK-012"]
+    estimated_effort: "8h"
+    assigned_agent: null
+    created_at: "2026-03-08T04:50:00Z"
+    tags: ["setup", "springboot", "user-service", "ddd"]
+
+  - id: "TASK-014"
+    title: "Implementar Candidate aggregate + Application context"
+    description: "Lógica de aplicaciones, estado, communicaciones."
+    priority: "high"
+    severity: "important"
+    status: "pending"
+    depends_on: ["TASK-013"]
+    estimated_effort: "6h"
+    assigned_agent: null
+    created_at: "2026-03-08T04:50:00Z"
+    tags: ["ddd", "user-service"]
+
+  - id: "TASK-015"
+    title: "Implementar OAuth2 + JWT en User-Service"
+    description: |
+      - Spring Security OAuth2
+      - JWT token generation y verification
+      - Refresh token mechanism
+    priority: "critical"
+    severity: "blocker"
+    status: "pending"
+    depends_on: ["TASK-014"]
+    estimated_effort: "7h"
+    assigned_agent: null
+    created_at: "2026-03-08T04:50:00Z"
+    tags: ["security", "oauth2", "jwt", "user-service"]
+
+  # ============================================================================
+  # FASE 4: SEARCH-SERVICE (SEMANA 9-10)
+  # ============================================================================
+
+  - id: "TASK-016"
+    title: "Setup Search-Service + Elasticsearch indexing"
+    description: |
+      - Spring Data Elasticsearch
+      - Index mappings para Job search
+      - Event bus listener (RabbitMQ) recibe JobCreated
+    priority: "high"
+    severity: "important"
+    status: "pending"
+    depends_on: ["TASK-012"]
+    estimated_effort: "7h"
+    assigned_agent: null
+    created_at: "2026-03-08T04:50:00Z"
+    tags: ["elasticsearch", "cqrs", "search-service"]
+
+  - id: "TASK-017"
+    title: "Implementar filtrado avanzado y ranking"
+    description: |
+      - Full-text search (salario, localización, skills)
+      - Faceting por categoría
+      - Personalized ranking (user preferences)
+    priority: "high"
+    severity: "important"
+    status: "pending"
+    depends_on: ["TASK-016"]
+    estimated_effort: "6h"
+    assigned_agent: null
+    created_at: "2026-03-08T04:50:00Z"
+    tags: ["elasticsearch", "search-service"]
+
+  # ============================================================================
+  # FASE 5: NOTIFICATION-SERVICE (SEMANA 11-12)
+  # ============================================================================
+
+  - id: "TASK-018"
+    title: "Setup Notification-Service + Email integration"
+    description: |
+      - RabbitMQ listener para eventos (JobCreated, ApplicationReceived)
+      - Email template engine (Thymeleaf)
+      - Async SMTP sender
+    priority: "high"
+    severity: "important"
+    status: "pending"
+    depends_on: ["TASK-012", "TASK-014", "TASK-016"]
+    estimated_effort: "6h"
+    assigned_agent: null
+    created_at: "2026-03-08T04:50:00Z"
+    tags: ["async", "notifications", "email"]
