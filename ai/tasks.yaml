@@ -1669,16 +1669,16 @@ tasks:
       - Verificación de Spring Security config
     priority: "critical"
     severity: "blocker"
-    status: "todo"
+    status: "claimed"
     depends_on: ["TASK-015"]
     estimated_effort: "4h"
-    assigned_agent: null
-    claimed_at: null
+    assigned_agent: "antigravity"
+    claimed_at: "2026-03-08T21:05:00Z"
     started_at: null
     completed_at: null
     created_at: "2026-03-08T18:30:00Z"
     created_by: "github-copilot"
-    updated_at: "2026-03-08T19:00:00Z"
+    updated_at: "2026-03-08T21:05:00Z"
     actual_effort: null
     tags: ["review", "audit", "security", "oauth2", "user-service"]
     security_sensitive: true
