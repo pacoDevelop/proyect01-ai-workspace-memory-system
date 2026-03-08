@@ -1,3 +1,35 @@
+## [2026-03-08T23:55:00Z] TASK-035: AUDITORÍA ADVANCED SEARCH COMPLETADA - FALLOS DE LÓGICA (SESSION-031)
+
+**Type:** review-audit | **Responsible:** antigravity | **Scope:** Search-Service (Advanced Search & Ranking)
+
+### Summary
+
+Auditoría de TASK-017 finalizada. Se detectan omisiones críticas en la implementación de filtros y placeholders en faceting.
+
+**Acciones tomadas:**
+- 🔴 Identificación de **Ignored Parameters** (location, remote, industry) en la consulta Native.
+- 🔴 Detección de **Mocked Faceting** (el método no implementa agregaciones).
+- 🔴 Error de lógica en ranking personalizado (match `desiredCity` contra `companyName`).
+- ✅ Verificación de Boosting factors (title 2.0x, skills 2.0x).
+
+---
+
+## [2026-03-08T22:45:00Z] TASK-034: AUDITORÍA SEARCH-SERVICE COMPLETADA - GAPS DE INDEXACIÓN (SESSION-030)
+
+**Type:** review-audit | **Responsible:** antigravity | **Scope:** Search-Service Infrastructure + Indexing
+
+### Summary
+
+Auditoría de TASK-016 finalizada. Se confirma la inexistencia de infraestructura raíz y se detectan fallos en la lógica de indexación de dimensiones críticas.
+
+**Acciones tomadas:**
+- 🔴 Confirmación de **Missing Infrastructure** (pom.xml, Dockerfile).
+- 🔴 Identificación de **Incomplete Indexing** (se pierden location, industryId, regionId en la ingestión).
+- ✅ Validación de 13 campos en `JobSearchDocument`.
+- 🔴 Detección de acoplamiento en nombres de colas RabbitMQ.
+
+---
+
 ## [2026-03-08T21:47:00Z] TASK-036: AUDITORÍA DE TASK-018 COMPLETADA Y APROBADA (SESSION-030)
 
 **Type:** security-audit-closure | **Responsible:** github-copilot | **Scope:** Notification-Service Audit Formalization
