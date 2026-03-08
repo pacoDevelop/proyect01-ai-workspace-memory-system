@@ -1,11 +1,11 @@
 # TASK GRAPH — JRecruiter Microservices Migration
 schema_version: "3.0"
 min_compatible_version: "2.0"
-last_updated: "2026-03-08T06:05:00Z"
+last_updated: "2026-03-08T06:22:00Z"
 last_updated_by: "github-copilot"
 total_tasks: 18
-pending: 9
-in_progress: 0
+pending: 8
+in_progress: 1
 blocked: 0
 done: 6
 review: 0
@@ -307,16 +307,30 @@ tasks:
       - NO debe depender de SpringFramework
     priority: "critical"
     severity: "important"
-    status: "pending"
+    status: "in_progress"
     depends_on: ["TASK-006"]
     estimated_effort: "5h"
-    assigned_agent: null
+    assigned_agent: "github-copilot"
+    claimed_at: "2026-03-08T06:22:00Z"
     created_at: "2026-03-08T04:50:00Z"
     tags: ["ddd", "domain", "job-service"]
+    progress_notes: |
+      ✅ TASK-007 CLAIMED at 2026-03-08T06:22:00Z
+      ✅ Created domain/valueobjects/ package
+      ✅ JobTitle VO implemented (5-100 chars validation)
+      ✅ JobDescription VO implemented (20-10000 chars validation)
+      ✅ CompanyName VO implemented (2-100 chars validation)
+      ✅ JobLocation VO implemented (address OR coordinates validation)
+      ✅ JobSalary VO implemented (range validation with currency)
+      ✅ JobPostingStatus enum implemented (DRAFT, PUBLISHED, ON_HOLD, CLOSED, ARCHIVED)
+      ✅ OfferedBy enum implemented (EMPLOYER, RECRUITER)
+      ✅ Created domain/exceptions/ package
+      ✅ JobDomainException base class implemented
+      ⏳ Implementing Job aggregate root (in progress)
     definition_of_done_check:
-      - "Job.java compila sin Spring"
-      - "Invariantes testeados"
-      - "Javadoc completado"
+      - "Job.java compila sin Spring": false
+      - "Invariantes testeados": false
+      - "Javadoc completado": false
 
   - id: "TASK-008"
     title: "Implementar JobRepository (port)"

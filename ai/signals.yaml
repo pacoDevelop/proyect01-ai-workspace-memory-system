@@ -109,3 +109,15 @@ signals:
     created_at: "2026-03-08T06:20:00Z"
     read_by: []
     priority: "critical"
+
+  - id: "SIG-WORK-008"
+    type: "task_claimed"
+    from: "github-copilot"
+    to: "any"
+    task_id: "TASK-007"
+    message: "TASK-007 (Implementar Job aggregate root) CLAIMED at 2026-03-08T06:22:00Z. Starting implementation of DDD aggregate with value objects, domain events, and invariant validation."
+    created_at: "2026-03-08T06:22:00Z"
+    created_by_commit: "task-007-start"
+    read_by: []
+    priority: "critical"
+    requires_review: false
