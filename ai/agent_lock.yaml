@@ -4,7 +4,20 @@ min_compatible_version: "2.0"
 last_updated: "2026-03-09T01:15:00Z"
 last_updated_by: "antigravity"
 
-active_agents: []
+active_agents:
+  - agent_id: "antigravity"
+    session_id: "20260308-2158-antigravity"
+    started_at: "2026-03-08T22:05:00Z"
+    last_heartbeat: "2026-03-08T22:05:00Z"
+    current_task: "TASK-014"
+    status: "working"
+    working_branch: "main"   # Archivos /ai/ primordialmente por ahora
+    base_branch: "main"
+    locked_files:
+      - "ai/tasks.yaml"
+      - "services/user-service/src/main/java/com/jrecruiter/userservice/domain/aggregates/Candidate.java"
+      - "services/user-service/src/main/java/com/jrecruiter/userservice/application/ApplicationService.java"
+    notes: "Implementando Candidate aggregate y contexto de aplicaciones (TASK-014)."
 
 ghost_entries: []
 
