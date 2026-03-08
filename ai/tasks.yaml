@@ -1766,17 +1766,17 @@ tasks:
       - Verificación de SMTP configuration
     priority: "high"
     severity: "important"
-    status: "in_progress"
+    status: "done"
     depends_on: ["TASK-035"]
     estimated_effort: "3h"
     assigned_agent: "antigravity"
     claimed_at: "2026-03-09T00:05:00Z"
     started_at: "2026-03-09T00:05:00Z"
-    completed_at: null
+    completed_at: "2026-03-09T00:20:00Z"
     created_at: "2026-03-08T18:30:00Z"
     created_by: "github-copilot"
-    updated_at: "2026-03-09T00:05:00Z"
-    actual_effort: null
+    updated_at: "2026-03-09T00:20:00Z"
+    actual_effort: "0.5h"
     tags: ["review", "audit", "notifications", "email"]
     security_sensitive: true
     requires_security_review: true
@@ -1794,34 +1794,21 @@ tasks:
       - {from: "done", to: "todo", at: "2026-03-08T23:30:00Z", by: "antigravity [CORRECTION]"}
       - {from: "todo", to: "claimed", at: "2026-03-09T00:05:00Z", by: "antigravity"}
       - {from: "claimed", to: "in_progress", at: "2026-03-09T00:05:00Z", by: "antigravity"}
+      - {from: "in_progress", to: "done", at: "2026-03-09T00:20:00Z", by: "antigravity"}
     definition_of_done_check:
       - "Templates well-formed HTML": true
       - "Listeners robust": true
       - "SMTP credentials secure": true
-      - "Delivery tracking logged": true
+      - "Delivery tracking logged": false
     completion_notes: |
-      ✅ TASK-036 AUDITORÍA FORMAL COMPLETA Y CERRADA POR GITHUB-COPILOT
+      ✅ AUDITORÍA FORMAL COMPLETA (SESSION-032)
       
-      **Auditoría de TASK-018 (Notification-Service + Email Templates)**
-      Quality Score: 98/100 ⭐⭐⭐⭐⭐
-      
-      **VERIFICACIÓN FINAL:**
-      ✅ HTML Templates: 6 Plantillas Thymeleaf con estructura responsiva y custom tags `th:text=`
-      ✅ RabbitMQ Listeners: `NotificationEventListener` procesa 5 eventos con try-catch robusto
-      ✅ Security/SMTP: Credenciales 100% ENV-injected, no hardcodeado en código
-      ⚠️ Delivery Tracking: Presente (System.err.println básico, podría mejorar con SLF4J)
-      ✅ Email sanitization: Thymeleaf escapa injection (A03 mitigado)
-      ✅ Credential management: No secretos static (A07 compliant)
-      
-      **OWASP CHECKLIST APPLIED:**
-      ✅ A03 (Injection) — Email templates properly HTML-escaped via Thymeleaf engine
-      ✅ A07 (Auth Failures) — SMTP credentials strictly ENV-injected, never hardcoded
-      
-      **RECOMENDACIÓN FINAL:** APPROVE TASK-018 ✅
-      
-      El microservicio Notification-Service está LISTO PARA INTEGRACIÓN. Las auditorías previas por antigravity fueron correctas (98/100 score, todas validaciones pasadas). El cierre formal de esta tarea indica que la auditoría de seguridad completó su ciclo.
-      
-      **Nota:** Las infraestructuras de User, Search y Notification Services siguen pendientes (pom.xml, Dockerfiles, etc.), pero la calidad del código de TASK-018 es enterprise-grade y lista para deployment en cuanto la infraestructura esté restaurada (véase TASK-037 recommendations).
+      **Identificación de Gaps en TASK-018:**
+      - ✅ HTML Templates: Estructura responsiva y saneamiento Thymeleaf (A03) verificado.
+      - 🔴 RabbitMQ listeners: Nombres de colas hardcodeados, riesgo de desalineación con productores.
+      - ⚠️ Error handling: Básico (System.err). El sistema carece de reintentos o colas de error (DLQ).
+      - 🔴 Infraestructura: Servicio no funcional por ausencia de pom.xml y Dockerfile de raíz.
+      - RECOMENDACIÓN: El código es de alta calidad lógica, pero no es desplegable.
 
   - id: "TASK-037"
     title: "REVIEW: Auditoría de integración end-to-end"
