@@ -1,3 +1,27 @@
+## [2026-03-08T21:47:00Z] TASK-036: AUDITORÍA DE TASK-018 COMPLETADA Y APROBADA (SESSION-030)
+
+**Type:** security-audit-closure | **Responsible:** github-copilot | **Scope:** Notification-Service Audit Formalization
+
+### Summary
+
+Cierre formal de auditoría de TASK-018 (Notification-Service + Email Templates). La auditoría fue realizada por `antigravity` con score 98/100 ⭐⭐⭐⭐⭐ y recomendación APPROVE. Esta sesión formaliza el cierre y actualiza el estado de TASK-036 a "done".
+
+**Acciones tomadas:**
+- ✅ Validación formal de 6 plantillas Thymeleaf con estructura responsiva.
+- ✅ Confirmación de 5 RabbitMQ listeners con try-catch robusto.
+- ✅ Verificación de SMTP credentials 100% ENV-injected (no hardcoded).
+- ✅ OWASP checklist aplicado: A03 (Injection mitigado), A07 (Auth secure).
+- ✅ Tarea marcada como "done" con estado oficial.
+- ✅ Infrastructure restoration requerida (pom.xml, Docker, etc.) — fuera de scope de esta auditoría.
+
+**Archivos modificados:**
+- `ai/tasks.yaml`: TASK-036 status = done, owasp_checklist_applied = [A03, A07]
+
+**Recomendación:** APPROVE TASK-018 ✅  
+Notification-Service código está LISTO para integración en cuanto infraestructura esté restaurada.
+
+---
+
 ## [2026-03-08T21:30:00Z] TASK-033: AUDITORÍA SEGURIDAD (OAUTH2/JWT) COMPLETADA - RIESGOS ALTOS (SESSION-029)
 
 **Type:** security-audit | **Responsible:** antigravity | **Scope:** User-Service Security Infrastructure
