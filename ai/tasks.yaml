@@ -316,19 +316,40 @@ tasks:
     tags: ["ddd", "domain", "job-service"]
     progress_notes: |
       ✅ TASK-007 CLAIMED at 2026-03-08T06:22:00Z
-      ✅ Created domain/valueobjects/ package
-      ✅ JobTitle VO implemented (5-100 chars validation)
-      ✅ JobDescription VO implemented (20-10000 chars validation)
-      ✅ CompanyName VO implemented (2-100 chars validation)
-      ✅ JobLocation VO implemented (address OR coordinates validation)
-      ✅ JobSalary VO implemented (range validation with currency)
-      ✅ JobPostingStatus enum implemented (DRAFT, PUBLISHED, ON_HOLD, CLOSED, ARCHIVED)
-      ✅ OfferedBy enum implemented (EMPLOYER, RECRUITER)
-      ✅ Created domain/exceptions/ package
-      ✅ JobDomainException base class implemented
-      ⏳ Implementing Job aggregate root (in progress)
+      ✅ Created domain/valueobjects/ package (7 files)
+      ✅ JobTitle VO (5-100 chars validation)
+      ✅ JobDescription VO (20-10000 chars validation)
+      ✅ CompanyName VO (2-100 chars validation)
+      ✅ JobLocation VO (12 fields, address OR coordinates validation)
+      ✅ JobSalary VO (BigDecimal min/max, currency, SalaryFrequency enum)
+      ✅ JobPostingStatus enum (5 states: DRAFT, PUBLISHED, ON_HOLD, CLOSED, ARCHIVED)
+      ✅ OfferedBy enum (EMPLOYER, RECRUITER)
+      ✅ Created domain/exceptions/ package (3 files)
+      ✅ JobDomainException base class
+      ✅ InvalidJobException (invariant violations)
+      ✅ InvalidJobStateException (invalid transitions)
+      ✅ Created domain/events/ package (5 files)
+      ✅ JobDomainEvent base class (UUID eventId, jobId, occurredAt + reconstructors)
+      ✅ JobPublishedEvent (DRAFT→PUBLISHED with job details)
+      ✅ JobClosedEvent (PUBLISHED/ON_HOLD→CLOSED with reason)
+      ✅ JobHeldEvent (PUBLISHED→ON_HOLD with reason)
+      ✅ JobResumedEvent (ON_HOLD→PUBLISHED)
+      ✅ Created domain/aggregates/ package
+      ✅ Job aggregate root (420+ lines)
+      ✅ Identity: jobId, universalId, employerId
+      ✅ Core immutable data: title, description, companyName, location, salary, offeredBy
+      ✅ References: industryId, industryName, regionId, regionName
+      ✅ Mutable state: status, timestamps (createdAt, publishedAt, closedAt, updatedAt)
+      ✅ Domain events tracking (List<JobDomainEvent>)
+      ✅ Factory method: createDraft() with full validation
+      ✅ Factory method: reconstruct() for persistence layer
+      ✅ State transitions: publish(), close(reason), hold(reason), resume(), archive()
+      ✅ Query methods: canTransitionTo(), isPublished(), isClosed()
+      ✅ Event management: getDomainEvents(), clearDomainEvents()
+      ✅ Full equals/hashCode/toString
+      ⏳ Unit tests pending (30+ test cases for VOs, exceptions, aggregates, events)
     definition_of_done_check:
-      - "Job.java compila sin Spring": false
+      - "Job.java compila sin Spring": true
       - "Invariantes testeados": false
       - "Javadoc completado": false
 

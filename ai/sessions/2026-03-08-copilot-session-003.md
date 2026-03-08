@@ -7,7 +7,7 @@
 | **Inicio** | 2026-03-08T06:22:00Z |
 | **Fin** | `EN PROGRESO` |
 | **Estado al cerrar** | EN PROGRESO |
-| **Duración estimada** | 5h (actual en progreso) |
+| **Duración estimada** | 5h (actual: ~0.8h) |
 
 ---
 
@@ -86,6 +86,46 @@ Ahora se implementa la lógica de dominio sin dependencias de Spring.
   - RuntimeException para fallos de invariantes
   - Constructores para message + cause
   - Base para excepciones específicas
+- ✅ **InvalidJobException**
+  - Thrown cuando invariantes de creación son violados
+  - Ejemplos: campo nulo, título muy corto, ubicación inválida
+- ✅ **InvalidJobStateException**
+  - Thrown cuando transición de estado es inválida
+  - Ejemplos: publicar job cerrado, cerrar job en borrador
+
+### Bloque 6: Domain Events (5 eventos)
+- ✅ **JobDomainEvent** (base class)
+  - UUID eventId + jobId + occurredAt
+  - Constructor para new events (auto-generated ID, current timestamp)
+  - Constructor para reconstitución (event sourcing scenario)
+  - Método abstracto getEventType() para routing
+  
+- ✅ **JobPublishedEvent**
+  - Emitted cuando DRAFT → PUBLISHED
+  - Payload: employerId, title, description, location, salary
+  - Triggers: Search indexing, Notification dispatch
+  
+- ✅ **JobClosedEvent**
+  - Emitted cuando PUBLISHED/ON_HOLD → CLOSED
+  - Payload: reason (optional)
+  
+- ✅ **JobHeldEvent**
+  - Emitted cuando PUBLISHED → ON_HOLD
+  - Payload: reason (optional)
+  
+- ✅ **JobResumedEvent**
+  - Emitted cuando ON_HOLD → PUBLISHED
+
+### Bloque 7: Job Aggregate Root (400+ líneas)
+- ✅ **Job** aggregate root class con:
+  - IDENTITY: jobId, universalId, employerId
+  - CORE DATA: title, description, companyName, location, salary, offeredBy
+  - MUTABLE STATE: status, createdAt, publishedAt, closedAt, updatedAt
+  - Domain events tracking
+  - Factory methods: createDraft(), reconstruct()
+  - State transitions: publish(), close(reason), hold(reason), resume(), archive()
+  - Query methods: canTransitionTo(), isPublished(), isClosed()
+  - Full equals/hashCode/toString
 
 ---
 
@@ -101,35 +141,39 @@ Ahora se implementa la lógica de dominio sin dependencias de Spring.
 | `domain/valueobjects/JobPostingStatus.java` | crear | 42 | Enum con 5 estados y validación de transiciones |
 | `domain/valueobjects/OfferedBy.java` | crear | 24 | Enum con 2 tipos |
 | `domain/exceptions/JobDomainException.java` | crear | 21 | Base exception class |
+| `domain/exceptions/InvalidJobException.java` | crear | 23 | Invariant violation exception |
+| `domain/exceptions/InvalidJobStateException.java` | crear | 23 | State transition exception |
+| `domain/events/JobDomainEvent.java` | crear | 54 | Base event class |
+| `domain/events/JobPublishedEvent.java` | crear | 84 | Event emitted on publish |
+| `domain/events/JobClosedEvent.java` | crear | 42 | Event emitted on close |
+| `domain/events/JobHeldEvent.java` | crear | 42 | Event emitted on hold |
+| `domain/events/JobResumedEvent.java` | crear | 34 | Event emitted on resume |
+| `domain/aggregates/Job.java` | crear | 420 | Aggregate root with full lifecycle |
 
-**Total de líneas de código nuevo:** 423 líneas de domain logic puro (sin Spring)
+**Total de líneas de código nuevo:** ~1050 líneas de domain logic puro (sin Spring)
 
 ---
 
 ## Próximos pasos en esta sesión
 
-### A Implementar (Tareas Inmediatas)
-- [ ] JobAggregateInvalidException (extends JobDomainException)
-- [ ] JobStateException (extends JobDomainException)
-- [ ] Job aggregate root class (300-400 líneas)
-  - Identity fields (jobId, universalId, employerId)
-  - Core data fields
-  - State fields (status, timestamps)
-  - Domain events list
-  - Factory methods: createDraft(), reconstructFrom()
-  - State transitions: publish(), close(), hold(), resume(), archive()
-  - Business rule enforcement
-  - Event publishing mechanism
-  - Javadoc completo
-- [ ] Domain events (JobPublished, JobClosed, JobHeld, JobResumed)
-- [ ] Unit tests (JobTests.java con 20+ test cases)
+### Completado ✅
+- [x] Value Objects (7 archivos)
+- [x] Excepciones de dominio (3 archivos)
+- [x] Domain events (5 archivos)
+- [x] Job aggregate root (420 líneas completas)
+
+### Pendiente ⏳
+- [ ] Unit tests (JobTests.java con 30+ test cases)
+  - Test VOs validation rules
+  - Test aggregate creation invariants
+  - Test state transitions
+  - Test domain event emission
+- [ ] Integration tests (JobRepositoryTests - after TASK-008)
   
-### Testing Strategy (Antes de Completar)
-- [ ] Test value object validations
-- [ ] Test invariant enforcement
-- [ ] Test state transitions
-- [ ] Test aggregate root creation
-- [ ] Test domain events emission
+### Testing Strategy (Próximas sesiones)
+- Unit tests para verifyar reglas de negocio
+- Contract testing con otros services
+- Integration tests con persistence layer
 
 ---
 
