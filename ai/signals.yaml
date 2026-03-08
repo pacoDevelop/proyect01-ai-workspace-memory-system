@@ -1,8 +1,19 @@
 # SIGNALS — Inter-Agent Notifications
 schema_version: "4.0"
 min_compatible_version: "4.0"
-last_updated: "2026-03-09T01:20:00Z"
+last_updated: "2026-03-09T01:50:00Z"
 signals:
+  - id: "SIG-AUDIT-040"
+    type: "task_completed"
+    from: "github-copilot"
+    to: "any"
+    task_id: "TASK-035"
+    message: "TASK-035 (Auditoría de Advanced Search - TASK-017) COMPLETE ✅. Bool queries correct. Boosting conflict detected (title 2.0f vs skills 2.0f). Faceting INCOMPLETE (stub only). RECOMMENDATION: TASK-017 requires refactoring. Quality Score: 7/10."
+    created_at: "2026-03-09T01:50:00Z"
+    read_by: ["github-copilot"]
+    priority: "high"
+    requires_review: true
+
   - id: "SIG-WORK-012"
     type: "task_completed"
     from: "antigravity"
