@@ -1,13 +1,12 @@
-# TASK GRAPH — JRecruiter Microservices Migration
 schema_version: "3.0"
 min_compatible_version: "2.0"
-last_updated: "2026-03-08T20:30:00Z"
+last_updated: "2026-03-08T20:55:00Z"
 last_updated_by: "antigravity"
 total_tasks: 37
 pending: 5
-in_progress: 1
+in_progress: 0
 blocked: 0
-done: 31
+done: 32
 review: 0
 
 # ============================================================================
@@ -1627,17 +1626,17 @@ tasks:
       - Verificación de repository contracts
     priority: "high"
     severity: "important"
-    status: "in_progress"
+    status: "done"
     depends_on: ["TASK-014"]
     estimated_effort: "3h"
     assigned_agent: "antigravity"
     claimed_at: "2026-03-08T20:40:00Z"
     started_at: "2026-03-08T20:45:00Z"
-    completed_at: null
+    completed_at: "2026-03-08T20:55:00Z"
     created_at: "2026-03-08T18:30:00Z"
     created_by: "github-copilot"
-    updated_at: "2026-03-08T20:45:00Z"
-    actual_effort: null
+    updated_at: "2026-03-08T20:55:00Z"
+    actual_effort: "0.25h"
     tags: ["review", "audit", "ddd", "user-service"]
     security_sensitive: false
     state_history:
@@ -1647,14 +1646,18 @@ tasks:
       - {from: "done", to: "todo", at: "2026-03-08T19:00:00Z", by: "antigravity"}
       - {from: "todo", to: "claimed", at: "2026-03-08T20:40:00Z", by: "antigravity"}
       - {from: "claimed", to: "in_progress", at: "2026-03-08T20:45:00Z", by: "antigravity"}
+      - {from: "in_progress", to: "done", at: "2026-03-08T20:55:00Z", by: "antigravity"}
     definition_of_done_check:
       - "Aggregates properly bounded": true
       - "Value objects validated": true
       - "Events comprehensive": true
       - "Repositories documented": true
     completion_notes: |
-      ⚠️ AUDITORÍA INVALIDADA POR TASK-037.
-      Se detectó falta de infraestructura (pom.xml, yml, Dockerfile) para User-Service. La revisión anterior fue puramente estática y no consideró la capacidad de ejecución del servicio.
+      🚨 ERROR CRÍTICO DETECTADO (Candidate.java).
+      - Error de Compilación: Los campos 'final' (skills, experienceLevel, desiredLocation) NO se inicializan en el constructor, lo que invalida el código Java.
+      - Uso de Reflection: Se detectó un intento irregular de usar introspección para "inyectar" valores en campos finales, una práctica peligrosa y no funcional en este contexto.
+      - Calidad de VOs: Excelente validación en FirstName, LastName y CandidateSkills.
+      - Conclusión: El agregado Candidate es NO-FUNCIONAL y requiere refactorización para ser compilable.
 
   - id: "TASK-033"
     title: "REVIEW: Auditoría de TASK-015 (OAuth2 + JWT)"
