@@ -1,0 +1,78 @@
+# ======================== MAVEN ========================
+target/
+*.jar
+*.war
+*.ear
+*.class
+*.classpath
+.project
+.settings/
+.idea/
+*.iml
+
+# ======================== BUILD ARTIFACTS ========================
+build/
+bin/
+out/
+dist/
+*.o
+*.a
+*.so
+*.dylib
+
+# ======================== IDE & EDITOR ========================
+.vscode/
+.vs/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ======================== LOGS ========================
+logs/
+*.log
+*.out
+
+# ======================== RUNTIME & TEMP ========================
+tmp/
+temp/
+*.lock
+*.pid
+
+# ======================== NODE & NPM ========================
+node_modules/
+npm-debug.log
+package-lock.json
+yarn.lock
+
+# ======================== PYTHON ========================
+__pycache__/
+*.py[cod]
+*.pyc
+.pytest_cache/
+*.egg-info/
+dist/
+
+# ======================== ENV & SECRETS ========================
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+*.p12
+secrets/
+
+# ======================== DATABASE ========================
+*.db
+*.sqlite
+*.sqlite3
+data/
+
+# ======================== OS ========================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
