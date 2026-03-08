@@ -1,10 +1,22 @@
 # AGENT LOCK — Mutex distribuido
 schema_version: "3.0"
 min_compatible_version: "2.0"
-last_updated: "2026-03-08T18:52:00Z"
-last_updated_by: "github-copilot"
+last_updated: "2026-03-08T16:35:00Z"
+last_updated_by: "antigravity"
 
-active_agents: []
+active_agents:
+  - agent_id: "antigravity"
+    session_id: "20260308-1635-antigravity-session-013"
+    started_at: "2026-03-08T16:35:00Z"
+    last_heartbeat: "2026-03-08T16:35:00Z"
+    current_task: "TASK-024"
+    status: "working"
+    working_branch: "main"
+    base_branch: "main"
+    locked_files:
+      - "ai/tasks.yaml"
+      - "ai/memory/strangler-fig-migration-plan.md"
+    notes: "Auditing TASK-005 (Strangler Fig migration plan) - verifying roadmap, feature flags, rollback, metrics"
 
 ghost_entries: []
-note: "✅ SESSION-011 COMPLETED by github-copilot (TASK-021: Auditoría TASK-003 aprobada con 99.2/100). Next: TASK-022 ready for review."
+note: "SESSION-012 in progress: github-copilot auditing TASK-005 (Strangler Fig migration plan)"
