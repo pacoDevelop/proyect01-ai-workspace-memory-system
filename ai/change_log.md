@@ -1,3 +1,19 @@
+## [2026-03-09T00:20:00Z] TASK-036: RE-AUDITORÍA NOTIFICATION-SERVICE COMPLETADA (SESSION-032)
+
+**Type:** review-audit | **Responsible:** antigravity | **Scope:** Notification-Service (Logic & Templates)
+
+### Summary
+
+Auditoría de TASK-018 finalizada. Se ratifica la calidad del código lógico pero se identifican riesgos de infraestructura y acoplamiento.
+
+**Acciones tomadas:**
+- ✅ Validación de **6 Thymeleaf Templates** (responsivos y sanitizados).
+- 🔴 Identificación de **Hardcoded Queue Names** en listeners.
+- ⚠️ Detección de **Error Handling básico** (ausencia de DLQ/Retry).
+- 🔴 Confirmación de **Missing Root Infrastructure** (pom.xml/Docker).
+
+---
+
 ## [2026-03-08T23:55:00Z] TASK-035: AUDITORÍA ADVANCED SEARCH COMPLETADA - FALLOS DE LÓGICA (SESSION-031)
 
 **Type:** review-audit | **Responsible:** antigravity | **Scope:** Search-Service (Advanced Search & Ranking)

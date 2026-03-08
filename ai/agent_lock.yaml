@@ -1,8 +1,8 @@
 # AGENT LOCK — Mutex distribuido
 schema_version: "3.0"
 min_compatible_version: "2.0"
-last_updated: "2026-03-09T00:15:00Z"
-last_updated_by: "github-copilot"
+last_updated: "2026-03-09T00:25:00Z"
+last_updated_by: "antigravity"
 
 active_agents:
   - agent_id: "github-copilot"
@@ -16,19 +16,7 @@ active_agents:
     locked_files:
       - "ai/tasks.yaml"
     notes: "User-Service setup and Employer aggregate implementation"
-  - agent_id: "antigravity"
-    session_id: "20260309-0010-antigravity"
-    started_at: "2026-03-09T00:10:00Z"
-    last_heartbeat: "2026-03-09T00:10:00Z"
-    current_task: "TASK-036"
-    status: "working"
-    working_branch: "main"
-    base_branch: "main"
-    locked_files:
-      - "ai/tasks.yaml"
-      - "services/notification-service/src/main/java"
-    notes: "Auditing TASK-018 (Notification-Service + Email Templates)"
 
 ghost_entries: []
 
-note: "Agent github-copilot and antigravity active."
+note: "Audit cycle (31-37) complete. Agent github-copilot active for TASK-013."
