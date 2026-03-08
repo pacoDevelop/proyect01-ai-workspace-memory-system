@@ -1,4 +1,20 @@
-## [2026-03-08T20:55:00Z] TASK-032: AUDITORÍA DOMINIO CANDIDATE COMPLETADA - ERROR CRÍTICO (SESSION-028)
+## [2026-03-08T21:30:00Z] TASK-033: AUDITORÍA SEGURIDAD (OAUTH2/JWT) COMPLETADA - RIESGOS ALTOS (SESSION-029)
+
+**Type:** security-audit | **Responsible:** antigravity | **Scope:** User-Service Security Infrastructure
+
+### Summary
+
+Re-auditoría de TASK-015 finalizada. Se han identificado riesgos de seguridad críticos que requieren revisión humana inmediata.
+
+**Acciones tomadas:**
+- 🔴 Identificación de **Hardcoded Secret** en `JwtTokenProvider.java` (A02).
+- 🔴 Detección de bug en **Refresh Token Flow** (email claim vacío).
+- ✅ Verificación de BCrypt y configuración de filtros de seguridad.
+- 🔴 Ratificación de falta de rotación de tokens.
+
+---
+
+1: ## [2026-03-08T20:55:00Z] TASK-032: AUDITORÍA DOMINIO CANDIDATE COMPLETADA - ERROR CRÍTICO (SESSION-028)
 
 **Type:** review-audit | **Responsible:** antigravity | **Scope:** User-Service Domain Layer (Candidate/Application)
 
