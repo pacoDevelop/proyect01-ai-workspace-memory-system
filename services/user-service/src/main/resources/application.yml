@@ -1,0 +1,178 @@
+spring:
+  application:
+    name: user-service
+    description: JRecruiter User Management Service
+
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+
+  # ======================== DATASOURCE ========================
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:jrecruiter_users}
+    username: ${DB_USER:jrecruiter}
+    password: ${DB_PASSWORD:password}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      connection-timeout: 20000
+      idle-timeout: 300000
+      max-lifetime: 1200000
+
+  # ======================== JPA / HIBERNATE ========================
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL10Dialect
+        format_sql: true
+        use_sql_comments: true
+        jdbc:
+          batch_size: 20
+          fetch_size: 50
+        order_inserts: true
+        order_updates: true
+    open-in-view: false
+    show-sql: ${SHOW_SQL:false}
+
+  # ======================== FLYWAY ========================
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db/migration
+    baseline-version: 0
+
+  # ======================== RABBITMQ ========================
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USER:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
+    virtual-host: ${RABBITMQ_VHOST:/}
+    connection-timeout: 10000
+    channel-rpc-timeout: 10000
+
+  # ======================== JACKSON ========================
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+      indent-output: true
+    deserialization:
+      fail-on-unknown-properties: false
+    default-property-inclusion: non_null
+    time-zone: UTC
+
+  # ======================== MVC ========================
+  mvc:
+    throw-exception-if-no-handler-found: true
+    static-path-pattern: /static/**
+  web:
+    resources:
+      add-mappings: true
+
+  # ======================== SECURITY ========================
+  lifecyle:
+    timeout-per-shutdown-phase: 30s
+
+# ======================== SERVER ========================
+server:
+  port: 8082
+  servlet:
+    context-path: /api/v1
+  compression:
+    enabled: true
+    min-response-size: 1024
+  error:
+    include-message: always
+    include-stacktrace: on-param
+    include-exception: false
+
+# ======================== ACTUATOR ========================
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics,prometheus,info,env
+      base-path: /
+  endpoint:
+    health:
+      show-details: when-authorized
+  metrics:
+    enable:
+      all: true
+    export:
+      prometheus:
+        enabled: true
+  server:
+    port: 8082
+    servlet:
+      context-path: /actuator
+
+# ======================== LOGGING ========================
+logging:
+  level:
+    root: INFO
+    org.springframework: INFO
+    org.springframework.security: DEBUG
+    org.springframework.web: DEBUG
+    org.hibernate.SQL: ${HIBERNATE_SQL_LOG:DEBUG}
+    org.hibernate.type.descriptor.sql: ${HIBERNATE_PARAM_LOG:TRACE}
+    com.jrecruiter: DEBUG
+  pattern:
+    console: "%d{ISO8601} [%thread] %-5level %logger{36} - %msg%n"
+    file: "%d{ISO8601} [%thread] %-5level %logger{36} - %msg%n"
+
+# ======================== JWT CONFIGURATION ========================
+app:
+  jwt:
+    secret: ${JWT_SECRET:your-super-secret-key-minimum-256-bits-recommended-for-production}
+    expiration:
+      access-token-ms: 900000  # 15 minutes
+      refresh-token-ms: 86400000  # 24 hours
+    issuer: ${JWT_ISSUER:jrecruiter-user-service}
+    audience: ${JWT_AUDIENCE:jrecruiter-clients}
+
+# ======================== PROFILES ========================
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+  jpa:
+    show-sql: true
+  flyway:
+    out-of-order: true
+
+logging:
+  level:
+    root: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.web: DEBUG
+    com.jrecruiter: DEBUG
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    hikari:
+      maximum-pool-size: 50
+      connection-test-query: SELECT 1
+  jpa:
+    show-sql: false
+    properties:
+      hibernate:
+        jdbc:
+          batch_size: 50
+
+logging:
+  level:
+    root: WARN
+    org.springframework.security: INFO
+    com.jrecruiter: INFO
+  file:
+    name: /var/log/user-service/user-service.log
+    max-size: 100MB
+    max-history: 30
