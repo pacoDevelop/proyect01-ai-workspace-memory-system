@@ -1,49 +1,79 @@
 # PROJECT CONTEXT — JRecruiter Microservices Migration
-> Última actualización: 2026-03-09T03:55:00Z | Actualizado por: github-copilot
-> ✅ **PROJECT STATUS: TASKBOARD COMPLETE** — 37/37 tasks done or review. ⚠️ Critical schema mismatch found in TASK-027
+> Última actualización: 2026-03-09T03:56:00Z | Actualizado por: github-copilot
+> ✅ **PROJECT STATUS: PHASE 6 COMPLETE** — Ready for Phase 7 (Infrastructure Hardening). ⚠️ TASK-038 (Schema Alignment) is next critical blocker.
 
 ## ▸ QUÉ ES ESTE PROYECTO
 JRecruiter es una plataforma legacy de gestión de ofertas de empleo (Job Board) basada en Java. El proyecto actual consiste en su descomposición y migración desde un monolito hacia una arquitectura de microservicios moderna, escalable y mantenible.
 
 ## ▸ OBJETIVO ACTUAL
-Migrar la lógica de negocio del monolito ubicado en `/legacy` hacia microservicios independientes utilizando **Arquitectura Hexagonal** (Domain-Driven Design, Ports & Adapters).
+**Phase 6 Complete:** Migrar la lógica de negocio del monolito ubicado en `/legacy` hacia microservicios independientes utilizando **Arquitectura Hexagonal** (Domain-Driven Design, Ports & Adapters).
+
+**Phase 7 Incoming:** Infrastructure Hardening + Schema Alignment + Security Patching
 
 ## ▸ ESTADO DEL SISTEMA
-**Estado:** ✅ PHASE 6 COMPLETE — 37/37 tasks: 36 done + 1 new pending (TASK-038)
-**Etapa:** Phase 7 Proposed (Infrastructure Hardening + Schema Alignment)
-**Fecha:** 2026-03-09T03:55:00Z
+**Estado:** ✅ PHASE 6 COMPLETE — 37/37 TASKS DONE + 1 PENDING (TASK-038)
+**Etapa:** Transition to Phase 7 (Infrastructure Hardening + Security Fixes)
+**Fecha:** 2026-03-09T03:56:00Z
 
-### Completado:
-✅ Phase 1 (TASK-001-005): Analysis & Planning — 100% (5/5 tasks)
-✅ Phase 2 (TASK-006-012): Job-Service — 100% (7/7 tasks, ~6,500 LOC, 56 tests) 
-✅ Phase 3 (TASK-013-015): User-Service — 100% (3/3 tasks, Infrastructure Complete)
-✅ Phase 4 (TASK-016-017): Search-Service — 100% (2/2 tasks, Infrastructure Complete)
-✅ Phase 5 (TASK-018): Notification-Service — 100% (1/1 task, Code + Infrastructure Complete)
-✅ Phase 6 (TASK-019-037): Audits & Reviews — 100% (19/19 audit tasks)
-✅ **TASK-033:** OAuth2/JWT Audit APPROVED by user review ✅
+### ✅ Phase 6 Completado (37/37 Tasks Done):
+✅ Phase 1 (TASK-001-005): Analysis & Planning — 5/5 tasks
+✅ Phase 2 (TASK-006-012): Job-Service — 7/7 tasks (~6,500 LOC, 56 tests) 
+✅ Phase 3 (TASK-013-015): User-Service — 3/3 tasks (Full infrastructure)
+✅ Phase 4 (TASK-016-017): Search-Service — 2/2 tasks (Full infrastructure)
+✅ Phase 5 (TASK-018): Notification-Service — 1/1 task (Code + Infrastructure)
+✅ Phase 6 (TASK-019-037): Audits & Reviews — 19/19 audit tasks
+✅ **TASK-033:** OAuth2/JWT Audit APPROVED by user ✅
 
-### Pending Phase 7:
-⏳ **TASK-038:** Schema Alignment (JPA ↔ SQL) — Critical blocker from TASK-027 findings
+### ⏳ Phase 7 Pending (1 Task):
+⏳ **TASK-038:** Schema Alignment (JPA ↔ SQL) — CRITICAL blocker for production
 
-### Critical Gap Resolution Status:
-✅ USER-SERVICE INFRASTRUCTURE: Complete (pom.xml, Dockerfile, application.yml, migrations)
-✅ SEARCH-SERVICE INFRASTRUCTURE: Complete (pom.xml, Dockerfile, application.yml, migrations)
-✅ NOTIFICATION-SERVICE INFRASTRUCTURE: Complete (pom.xml, Dockerfile, application.yml, migrations)
-✅ RABBITMQ ALIGNMENT: Fixed (job-notification-queue consumer properly configured)
-✅ SECURITY AUDIT (TASK-033): Approved with documented findings for Phase 7+ hardening
-⏳ SCHEMA ALIGNMENT (TASK-038): Created, awaiting Phase 7 execution
+### Infrastructure Status — All Complete:
+✅ Job-Service: pom.xml, Dockerfile, application*.yml, migrations → BUILD SUCCESS
+✅ User-Service: pom.xml, Dockerfile, application*.yml, migrations → Complete
+✅ Search-Service: pom.xml, Dockerfile, application*.yml, migrations → Complete  
+✅ Notification-Service: pom.xml, Dockerfile, application*.yml, migrations → Complete
+✅ RabbitMQ: Queue names aligned (job-notification-queue) → Integrated
 
-## ▸ RECUENTO DE TAREAS FINAL
-| Phase | Tareas | Status | Auditoría | Decisión |
-|------|--------|--------|-----------|----------|
-| Análisis | TASK-001-005 | ✅ 5/5 done | ✅ TASK-019-023 | ✅ Ready |
-| Job-Service | TASK-006-012 | ✅ 7/7 done | ✅ TASK-024-030 | ✅ Ready |
-| User-Service | TASK-013-015 | ✅ 3/3 done | ✅ TASK-031-033 | ✅ Ready |
-| Search-Service | TASK-016-017 | ✅ 2/2 done | ✅ TASK-034-035 | ✅ Ready |
-| Notification | TASK-018 | ✅ 1/1 done | ✅ TASK-036 done | ✅ Ready |
-| E2E Audit | TASK-019-037 | ✅ 19/19 done | N/A | ✅ Complete |
-| **Infrastructure Fix** | **TASK-038** | **⏳ pending** | **N/A** | **Phase 7** |
-| **TOTAL** | **38 tasks** | **37 done + 1 pending** | **100%** | **Phase 6 Complete** |
+### Critical Findings (To Be Addressed in Phase 7):
+⚠️ **TASK-027 Discovery — Schema Mismatch:**
+- SQL columns (V1__Initial_Schema.sql) NOT mapped in JPA entity JobLocationEmbeddable
+- JPA fields (JobLocationEmbeddable) NOT present in SQL schema
+- Column naming: SQL `location_state` vs JPA `location_state_province`
+- **Action:** TASK-038 (Schema Alignment) must resolve BEFORE production
+
+⚠️ **TASK-033 Security Findings:**
+- A02 (Cryptographic Failures): JWT secret hardcoded (env var needed)
+- A07 (Auth Failures): Email claim empty in refresh token (needs fix)
+- A07: No refresh token rotation (needs implementation)
+- **Action:** TASK-039 (Security Hardening) proposed for Phase 7
+
+## ▸ PRÓXIMAS ACCIONES (PHASE 7)
+### IMMEDIATE (CRITICAL):
+1. **TASK-038:** Resolve schema mismatch
+   - Create Flyway V2 migration to normalize schema
+   - Update JPA mappings or SQL to align
+   - Run integration tests
+   - Verify data consistency
+
+2. **TASK-039:** Security Hardening (Proposed)
+   - Externalize JWT secret via environment variables
+   - Fix email claim in refresh token flow
+   - Implement refresh token rotation
+
+### HIGH (Infrastructure):
+1. Kubernetes manifests setup
+2. CI/CD pipeline configuration
+3. APM & Observability integration
+
+## ▸ RECUENTO DE TAREAS — Phase 6 Final + Phase 7 Start
+| Phase | Tareas | Status | Responsable |
+|------|--------|--------|------------|
+| 1-5 | 18 tareas | ✅ Done | github-copilot + antigravity |
+| 6 — Reviews | 19 tareas | ✅ Done | antigravity + github-copilot |
+| 6 — User Approval | 1 tarea | ✅ TASK-033 (Done) | user |
+| **7 — Infrastructure** | **TASK-038** | **⏳ Pending** | **Ready to claim** |
+| **7 — Security** | **TASK-039** | **Proposed** | **To be created** |
+| **TOTAL** | **38 tasks planned** | **37 done + 1 pending** | **Phase 7 ready** |
 
 ## ▸ Próximas Acciones Recomendadas
 1. **IMMEDIATE:** Resolve schema mismatch (TASK-038 — Infrastructure Alignment)
