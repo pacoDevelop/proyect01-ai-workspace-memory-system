@@ -64,6 +64,7 @@ jobs:
       - name: 🧹 Clean Maven Cache (Force Fresh)
         run: |
           rm -rf ~/.m2/repository/org/springframework/boot/spring-boot-test* 2>/dev/null || true
+          rm -rf ~/.m2/repository/org/springframework/boot/spring-boot-test-autoconfigure* 2>/dev/null || true
           cd services/job-service
           mvn clean
 
