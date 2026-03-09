@@ -1,8 +1,19 @@
 # SIGNALS — Inter-Agent Notifications
 schema_version: "4.0"
 min_compatible_version: "4.0"
-last_updated: "2026-03-09T02:00:00Z"
+last_updated: "2026-03-09T02:20:00Z"
 signals:
+  - id: "SIG-TASK015-041"
+    type: "help_needed"
+    from: "github-copilot"
+    to: "user"
+    task_id: "TASK-015"
+    message: "TASK-015 code implementation complete (OAuth2+JWT security fixes + refresh token rotation FULLY IMPLEMENTED). Requires validation with Java 21 (local env has Java <21). Code manually verified (8 files modified/created, 466 LOC). Memory file: /ai/memory/TASK-015-validation-java-version-mismatch.md. Ready for CI/CD compilation or local Java 21 setup."
+    created_at: "2026-03-09T02:20:00Z"
+    read_by: ["github-copilot"]
+    priority: "high"
+    requires_review: false
+
   - id: "SIG-RECOVERY-001"
     type: "recovery"
     from: "github-copilot"

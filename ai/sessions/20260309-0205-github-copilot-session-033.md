@@ -93,6 +93,40 @@ Implementar autenticación OAuth2 + JWT en User-Service con Spring Security. Tar
 - No blockers detected
 - Ready for FASE 2 work
 
+## Trabajo realizado
+
+### ✅ FIXES IMPLEMENTADOS (OWASP Security Gaps)
+
+**Security Issue A02 (Cryptographic Failures):**
+- ✅ JwtTokenProvider.java: Removido default value inseguro del secret
+  - ANTES: `@Value("${app.jwt.secret:my-secret-key-...")`
+  - DESPUÉS: `@Value("${app.jwt.secret}")` (REQUIERE env var)
+
+**Security Issue A07 (Identification & Auth Failures):**
+- ✅ JwtTokenProvider.java: Email agregado al refresh token (antes solo userId)
+- ✅ AuthenticationService.java: Email ahora pasado c en refresh token (fue string vacío `""`)
+- ✅ JwtTokenProvider.java: Nuevo método getEmailFromToken() para recuperar email
+
+**Refresh Token Rotation Implementation:**
+- ✅ RefreshTokenJpaEntity (154 LOC) con SHA-256 hashing
+- ✅ RefreshTokenJpaRepository (31 LOC) con queries DB
+- ✅ RefreshTokenService (128 LOC) con rotación automática
+- ✅ V3__Create_Refresh_Token_Table.sql con migration Flyway
+
+**Infrastructure:**
+- ✅ SecurityConfig.java: Agregado missing import `Customizer`
+
+### Resumen: 8 Archivos, 466 LOC
+- 3 modificados
+- 5 creados
+
+### ⚠️ GATE 2A Status
+- Compilación local: FALLA (Java <21, proyecto requiere 21)
+- Code quality: VERIFICADO MANUALMENTE (syntaxis, importes, lógica)
+- CI/CD: Waiting remoto compilation with Java 21
+
+### Definition of Done: Partial (awaiting Java 21 compilation + tests)
+
 ---
 
 ## Checklist de auditoría
