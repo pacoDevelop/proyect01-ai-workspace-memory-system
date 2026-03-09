@@ -287,3 +287,59 @@ Actualización de `PROTOCOL.md`:
 2. **Integridad de Versión**: Prohibido degradar versiones de lenguaje/herramientas del proyecto para validación local. Obligatorio informar al usuario sobre discrepancias de entorno.
 
 ---
+## [2026-03-09T03:50:00Z] TASK-027: JPA Adapter Audit Complete — CRITICAL SCHEMA MISMATCH DETECTED [SECURITY-ALERT]
+
+**Type:** audit | **Responsible:** github-copilot | **Scope:** Job-Service JPA infrastructure (TASK-009)
+
+### Summary
+Completed comprehensive audit of PostgreSQL JPA adapter (`JobJpaEntity`, `PostgresJobRepository`, `JobLocationEmbeddable`, `JobSalaryEmbeddable`). Hexagonal architecture pattern correctly implemented. Enterprise-grade transaction boundaries and optimistic locking verified. **CRITICAL ISSUE DISCOVERED:** Schema SQL and JPA entity mappings are misaligned, creating potential data loss scenarios.
+
+### Audit Findings
+
+✅ **JPA Mappings Verified**
+- Entity annotations correctly applied (@Entity, @Table, @Id, @Embeddable)
+- Primary key: UUID with surrogate key pattern
+- Business key: universal_id with uniqueness constraint
+- 12 mapped fields + version column for optimistic locking
+- Value objects properly embedded (JobLocationEmbeddable, JobSalaryEmbeddable)
+
+✅ **Transaction Boundaries Correct**
+- Class-level @Transactional with read-write semantics
+- 14 query methods marked @Transactional(readOnly = true) for connection optimization
+- Exception wrapping: all database exceptions converted to domain RepositoryException
+- Domain events cleanup after successful persistence (clearDomainEvents)
+
+✅ **Optimistic Locking Implemented**
+- @Version annotation on Long field automatically incremented on updates
+- canUpdate() method for explicit version verification before updates
+- Concurrency control in place for prevent lost-update anomalies
+
+⚠️ **CRITICAL: Schema Mismatch Detected**
+- **5 SQL columns NOT MAPPED in JPA:** location_address1, location_address2, location_website, location_phone, location_email
+- **2 JPA fields NOT PRESENT in SQL:** location_country_code, location_remote
+- **Column naming mismatch:** SQL uses `location_state` but JPA maps to `location_state_province`
+- **Impact:** Hibernate will IGNORE unmapped SQL columns during persistence, creating data loss scenarios
+- **Severity:** CRITICAL for production deployment
+
+### Recommendations
+
+**IMMEDIATE (CRITICAL):**
+1. Align V1__Initial_Schema.sql column definitions with JobLocationEmbeddable @Column annotations
+2. Create Flyway migration V2 to fix schema or update JobLocationEmbeddable to match existing schema
+3. Re-run integration tests post-schema-fix with data verification
+
+**FOLLOW-UP:**
+- Implement schema validation in CI/CD pipeline
+- Consider using Liquibase/Flyway versioning with automated schema drift detection
+- Add test coverage for embeddable object persistence edge cases
+
+### Quality Metrics
+- **Architecture Pattern:** ✅ Hexagonal (Ports & Adapters) correctly applied
+- **Code Quality:** 8/10 (deducted for schema mismatch)
+- **Security:** ✅ OWASP-compatible transaction handling, no SQL injection vectors
+- **Performance:** ✅ 7 proper indexes covering query patterns
+
+### Decision
+**Status:** Task completed as `done` with critical findings documented. Schema mismatch must be resolved by TASK-038 (Infrastructure Alignment) before production deployment.
+
+---
