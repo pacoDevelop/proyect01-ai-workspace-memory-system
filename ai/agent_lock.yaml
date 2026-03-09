@@ -1,7 +1,7 @@
 # AGENT LOCK — Mutex distribuido
 schema_version: "3.0"
 min_compatible_version: "2.0"
-last_updated: "2026-03-09T22:08:00Z"
+last_updated: "2026-03-09T22:20:00Z"
 last_updated_by: "github-copilot"
 
 active_agents: []
@@ -17,4 +17,4 @@ ghost_entries:
     cleaned_by: "github-copilot [FASE-0.2b]"
     cleaned_at: "2026-03-09T02:00:00Z"
 
-note: "TASK-043 COMPLETE — GitHub Actions Maven cache invalidation fixed. TASK-041/42 dependencies now accessible. Deploy should build successfully on next run."
+note: "TASK-044 COMPLETE — Definitive Maven dependency fix applied. Explicit versions 3.4.0 for test dependencies + aggressive cache cleanup in CI/CD workflow. Ready for GitHub Actions re-run."
