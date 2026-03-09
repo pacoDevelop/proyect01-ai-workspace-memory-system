@@ -78,7 +78,7 @@ public class JobApplicationService {
                 request.getSalary().getMinAmount(),
                 request.getSalary().getMaxAmount(),
                 request.getSalary().getCurrency(),
-                request.getSalary().getFrequency()
+                JobSalary.SalaryFrequency.valueOf(request.getSalary().getFrequency())
         );
         
         OfferedBy offeredBy = OfferedBy.valueOf(request.getOfferedBy());
@@ -287,17 +287,18 @@ public class JobApplicationService {
                     request.getSalary().getMinAmount(),
                     request.getSalary().getMaxAmount(),
                     request.getSalary().getCurrency(),
-                    request.getSalary().getFrequency()
+                    JobSalary.SalaryFrequency.valueOf(request.getSalary().getFrequency())
             );
         }
         
         // Reconstruct job with updated values, preserving identity and timestamps
+        // Note: industryId and regionId are immutable (cannot be changed via update)
         Job updatedJob = Job.reconstruct(
                 job.getJobId(),
                 job.getUniversalId(),
                 job.getEmployerId(),
-                request.getIndustryId() != null ? request.getIndustryId() : job.getIndustryId(),
-                request.getRegionId() != null ? request.getRegionId() : job.getRegionId(),
+                job.getIndustryId(),  // Keep existing industry
+                job.getRegionId(),    // Keep existing region
                 updatedTitle,
                 updatedDescription,
                 updatedCompanyName,
@@ -360,7 +361,7 @@ public class JobApplicationService {
         JobResponse.SalaryResponse salaryResponse = new JobResponse.SalaryResponse(
                 job.getSalary().getMinAmount(),
                 job.getSalary().getMaxAmount(),
-                job.getSalary().getCurrency().name(),
+                job.getSalary().getCurrency(),
                 job.getSalary().getFrequency().name()
         );
         
@@ -370,9 +371,9 @@ public class JobApplicationService {
                 job.getEmployerId(),
                 job.getIndustryId(),
                 job.getRegionId(),
-                job.getTitle().getValue(),
-                job.getDescription().getValue(),
-                job.getCompanyName().getValue(),
+                job.getTitle().value(),
+                job.getDescription().value(),
+                job.getCompanyName().value(),
                 locationResponse,
                 salaryResponse,
                 job.getOfferedBy().name(),

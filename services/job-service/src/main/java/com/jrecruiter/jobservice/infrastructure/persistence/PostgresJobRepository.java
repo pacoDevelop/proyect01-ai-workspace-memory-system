@@ -276,7 +276,7 @@ public class PostgresJobRepository implements JobRepository {
         JobSalaryEmbeddable salaryEmbeddable = new JobSalaryEmbeddable(
                 job.getSalary().getMinAmount(),
                 job.getSalary().getMaxAmount(),
-                job.getSalary().getCurrency().name(),
+                job.getSalary().getCurrency(),
                 job.getSalary().getFrequency().name()
         );
         
@@ -286,9 +286,9 @@ public class PostgresJobRepository implements JobRepository {
                 job.getEmployerId(),
                 job.getIndustryId(),
                 job.getRegionId(),
-                job.getTitle().getValue(),
-                job.getDescription().getValue(),
-                job.getCompanyName().getValue(),
+                job.getTitle().value(),
+                job.getDescription().value(),
+                job.getCompanyName().value(),
                 locationEmbeddable,
                 salaryEmbeddable,
                 job.getOfferedBy().name(),
@@ -311,14 +311,14 @@ public class PostgresJobRepository implements JobRepository {
                 entity.getLocation().getPostalCode(),
                 entity.getLocation().getCountry(),
                 entity.getLocation().getCountryCode(),
-                entity.getLocation().isRemote()
+                entity.getLocation().getRemote()
         );
         
         JobSalary salary = JobSalary.of(
                 entity.getSalary().getMinAmount(),
                 entity.getSalary().getMaxAmount(),
                 entity.getSalary().getCurrency(),
-                entity.getSalary().getFrequency()
+                JobSalary.SalaryFrequency.valueOf(entity.getSalary().getFrequency())
         );
         
         return Job.reconstruct(

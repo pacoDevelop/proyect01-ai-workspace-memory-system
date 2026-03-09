@@ -44,4 +44,14 @@ public record JobDescription(String value) {
     public String toString() {
         return value.substring(0, Math.min(100, value.length())) + "...";
     }
+    
+    /**
+     * Factory method to create a JobDescription from a string value.
+     * 
+     * @param value the job description text
+     * @return a new JobDescription instance
+     */
+    public static JobDescription of(String value) {
+        return new JobDescription(value);
+    }
 }

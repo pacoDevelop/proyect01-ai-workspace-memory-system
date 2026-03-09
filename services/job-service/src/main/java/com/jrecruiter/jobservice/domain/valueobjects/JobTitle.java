@@ -44,4 +44,14 @@ public record JobTitle(String value) {
     public String toString() {
         return value;
     }
+    
+    /**
+     * Factory method to create a JobTitle from a string value.
+     * 
+     * @param value the job title text
+     * @return a new JobTitle instance
+     */
+    public static JobTitle of(String value) {
+        return new JobTitle(value);
+    }
 }

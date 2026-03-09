@@ -44,4 +44,14 @@ public record CompanyName(String value) {
     public String toString() {
         return value;
     }
+    
+    /**
+     * Factory method to create a CompanyName from a string value.
+     * 
+     * @param value the company name
+     * @return a new CompanyName instance
+     */
+    public static CompanyName of(String value) {
+        return new CompanyName(value);
+    }
 }

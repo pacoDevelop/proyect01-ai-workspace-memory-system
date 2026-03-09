@@ -87,6 +87,41 @@ public record JobSalary(
         return new JobSalary(minSalary, maxSalary, DEFAULT_CURRENCY, frequency);
     }
     
+    /**
+     * Generic factory method - alias for ofRange.
+     */
+    public static JobSalary of(BigDecimal minSalary, BigDecimal maxSalary, String currency, SalaryFrequency frequency) {
+        return ofRange(minSalary, maxSalary, currency, frequency);
+    }
+    
+    /**
+     * Getter method for minimum salary (for compatibility with traditional getters).
+     */
+    public BigDecimal getMinAmount() {
+        return minSalary;
+    }
+    
+    /**
+     * Getter method for maximum salary (for compatibility with traditional getters).
+     */
+    public BigDecimal getMaxAmount() {
+        return maxSalary;
+    }
+    
+    /**
+     * Getter method for currency (for compatibility with traditional getters).
+     */
+    public String getCurrency() {
+        return currency;
+    }
+    
+    /**
+     * Getter method for frequency (for compatibility with traditional getters).
+     */
+    public SalaryFrequency getFrequency() {
+        return frequency;
+    }
+    
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

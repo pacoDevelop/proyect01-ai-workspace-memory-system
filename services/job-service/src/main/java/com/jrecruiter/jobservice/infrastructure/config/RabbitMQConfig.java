@@ -32,21 +32,17 @@ public class RabbitMQConfig {
     @Bean
     public Queue jobSearchQueue() {
         return QueueBuilder.durable("job-search-queue")
-            .arguments(Map.of(
-                "x-dead-letter-exchange", "job-search-dlq",
-                "x-message-ttl", 86400000,
-                "x-max-length", 100000
-            ))
+            .deadLetterExchange("job-search-dlq")
+            .ttl(86400000)
+            .maxLengthBytes(100000)
             .build();
     }
 
     @Bean
     public Queue jobNotificationQueue() {
         return QueueBuilder.durable("job-notification-queue")
-            .arguments(Map.of(
-                "x-dead-letter-exchange", "job-notification-dlq",
-                "x-message-ttl", 86400000
-            ))
+            .deadLetterExchange("job-notification-dlq")
+            .ttl(86400000)
             .build();
     }
 
@@ -72,7 +68,7 @@ public class RabbitMQConfig {
     @Bean
     public Queue jobSearchDlqQueue() {
         return QueueBuilder.durable("job-search-dlq-queue")
-            .arguments(Map.of("x-message-ttl", 604800000))
+            .ttl(604800000)
             .build();
     }
 
@@ -89,7 +85,7 @@ public class RabbitMQConfig {
     @Bean
     public Queue jobNotificationDlqQueue() {
         return QueueBuilder.durable("job-notification-dlq-queue")
-            .arguments(Map.of("x-message-ttl", 604800000))
+            .ttl(604800000)
             .build();
     }
 
