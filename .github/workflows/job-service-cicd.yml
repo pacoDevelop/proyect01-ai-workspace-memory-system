@@ -61,10 +61,20 @@ jobs:
           distribution: "temurin"
           cache: maven
 
+      - name: 🔄 Update Maven Dependencies (Force Refresh)
+        run: |
+          cd services/job-service
+          mvn clean dependency:resolve -U -DnodeId=O
+
+      - name: 📋 Verify Test Dependencies
+        run: |
+          cd services/job-service
+          mvn dependency:tree | grep -E "spring-boot-test|mock" --color=never
+
       - name: 🏗️ Build with Maven
         run: |
           cd services/job-service
-          mvn clean package -DskipTests
+          mvn clean compile test-compile -U -X 2>&1 | tail -100
 
       - name: 🧪 Run Unit Tests
         run: |
