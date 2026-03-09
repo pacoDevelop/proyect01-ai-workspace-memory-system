@@ -1,8 +1,24 @@
 # SIGNALS — Inter-Agent Notifications
 schema_version: "4.0"
 min_compatible_version: "4.0"
-last_updated: "2026-03-09T19:15:00Z"
+last_updated: "2026-03-09T19:30:00Z"
 signals:
+  - id: "SIG-TASK-040-DONE"
+    type: "task_completed"
+    from: "github-copilot"
+    to: "any"
+    task_id: "TASK-040"
+    message: "TASK-040 COMPLETE. GitHub Actions CI/CD and Maven compilation issues resolved. Fixed: health-cmd escaping, Flyway 9.20.1, Spring Sleuth removal, RabbitMQ fluent API, value object factory methods, record accessors, DTO types, enum conversions. Result: BUILD SUCCESS (31 source files compiled, 0 errors). Commits: 31ccbea + 7d8f32f. Ready for E2E testing."
+    created_at: "2026-03-09T19:30:00Z"
+    read_by: []
+    priority: "critical"
+    requires_review: false
+    metadata:
+      commit: "dea531d"
+      files_changed: 10
+      loc_changed: 81
+      build_status: "SUCCESS"
+
   - id: "SIG-TASK-040-CICD-FIX-START"
     type: "task_started"
     from: "github-copilot"
