@@ -3140,3 +3140,50 @@ tasks:
       ✅ GitHub Actions workflow puede ejecutarse
       ✅ Listos para E2E testing  (TASK-041)
       ✅ Listos para deployment (TASK-042+)
+
+  - id: "TASK-041"
+    title: "FIX: Maven test compilation failure - Missing spring-boot-test-autoconfigure"
+    description: |
+      GitHub Actions deploy falla en fase de compilación de tests:
+      - Error: package org.springframework.boot.test.mock does not exist
+      - Error: cannot find symbol - class MockBean
+      - Root cause: Falta dependencia spring-boot-test-autoconfigure en pom.xml
+      
+      **Acción requerida:**
+      - Añadir spring-boot-test-autoconfigure al pom.xml
+      - Verificar que JobControllerIntegrationTest.java pueda encontrar @MockBean
+      - Re-compilar con `mvn clean compile` y tests
+      - Validar que GitHub Actions workflow compila exitosamente
+    priority: "high"
+    severity: "blocker"
+    status: "claimed"
+    depends_on: ["TASK-040"]
+    estimated_effort: "30m"
+    assigned_agent: "github-copilot"
+    claimed_at: "2026-03-09T20:02:00Z"
+    started_at: null
+    completed_at: null
+    created_at: "2026-03-09T20:00:00Z"
+    created_by: "github-copilot"
+    updated_at: "2026-03-09T20:02:00Z"
+    tags: ["build", "maven", "testing", "job-service", "github-actions"]
+    security_sensitive: false
+    definition_of_done_check:
+      - "spring-boot-test-autoconfigure added to pom.xml": false
+      - "JobControllerIntegrationTest.java compiles successfully": false
+      - "All tests compile without errors": false
+      - "GitHub Actions workflow succeeds": false
+    completion_notes: null
+    state_history:
+      - {
+          from: "pending",
+          to: "pending",
+          at: "2026-03-09T20:00:00Z",
+          by: "system",
+        }
+      - {
+          from: "pending",
+          to: "claimed",
+          at: "2026-03-09T20:02:00Z",
+          by: "github-copilot",
+        }
