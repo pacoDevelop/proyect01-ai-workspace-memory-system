@@ -33,6 +33,7 @@ Thumbs.db
 logs/
 *.log
 *.out
+/ai/logs_*
 
 # ======================== RUNTIME & TEMP ========================
 tmp/
