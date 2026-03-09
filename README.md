@@ -1,4 +1,5 @@
 # ÍNDICE MAESTRO — AI WORKSPACE MEMORY SYSTEM
+[![Job-Service CI/CD Pipeline](https://github.com/pacoDevelop/proyect01-ai-workspace-memory-system/actions/workflows/job-service-cicd.yml/badge.svg?branch=main)](https://github.com/pacoDevelop/proyect01-ai-workspace-memory-system/actions/workflows/job-service-cicd.yml)
 
 **Documento:** Resumen de los 15 Entregables del Sistema de Memoria Persistente para Agentes IA  
 **Versión:** v6.0 FINAL  
