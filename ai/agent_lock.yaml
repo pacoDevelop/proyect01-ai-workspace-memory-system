@@ -4,13 +4,7 @@ min_compatible_version: "2.0"
 last_updated: "2026-03-09T03:35:00Z"
 last_updated_by: "github-copilot"
 
-active_agents:
-  - agent_id: "github-copilot"
-    session_id: "20260309-0340-github-copilot-session-036"
-    task_id: "TASK-027"
-    started_at: "2026-03-09T03:40:00Z"
-    last_heartbeat: "2026-03-09T03:40:00Z"
-    initial_status: "todo"
+active_agents: []
 
 ghost_entries:
   - agent_id: "antigravity"
