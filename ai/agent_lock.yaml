@@ -1,10 +1,21 @@
 # AGENT LOCK — Mutex distribuido
 schema_version: "3.0"
 min_compatible_version: "2.0"
-last_updated: "2026-03-09T03:15:00Z"
+last_updated: "2026-03-09T03:20:00Z"
 last_updated_by: "github-copilot"
 
-active_agents: []
+active_agents:
+  - agent_id: "github-copilot"
+    session_id: "20260309-0320-github-copilot-session-035"
+    started_at: "2026-03-09T03:20:00Z"
+    last_heartbeat: "2026-03-09T03:20:00Z"
+    current_task: "TASK-017"
+    status: "working"
+    working_branch: "main"
+    base_branch: "main"
+    locked_files:
+      - "ai/tasks.yaml"
+    notes: "Implementing advanced filtering and ranking for Search-Service (TASK-017, Elasticsearch integration)"
 
 ghost_entries:
   - agent_id: "antigravity"
