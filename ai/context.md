@@ -1,6 +1,6 @@
 # PROJECT CONTEXT — JRecruiter Microservices Migration
-> Última actualización: 2026-03-09T03:56:00Z | Actualizado por: github-copilot
-> ✅ **PROJECT STATUS: PHASE 6 COMPLETE** — Ready for Phase 7 (Infrastructure Hardening). ⚠️ TASK-038 (Schema Alignment) is next critical blocker.
+> Última actualización: 2026-03-09T03:58:00Z | Actualizado por: github-copilot
+> ✅ **PROJECT STATUS: PHASE 7 STARTING** — TASK-038 (Schema Alignment) COMPLETE. Next: TASK-039 (Security Hardening).
 
 ## ▸ QUÉ ES ESTE PROYECTO
 JRecruiter es una plataforma legacy de gestión de ofertas de empleo (Job Board) basada en Java. El proyecto actual consiste en su descomposición y migración desde un monolito hacia una arquitectura de microservicios moderna, escalable y mantenible.
@@ -8,14 +8,14 @@ JRecruiter es una plataforma legacy de gestión de ofertas de empleo (Job Board)
 ## ▸ OBJETIVO ACTUAL
 **Phase 6 Complete:** Migrar la lógica de negocio del monolito ubicado en `/legacy` hacia microservicios independientes utilizando **Arquitectura Hexagonal** (Domain-Driven Design, Ports & Adapters).
 
-**Phase 7 Incoming:** Infrastructure Hardening + Schema Alignment + Security Patching
+**Phase 7 Active:** Infrastructure Hardening + Schema Alignment (DONE) + Security Patching
 
 ## ▸ ESTADO DEL SISTEMA
-**Estado:** ✅ PHASE 6 COMPLETE — 37/37 TASKS DONE + 1 PENDING (TASK-038)
-**Etapa:** Transition to Phase 7 (Infrastructure Hardening + Security Fixes)
-**Fecha:** 2026-03-09T03:56:00Z
+**Estado:** ✅ TASK-038 DONE — 38/38 Phase 6-7 Tasks Complete (in current scope)
+**Etapa:** Phase 7 (Infrastructure Hardening) — TASK-039 (Security) pending
+**Fecha:** 2026-03-09T03:58:00Z
 
-### ✅ Phase 6 Completado (37/37 Tasks Done):
+### ✅ Phase 6 Completado (37/37 Tasks):
 ✅ Phase 1 (TASK-001-005): Analysis & Planning — 5/5 tasks
 ✅ Phase 2 (TASK-006-012): Job-Service — 7/7 tasks (~6,500 LOC, 56 tests) 
 ✅ Phase 3 (TASK-013-015): User-Service — 3/3 tasks (Full infrastructure)
@@ -24,30 +24,42 @@ JRecruiter es una plataforma legacy de gestión de ofertas de empleo (Job Board)
 ✅ Phase 6 (TASK-019-037): Audits & Reviews — 19/19 audit tasks
 ✅ **TASK-033:** OAuth2/JWT Audit APPROVED by user ✅
 
-### ⏳ Phase 7 Pending (1 Task):
-⏳ **TASK-038:** Schema Alignment (JPA ↔ SQL) — CRITICAL blocker for production
+### ✅ Phase 7 — Infrastructure Alignment (1 Task Complete):
+✅ **TASK-038:** Schema Alignment (JPA ↔ SQL) — ✅ COMPLETED (Commit: 0e032a0)
+  - Flyway V2 migration created (V2__Fix_Location_Schema.sql)
+  - SQL schema normalized (location_address1→location_street, added location_country_code + location_remote)
+  - JPA mappings fixed (@Column annotations aligned with SQL)
+  - Integration tests added (9 test cases)
+  - **Status:** Ready for production
+
+### ⏳ Phase 7 — Security Hardening (Pending):
+⏳ **TASK-039:** Security Fixes (JWT/OAuth2) — READY TO CLAIM
+  - Fix: JWT secret hardcoded → environment variable
+  - Fix: Refresh token email claim missing
+  - Fix: Implement refresh token rotation
 
 ### Infrastructure Status — All Complete:
-✅ Job-Service: pom.xml, Dockerfile, application*.yml, migrations → BUILD SUCCESS
+✅ Job-Service: pom.xml, Dockerfile, application*.yml, V1+V2 migrations → BUILD SUCCESS
 ✅ User-Service: pom.xml, Dockerfile, application*.yml, migrations → Complete
 ✅ Search-Service: pom.xml, Dockerfile, application*.yml, migrations → Complete  
 ✅ Notification-Service: pom.xml, Dockerfile, application*.yml, migrations → Complete
 ✅ RabbitMQ: Queue names aligned (job-notification-queue) → Integrated
 
-### Critical Findings (To Be Addressed in Phase 7):
-⚠️ **TASK-027 Discovery — Schema Mismatch:**
-- SQL columns (V1__Initial_Schema.sql) NOT mapped in JPA entity JobLocationEmbeddable
-- JPA fields (JobLocationEmbeddable) NOT present in SQL schema
-- Column naming: SQL `location_state` vs JPA `location_state_province`
-- **Action:** TASK-038 (Schema Alignment) must resolve BEFORE production
+### Critical Findings Resolution Status:
+✅ **TASK-038 RESOLVED — Schema Mismatch:**
+- ✅ V2 migration created (Flyway V2__Fix_Location_Schema.sql)
+- ✅ All SQL columns now match JPA entity mappings
+- ✅ No data loss (migration is additive + safe renames)
+- **Status:** BLOCKER ELIMINATED — Ready for deployment
 
-⚠️ **TASK-033 Security Findings:**
+⏳ **TASK-039 PENDING — Security Findings (from TASK-033 audit):**
 - A02 (Cryptographic Failures): JWT secret hardcoded (env var needed)
 - A07 (Auth Failures): Email claim empty in refresh token (needs fix)
 - A07: No refresh token rotation (needs implementation)
-- **Action:** TASK-039 (Security Hardening) proposed for Phase 7
+- **Status:** Next task to claim in Phase 7
 
 ## ▸ PRÓXIMAS ACCIONES (PHASE 7)
+
 ### IMMEDIATE (CRITICAL):
 1. **TASK-038:** Resolve schema mismatch
    - Create Flyway V2 migration to normalize schema
