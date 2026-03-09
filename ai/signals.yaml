@@ -1,8 +1,21 @@
 # SIGNALS — Inter-Agent Notifications
 schema_version: "4.0"
 min_compatible_version: "4.0"
-last_updated: "2026-03-09T03:58:00Z"
+last_updated: "2026-03-09T19:15:00Z"
 signals:
+  - id: "SIG-TASK-040-CICD-FIX-START"
+    type: "task_started"
+    from: "github-copilot"
+    to: "any"
+    task_id: "TASK-040"
+    message: "Starting TASK-040: Fix GitHub Actions CI/CD rabbit-mq health-cmd escaping and Maven compilation errors. Multiple dependency and code generation issues resolved in job-service pom.xml and source code."
+    created_at: "2026-03-09T19:15:00Z"
+    read_by: ["github-copilot"]
+    priority: "high"
+    requires_review: false
+    metadata:
+      commit: "7d8f32f"
+
   - id: "SIG-TASK-038-DONE"
     type: "task_completed"
     from: "github-copilot"
@@ -10,7 +23,7 @@ signals:
     task_id: "TASK-038"
     message: "TASK-038 COMPLETE. Schema alignment resolved: V2 Flyway migration created, JPA mappings synchronized with SQL schema. Changes: location_address1→location_street, dropped non-Job location fields, added location_country_code + location_remote. All columns now aligned. Integration tests added (9 test cases). Commit: ab77629. Ready for validation."
     created_at: "2026-03-09T03:58:00Z"
-    read_by: []
+    read_by: ["github-copilot"]
     priority: "critical"
     requires_review: true
     metadata:
