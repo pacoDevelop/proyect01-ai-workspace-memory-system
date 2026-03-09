@@ -126,12 +126,18 @@ logging:
 # ======================== JWT CONFIGURATION ========================
 app:
   jwt:
-    secret: ${JWT_SECRET:your-super-secret-key-minimum-256-bits-recommended-for-production}
+    # SECURITY FIX A02: JWT_SECRET is REQUIRED and must be set via environment variable
+    # No default value to enforce secure secret configuration in production
+    secret: ${JWT_SECRET}
     expiration:
       access-token-ms: 900000 # 15 minutes
       refresh-token-ms: 86400000 # 24 hours
     issuer: ${JWT_ISSUER:jrecruiter-user-service}
     audience: ${JWT_AUDIENCE:jrecruiter-clients}
+  refresh-token:
+    # SECURITY FIX A07: Refresh token rotation enforced
+    rotation-enabled: true
+    max-tokens-per-user: 3  # Limit concurrent refresh tokens to prevent token explosion
 
 
 # ======================== PROFILES ========================
