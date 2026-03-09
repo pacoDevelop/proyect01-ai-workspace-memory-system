@@ -122,3 +122,14 @@ signals:
     read_by: ["github-copilot"]
     priority: "high"
     requires_review: true
+
+  - id: "SIG-AUDIT-MISMATCH-001"
+    type: "warning"
+    from: "github-copilot"
+    to: "user"
+    task_id: "TASK-027"
+    message: "[CRITICAL] TASK-027 COMPLETE but schema mismatch detected. SQL schema (V1__Initial_Schema.sql) and JPA entity mappings (JobLocationEmbeddable) are MISALIGNED. 5 SQL columns not mapped in JPA, 2 JPA fields not in SQL, 1 column naming mismatch. Data loss potential in production. Requires TASK-038 (Infrastructure Alignment) to fix before deployment. See change_log.md for full details."
+    created_at: "2026-03-09T03:50:00Z"
+    read_by: []
+    priority: "critical"
+    requires_review: true
