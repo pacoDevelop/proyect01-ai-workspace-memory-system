@@ -1,10 +1,24 @@
 # AGENT LOCK — Mutex distribuido
 schema_version: "3.0"
 min_compatible_version: "2.0"
-last_updated: "2026-03-09T04:25:00Z"
+last_updated: "2026-03-09T19:25:00Z"
 last_updated_by: "github-copilot"
 
-active_agents: []
+active_agents:
+  - agent_id: "github-copilot"
+    session_id: "20260309-1920-github-copilot-session-040"
+    started_at: "2026-03-09T19:20:00Z"
+    last_heartbeat: "2026-03-09T19:25:00Z"
+    current_task: "TASK-040"
+    status: "working"
+    working_branch: "main"
+    base_branch: "main"
+    locked_files:
+      - "ai/tasks.yaml"
+      - "ai/signals.yaml"
+      - "ai/agent_lock.yaml"
+      - "ai/sessions/20260309-1920-github-copilot-session-040.md"
+    notes: "TASK-040: Fixing GitHub Actions CI/CD and Maven compilation errors in job-service"
 
 ghost_entries:
   - agent_id: "antigravity"
@@ -17,4 +31,4 @@ ghost_entries:
     cleaned_by: "github-copilot [FASE-0.2b]"
     cleaned_at: "2026-03-09T02:00:00Z"
 
-note: "TASK-039 completed. Session 20260309-0400-github-copilot-session-039 released at 2026-03-09T04:25:00Z (TASK-039 code-ready for Java 21 validation)"
+note: "TASK-040 in_progress. Schema alignment (TASK-038) and security hardening (TASK-039) completed. Phase 7 CI/CD and compilation issues now being fixed."
