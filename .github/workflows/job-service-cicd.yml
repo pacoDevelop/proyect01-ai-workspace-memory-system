@@ -61,20 +61,32 @@ jobs:
           distribution: "temurin"
           cache: maven
 
-      - name: 🔄 Update Maven Dependencies (Force Refresh)
+      - name: 🧹 Clean Maven Cache (Force Fresh)
         run: |
+          rm -rf ~/.m2/repository/org/springframework/boot/spring-boot-test* 2>/dev/null || true
           cd services/job-service
-          mvn clean dependency:resolve -U -DnodeId=O
+          mvn clean
 
-      - name: 📋 Verify Test Dependencies
+      - name: 📋 Display pom.xml to verify dependencies
         run: |
           cd services/job-service
-          mvn dependency:tree | grep -E "spring-boot-test|mock" --color=never
+          echo "=== Checking spring-boot-test-autoconfigure in pom.xml ===" 
+          grep -A2 "spring-boot-test-autoconfigure" pom.xml
 
-      - name: 🏗️ Build with Maven
+      - name: 🔄 Resolve Dependencies Explicitly
         run: |
           cd services/job-service
-          mvn clean compile test-compile -U -X 2>&1 | tail -100
+          mvn dependency:resolve dependency:resolve-plugins -U
+
+      - name: 📊 Show Dependency Tree
+        run: |
+          cd services/job-service
+          mvn dependency:tree | grep -i "spring-boot-test"
+
+      - name: 🏗️ Test Compile Only (No Package)
+        run: |
+          cd services/job-service
+          mvn clean compile test-compile -DskipTests=false -U -e
 
       - name: 🧪 Run Unit Tests
         run: |
