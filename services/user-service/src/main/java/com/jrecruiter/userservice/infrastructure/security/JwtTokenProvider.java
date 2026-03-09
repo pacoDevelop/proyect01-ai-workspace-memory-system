@@ -21,7 +21,7 @@ import java.util.UUID;
 @Component
 public class JwtTokenProvider {
     
-    @Value("${app.jwt.secret:my-secret-key-for-jrecruiter-service-please-change-in-production}")
+    @Value("${app.jwt.secret}")
     private String jwtSecret;
     
     @Value("${app.jwt.expiration:86400000}")
@@ -44,11 +44,12 @@ public class JwtTokenProvider {
     }
     
     /**
-     * Generate refresh token
+     * Generate refresh token with email claim
      */
-    public String generateRefreshToken(UUID userId) {
+    public String generateRefreshToken(UUID userId, String email) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("userId", userId.toString());
+        claims.put("email", email); // FIX A07: Include email to ensure authorization works on refresh
         claims.put("type", "REFRESH");
         
         return createToken(claims, userId.toString(), refreshTokenExpiration);
@@ -85,6 +86,19 @@ public class JwtTokenProvider {
                 .get("userId", String.class);
         
         return UUID.fromString(userId);
+    }
+    
+    /**
+     * Get email from token
+     */
+    public String getEmailFromToken(String token) {
+        SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .get("email", String.class);
     }
 
     /**

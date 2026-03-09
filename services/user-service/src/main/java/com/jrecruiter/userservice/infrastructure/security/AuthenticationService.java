@@ -48,7 +48,7 @@ public class AuthenticationService {
                 .collect(Collectors.toList());
 
         String accessToken = jwtTokenProvider.generateAccessToken(credentials.getUserId(), email, roles);
-        String refreshToken = jwtTokenProvider.generateRefreshToken(credentials.getUserId());
+        String refreshToken = jwtTokenProvider.generateRefreshToken(credentials.getUserId(), email); // FIX A07: Pass email
         
         return new AuthResponse(accessToken, refreshToken, credentials.getUserId(), email);
     }
@@ -62,7 +62,8 @@ public class AuthenticationService {
         }
         
         UUID userId = jwtTokenProvider.getUserIdFromToken(refreshToken);
+        String email = jwtTokenProvider.getEmailFromToken(refreshToken); // FIX A07: Get email from token
         java.util.List<String> roles = jwtTokenProvider.getRolesFromToken(refreshToken);
-        return jwtTokenProvider.generateAccessToken(userId, "", roles);
+        return jwtTokenProvider.generateAccessToken(userId, email, roles);
     }
 }
