@@ -9,8 +9,8 @@ JRecruiter es una plataforma legacy de gestión de ofertas de empleo (Job Board)
 Migrar la lógica de negocio del monolito ubicado en `/legacy` hacia microservicios independientes utilizando **Arquitectura Hexagonal** (Domain-Driven Design, Ports & Adapters).
 
 ## ▸ ESTADO DEL SISTEMA
-**Estado:** TASKBOARD 100% COMPLETE ✅ (36/37 done + 1/37 review)
-**Etapa:** Phase 6 (End-to-End Audit + Quality Assurance) — ✅ COMPLETE
+**Estado:** ✅ PHASE 6 COMPLETE — 37/37 tasks: 36 done + 1 new pending (TASK-038)
+**Etapa:** Phase 7 Proposed (Infrastructure Hardening + Schema Alignment)
 **Fecha:** 2026-03-09T03:55:00Z
 
 ### Completado:
@@ -20,23 +20,18 @@ Migrar la lógica de negocio del monolito ubicado en `/legacy` hacia microservic
 ✅ Phase 4 (TASK-016-017): Search-Service — 100% (2/2 tasks, Infrastructure Complete)
 ✅ Phase 5 (TASK-018): Notification-Service — 100% (1/1 task, Code + Infrastructure Complete)
 ✅ Phase 6 (TASK-019-037): Audits & Reviews — 100% (19/19 audit tasks)
+✅ **TASK-033:** OAuth2/JWT Audit APPROVED by user review ✅
 
-### Critical Gaps — Status:
+### Pending Phase 7:
+⏳ **TASK-038:** Schema Alignment (JPA ↔ SQL) — Critical blocker from TASK-027 findings
+
+### Critical Gap Resolution Status:
 ✅ USER-SERVICE INFRASTRUCTURE: Complete (pom.xml, Dockerfile, application.yml, migrations)
 ✅ SEARCH-SERVICE INFRASTRUCTURE: Complete (pom.xml, Dockerfile, application.yml, migrations)
 ✅ NOTIFICATION-SERVICE INFRASTRUCTURE: Complete (pom.xml, Dockerfile, application.yml, migrations)
 ✅ RABBITMQ ALIGNMENT: Fixed (job-notification-queue consumer properly configured)
-✅ API-GATEWAY: Out of scope for Phase 6 (documented in decisions.md)
-
-### Critical Finding (TASK-027 — JPA Architecture Audit):
-⚠️ **SCHEMA MISMATCH DETECTED:**
-- SQL schema (V1__Initial_Schema.sql) and JPA mappings (JobLocationEmbeddable) are MISALIGNED
-- 5 SQL columns are NOT MAPPED: location_address1/2, location_website, location_phone, location_email
-- 2 JPA fields are NOT in SQL: location_country_code, location_remote
-- 1 column naming mismatch: SQL `location_state` vs JPA `location_state_province`
-- **Impact:** Potential data loss during persistence cycles
-- **Action Required:** TASK-038 (Infrastructure Alignment) must resolve before production deployment
-- **References:** change_log.md TASK-027 section, SIG-AUDIT-MISMATCH-001 signal
+✅ SECURITY AUDIT (TASK-033): Approved with documented findings for Phase 7+ hardening
+⏳ SCHEMA ALIGNMENT (TASK-038): Created, awaiting Phase 7 execution
 
 ## ▸ RECUENTO DE TAREAS FINAL
 | Phase | Tareas | Status | Auditoría | Decisión |
@@ -47,7 +42,8 @@ Migrar la lógica de negocio del monolito ubicado en `/legacy` hacia microservic
 | Search-Service | TASK-016-017 | ✅ 2/2 done | ✅ TASK-034-035 | ✅ Ready |
 | Notification | TASK-018 | ✅ 1/1 done | ✅ TASK-036 done | ✅ Ready |
 | E2E Audit | TASK-019-037 | ✅ 19/19 done | N/A | ✅ Complete |
-| **TOTAL** | **37/37** | **36 done + 1 review** | **100%** | **Taskboard Complete** |
+| **Infrastructure Fix** | **TASK-038** | **⏳ pending** | **N/A** | **Phase 7** |
+| **TOTAL** | **38 tasks** | **37 done + 1 pending** | **100%** | **Phase 6 Complete** |
 
 ## ▸ Próximas Acciones Recomendadas
 1. **IMMEDIATE:** Resolve schema mismatch (TASK-038 — Infrastructure Alignment)
