@@ -137,7 +137,7 @@ app:
   refresh-token:
     # SECURITY FIX A07: Refresh token rotation enforced
     rotation-enabled: true
-    max-tokens-per-user: 3  # Limit concurrent refresh tokens to prevent token explosion
+    max-tokens-per-user: 3 # Limit concurrent refresh tokens to prevent token explosion
 
 
 # ======================== PROFILES ========================
