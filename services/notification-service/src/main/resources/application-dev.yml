@@ -1,0 +1,46 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        generate_statistics: true
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/jrecruiter_notifications_dev
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 1
+
+  mail:
+    host: localhost
+    port: 1025
+    username:
+    password:
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          auth: false
+          starttls:
+            enable: false
+
+  thymeleaf:
+    cache: false
+
+logging:
+  level:
+    root: INFO
+    com.jrecruiter: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.amqp: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+  pattern:
+    console: "%clr(%d{HH:mm:ss.SSS}){faint} %clr(%-5p) %clr(---){faint} %clr([%15.15t]){cyan} %clr(%-40.40logger{39}){blue} %clr(:){faint} %m%n"
+
+server:
+  port: 8080

@@ -11,6 +11,7 @@ import org.thymeleaf.context.Context;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -60,7 +61,7 @@ public class NotificationService {
             
             String htmlContent = resolveTemplate("job-created", templateVariables);
             sendHtmlEmail(candidateEmail, "New Job Opportunity: " + jobTitle, htmlContent);
-        } catch (MessagingException e) {
+        } catch (Exception e) {
             handleEmailError("Job Created", candidateEmail, e);
         }
     }
@@ -83,7 +84,7 @@ public class NotificationService {
             
             String htmlContent = resolveTemplate("application-submitted", templateVariables);
             sendHtmlEmail(candidateEmail, "Application Submitted - " + jobTitle, htmlContent);
-        } catch (MessagingException e) {
+        } catch (Exception e) {
             handleEmailError("Application Submitted", candidateEmail, e);
         }
     }
@@ -108,7 +109,7 @@ public class NotificationService {
             
             String htmlContent = resolveTemplate("interview-invitation", templateVariables);
             sendHtmlEmail(candidateEmail, "Interview Invitation - " + jobTitle, htmlContent);
-        } catch (MessagingException e) {
+        } catch (Exception e) {
             handleEmailError("Interview Invitation", candidateEmail, e);
         }
     }
@@ -131,7 +132,7 @@ public class NotificationService {
             
             String htmlContent = resolveTemplate("application-rejected", templateVariables);
             sendHtmlEmail(candidateEmail, "Application Status Update", htmlContent);
-        } catch (MessagingException e) {
+        } catch (Exception e) {
             handleEmailError("Rejection", candidateEmail, e);
         }
     }
@@ -156,7 +157,7 @@ public class NotificationService {
             
             String htmlContent = resolveTemplate("job-offer", templateVariables);
             sendHtmlEmail(candidateEmail, "Job Offer - " + jobTitle, htmlContent);
-        } catch (MessagingException e) {
+        } catch (Exception e) {
             handleEmailError("Job Offer", candidateEmail, e);
         }
     }
@@ -181,7 +182,7 @@ public class NotificationService {
             
             String htmlContent = resolveTemplate("new-application", templateVariables);
             sendHtmlEmail(recruiterEmail, "New Application - " + jobTitle, htmlContent);
-        } catch (MessagingException e) {
+        } catch (Exception e) {
             handleEmailError("New Application", recruiterEmail, e);
         }
     }
@@ -189,7 +190,7 @@ public class NotificationService {
     /**
      * Send HTML email via SMTP
      */
-    private void sendHtmlEmail(String to, String subject, String htmlContent) throws MessagingException {
+    private void sendHtmlEmail(String to, String subject, String htmlContent) throws MessagingException, UnsupportedEncodingException {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
         
@@ -213,7 +214,7 @@ public class NotificationService {
     /**
      * Handle email sending errors (log + dead letter queue fallback)
      */
-    private void handleEmailError(String eventType, String email, MessagingException e) {
+    private void handleEmailError(String eventType, String email, Exception e) {
         System.err.println("Error sending " + eventType + " email to " + email);
         e.printStackTrace();
         // TODO: Implement dead letter queue logging for failed emails

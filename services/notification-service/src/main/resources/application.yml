@@ -1,0 +1,137 @@
+spring:
+  application:
+    name: notification-service
+
+  # ======================== JPA / HIBERNATE ========================
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        jdbc:
+          batch_size: 20
+          fetch_size: 50
+        format_sql: true
+        use_sql_comments: true
+        generate_statistics: false
+    show-sql: false
+
+  # ======================== DATASOURCE ========================
+  datasource:
+    url: jdbc:postgresql://localhost:5432/jrecruiter_notifications
+    username: ${DATABASE_USERNAME:postgres}
+    password: ${DATABASE_PASSWORD:postgres}
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+      connection-timeout: 20000
+      idle-timeout: 300000
+      max-lifetime: 1200000
+
+  # ======================== FLYWAY ========================
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+
+  # ======================== RABBITMQ ========================
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USERNAME:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
+    connection-timeout: 10000
+    listener:
+      simple:
+        concurrency: 3
+        max-concurrency: 10
+        prefetch: 1
+        acknowledge-mode: MANUAL
+        default-requeue-rejected: true
+
+  # ======================== EMAIL / SMTP ========================
+  mail:
+    host: ${SMTP_HOST:localhost}
+    port: ${SMTP_PORT:1025}
+    username: ${SMTP_USERNAME:}
+    password: ${SMTP_PASSWORD:}
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          auth: ${SMTP_AUTH:false}
+          starttls:
+            enable: ${SMTP_STARTTLS:false}
+            required: ${SMTP_STARTTLS_REQUIRED:false}
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+
+  # ======================== THYMELEAF ========================
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+    encoding: UTF-8
+    cache: true
+
+  # ======================== JACKSON ========================
+  jackson:
+    default-property-inclusion: non_null
+    time-zone: UTC
+    serialization:
+      write-dates-as-timestamps: false
+      indent-output: true
+    deserialization:
+      fail-on-unknown-properties: false
+
+  # ======================== SECURITY ========================
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${JWT_ISSUER:http://localhost:8888}
+          jwk-set-uri: ${JWT_JWK_SET_URI:http://localhost:8888/.well-known/jwks.json}
+
+  # ======================== PROFILES ========================
+  profiles:
+    active: ${SPRING_PROFILE_ACTIVE:dev}
+
+# ======================== MANAGEMENT (ACTUATOR) ========================
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: when-authorized
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+# ======================== LOGGING ========================
+logging:
+  level:
+    root: INFO
+    com.jrecruiter: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.amqp: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/notification-service.log
+
+# ======================== SERVER ========================
+server:
+  port: 8080
+  servlet:
+    context-path: /api/notifications
+  compression:
+    enabled: true
+    min-response-size: 1024
+  error:
+    include-message: always
+    include-binding-errors: on-param
