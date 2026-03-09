@@ -286,6 +286,55 @@ Actualización de `PROTOCOL.md`:
 1. **Push Obligatorio**: Todo commit debe ir seguido de un push remoto inmediato.
 2. **Integridad de Versión**: Prohibido degradar versiones de lenguaje/herramientas del proyecto para validación local. Obligatorio informar al usuario sobre discrepancias de entorno.
 
+---## [2026-03-09T03:55:00Z] TASK-033: OAuth2/JWT Security Audit APPROVED [USER-REVIEW]
+
+**Type:** security-review-approved | **Responsible:** user | **Scope:** TASK-015 (User-Service OAuth2/JWT)
+
+### Summary
+TASK-033 (OAuth2/JWT security audit) has been reviewed and approved by user. Security findings documented. Code is approved for Phase 7+ with recommendation to create TASK-039 (Security Hardening) to address identified cryptographic and auth flow issues.
+
+### Security Findings (Documented)
+- ⚠️ **A02 (Cryptographic Failures):** JWT secret hardcoded by default in JwtTokenProvider.java
+- ⚠️ **A07 (Auth Failures):** Email claim empty in refresh token flow → breaks JWT-based authorization
+- ⚠️ **A07 (Auth):** Missing refresh token rotation (token reusable N times until expiration)
+
+### Action Items for TASK-039
+1. Externalize JWT secret via environment variables (Spring Cloud Config)
+2. Fix email claim population in refresh token generation
+3. Implement refresh token rotation with one-time use enforcement
+
+### Decision
+**APPROVED FOR DEPLOYMENT WITH KNOWN ISSUES** — to be patched in upcoming security hardening phase.
+
+---
+
+## [2026-03-09T03:55:00Z] TASK-038: Schema Alignment Created [CRITICAL-BLOCKER]
+
+**Type:** infrastructure-fix | **Responsible:** github-copilot | **Scope:** Job-Service JPA schema alignment
+
+### Summary
+Created TASK-038 to resolve critical schema mismatch discovered in TASK-027 (JPA Adapter Audit). SQL schema and JPA entity mappings are misaligned, creating potential data loss scenarios during persistence cycles.
+
+### Problem Details
+**SQL Schema (V1__Initial_Schema.sql) vs JPA Mappings (JobLocationEmbeddable):**
+- 5 SQL columns NOT MAPPED: location_address1/2, location_website, location_phone, location_email
+- 2 JPA fields NOT in SQL: location_country_code, location_remote
+- 1 naming mismatch: SQL `location_state` vs JPA `location_state_province`
+
+**Impact:** Hibernate will ignore unmapped SQL columns during persistence, leading to data loss on read/write cycles.
+
+### Action Items
+1. Choose alignment strategy (extend SQL or update JPA)
+2. Create Flyway V2__Fix_Location_Schema.sql migration
+3. Update JobLocationEmbeddable or SQL schema
+4. Run integration tests with data verification
+5. Verify build success
+
+### Priority & Effort
+- **Priority:** CRITICAL (blocker for production deployment)
+- **Effort:** 2h estimated
+- **Depends On:** TASK-027 (audit that found the issue)
+
 ---
 ## [2026-03-09T03:50:00Z] TASK-027: JPA Adapter Audit Complete — CRITICAL SCHEMA MISMATCH DETECTED [SECURITY-ALERT]
 

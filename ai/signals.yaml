@@ -133,3 +133,25 @@ signals:
     read_by: []
     priority: "critical"
     requires_review: true
+
+  - id: "SIG-APPROVED-033"
+    type: "task_completed"
+    from: "github-copilot"
+    to: "any"
+    task_id: "TASK-033"
+    message: "TASK-033 APPROVED by user security review. OAuth2/JWT audit complete. Security findings documented. Code approved for Phase 7 (Infrastructure Hardening). Known issues: JWT secret hardcoding, email claim empty, refresh token rotation missing - to be addressed in TASK-039."
+    created_at: "2026-03-09T03:55:00Z"
+    read_by: []
+    priority: "high"
+    requires_review: false
+
+  - id: "SIG-CREATED-038"
+    type: "task_created"
+    from: "github-copilot"
+    to: "any"
+    task_id: "TASK-038"
+    message: "TASK-038 created: Schema Alignment (JPA ↔ SQL). Critical blocker from TASK-027. Priority: critical. Effort: 2h. Depends on: TASK-027. Action: Create Flyway V2 migration, normalize schema, update JPA mappings, verify with integration tests."
+    created_at: "2026-03-09T03:55:00Z"
+    read_by: []
+    priority: "critical"
+    requires_review: false
