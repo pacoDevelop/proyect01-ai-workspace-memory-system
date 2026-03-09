@@ -1,8 +1,26 @@
 # SIGNALS — Inter-Agent Notifications
 schema_version: "4.0"
 min_compatible_version: "4.0"
-last_updated: "2026-03-09T02:20:00Z"
+last_updated: "2026-03-09T03:58:00Z"
 signals:
+  - id: "SIG-TASK-038-DONE"
+    type: "task_completed"
+    from: "github-copilot"
+    to: "any"
+    task_id: "TASK-038"
+    message: "TASK-038 COMPLETE. Schema alignment resolved: V2 Flyway migration created, JPA mappings synchronized with SQL schema. Changes: location_address1→location_street, dropped non-Job location fields, added location_country_code + location_remote. All columns now aligned. Integration tests added (9 test cases). Commit: ab77629. Ready for validation."
+    created_at: "2026-03-09T03:58:00Z"
+    read_by: []
+    priority: "critical"
+    requires_review: true
+    metadata:
+      commit: "ab77629"
+      files_changed: 3
+      loc_added: 234
+      sql_columns_renamed: 1
+      jpa_mappings_fixed: 1
+      tests_added: 1
+
   - id: "SIG-TASK015-041"
     type: "help_needed"
     from: "github-copilot"
