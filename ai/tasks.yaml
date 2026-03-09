@@ -2722,16 +2722,16 @@ tasks:
       - Asegurar backward compatibility con tokens existentes
     priority: "high"
     severity: "critical"
-    status: "claimed"
+    status: "in_progress"
     depends_on: ["TASK-033"]
     estimated_effort: "3h"
     assigned_agent: "github-copilot"
     claimed_at: "2026-03-09T04:00:00Z"
-    started_at: null
+    started_at: "2026-03-09T04:00:10Z"
     completed_at: null
     created_at: "2026-03-09T03:58:30Z"
     created_by: "github-copilot"
-    updated_at: "2026-03-09T04:00:00Z"
+    updated_at: "2026-03-09T04:00:10Z"
     actual_effort: null
     tags: ["security", "jwt", "oauth2", "user-service", "cryptography", "authentication"]
     security_sensitive: true
@@ -2741,6 +2741,12 @@ tasks:
           from: "pending",
           to: "claimed",
           at: "2026-03-09T04:00:00Z",
+          by: "github-copilot",
+        }
+      - {
+          from: "claimed",
+          to: "in_progress",
+          at: "2026-03-09T04:00:10Z",
           by: "github-copilot",
         }
     definition_of_done_check:
