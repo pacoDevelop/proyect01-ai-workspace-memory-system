@@ -112,3 +112,13 @@ signals:
     read_by: ["antigravity", "ai-assistant"]
     priority: "high"
     requires_review: true
+  - id: "SIG-WORK-018"
+    type: "task_completed"
+    from: "github-copilot"
+    to: "any"
+    task_id: "TASK-018"
+    message: "TASK-018 COMPLETE. Infrastructure restoration successful: pom.xml (Spring Boot 3.4.0), Dockerfile (Alpine multistage), application.yml configs, Flyway V1 migration created. RabbitMQ queue alignment fixed (job-notification-queue listener with event_type routing). Build SUCCESS (mvn clean compile). All 5 critical gaps from TASK-037 E2E audit resolved. Ready for integration testing."
+    created_at: "2026-03-09T03:15:00Z"
+    read_by: ["github-copilot"]
+    priority: "high"
+    requires_review: true
