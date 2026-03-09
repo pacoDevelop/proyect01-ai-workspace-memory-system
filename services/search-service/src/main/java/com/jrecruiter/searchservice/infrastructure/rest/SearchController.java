@@ -81,6 +81,26 @@ public class SearchController {
     }
     
     /**
+     * Faceted search with aggregations
+     * GET /api/search/jobs/facets?q=spring&page=0&size=20
+     * 
+     * Returns:
+     * - Job results matching keyword
+     * - Status facets (PUBLISHED, CLOSED, etc.)
+     * - Industry facets (Technology, Healthcare, etc.)
+     * - Salary statistics (min, max, avg)
+     */
+    @GetMapping("/facets")
+    public ResponseEntity<AdvancedSearchService.FacetedSearchResult> facetedSearch(
+            @RequestParam String q,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size) {
+        
+        AdvancedSearchService.FacetedSearchResult result = advancedSearchService.facetedSearch(q, page, size);
+        return ResponseEntity.ok(result);
+    }
+    
+    /**
      * DTO for personalized search
      */
     public static class PersonalizedSearchRequest {
