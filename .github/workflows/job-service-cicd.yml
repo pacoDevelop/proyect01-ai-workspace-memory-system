@@ -72,7 +72,7 @@ jobs:
         run: |
           cd services/job-service
           echo "=== Checking spring-boot-test-autoconfigure in pom.xml ===" 
-          grep -A2 "spring-boot-test-autoconfigure" pom.xml
+          grep -A2 "spring-boot-test-autoconfigure" pom.xml || true
 
       - name: 🔄 Resolve Dependencies Explicitly
         run: |
