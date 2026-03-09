@@ -61,30 +61,28 @@ jobs:
           distribution: "temurin"
           cache: maven
 
-      - name: 🧹 Clean Maven Cache (Force Fresh)
+      - name: 🧹 Clean & Resolve Dependencies Safely
         run: |
-          rm -rf ~/.m2/repository/org/springframework/boot/spring-boot-test* 2>/dev/null || true
-          rm -rf ~/.m2/repository/org/springframework/boot/spring-boot-test-autoconfigure* 2>/dev/null || true
           cd services/job-service
-          mvn clean
+          mvn clean dependency:resolve dependency:resolve-plugins -U
 
-      - name: 📋 Display pom.xml to verify dependencies
+      - name: 🧽 Prevent Corrupt Maven Cache
+        run: |
+          echo "Checking for corrupt or incomplete Maven artifacts..."
+          cd ~/.m2/repository/org/springframework/boot/
+          find . -name "*.lastUpdated" -delete || true
+
+      - name: 📋 Verify spring-boot-test-autoconfigure
         run: |
           cd services/job-service
-          echo "=== Checking spring-boot-test-autoconfigure in pom.xml ===" 
           grep -A2 "spring-boot-test-autoconfigure" pom.xml || true
 
-      - name: 🔄 Resolve Dependencies Explicitly
-        run: |
-          cd services/job-service
-          mvn dependency:resolve dependency:resolve-plugins -U
-
-      - name: 📊 Show Dependency Tree
+      - name: 📊 Show Dependency Tree for Tests
         run: |
           cd services/job-service
           mvn dependency:tree | grep -i "spring-boot-test"
 
-      - name: 🏗️ Test Compile Only (No Package)
+      - name: 🏗️ Compile & Test
         run: |
           cd services/job-service
           mvn clean compile test-compile -DskipTests=false -U -e
@@ -117,7 +115,7 @@ jobs:
           flags: job-service
           fail_ci_if_error: false
 
-      - name: 🔍 SonarQube Analysis (if configured)
+      - name: 🔍 SonarQube Analysis (optional)
         run: |
           cd services/job-service
           mvn sonar:sonar \
@@ -133,7 +131,6 @@ jobs:
   security-scan:
     runs-on: ubuntu-latest
     name: Security Scanning
-
     permissions:
       contents: read
       security-events: write
@@ -150,8 +147,8 @@ jobs:
           format: "sarif"
           output: "trivy-results.sarif"
 
-      - name: 📤 Upload Trivy results to GitHub Security
-        uses: github/codeql-action/upload-sarif@v3
+      - name: 📤 Upload Trivy results
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: "trivy-results.sarif"
 
@@ -176,7 +173,7 @@ jobs:
           distribution: "temurin"
           cache: maven
 
-      - name: 🏗️ Build JAR with Maven
+      - name: 🏗️ Build JAR
         run: |
           cd services/job-service
           mvn clean package -DskipTests
@@ -191,7 +188,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 📝 Extract metadata
+      - name: 📝 Extract Docker Metadata
         id: meta
         uses: docker/metadata-action@v5
         with:
