@@ -28,7 +28,7 @@ public class JobLocationEmbeddable implements Serializable {
     @Column(name = "location_city", length = 100, nullable = true)
     private String city;
     
-    @Column(name = "location_state_province", length = 100, nullable = true)
+    @Column(name = "location_state", length = 100, nullable = true)
     private String stateProvince;
     
     @Column(name = "location_postal_code", length = 50, nullable = true)
