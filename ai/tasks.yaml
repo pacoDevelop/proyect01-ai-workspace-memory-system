@@ -2710,3 +2710,92 @@ tasks:
       NEXT PHASE:
       → TASK-039: Security Hardening (JWT/OAuth2 fixes)
       → TASK-040: E2E Testing with migrated schema
+
+  - id: "TASK-039"
+    title: "FIX: Security Hardening (JWT/OAuth2 Fixes)"
+    description: |
+      Resolver problemas de seguridad identificados en TASK-033 (OAuth2/JWT Audit):
+      - A02 (Cryptographic Failures): JWT secret hardcoded en properties → mover a environment variable
+      - A07 (Broken Authentication): Email claim vacío en refresh token → corregir y completar
+      - A07 (Broken Authentication): Sin rotación de refresh tokens → implementar rotación con TTL/versioning
+      - Validar cambios con test suite (security tests)
+      - Asegurar backward compatibility con tokens existentes
+    priority: "high"
+    severity: "critical"
+    status: "pending"
+    depends_on: ["TASK-033"]
+    estimated_effort: "3h"
+    assigned_agent: null
+    claimed_at: null
+    started_at: null
+    completed_at: null
+    created_at: "2026-03-09T03:58:30Z"
+    created_by: "github-copilot"
+    updated_at: "2026-03-09T03:58:30Z"
+    actual_effort: null
+    tags: ["security", "jwt", "oauth2", "user-service", "cryptography", "authentication"]
+    security_sensitive: true
+    requires_security_review: true
+    state_history: []
+    definition_of_done_check:
+      - "JWT secret moved to env var": false
+      - "Email claim in refresh token populated": false
+      - "Refresh token rotation implemented": false
+      - "Security tests passing": false
+      - "Security review approved": false
+    completion_notes: |
+      ⏳ TASK-039 PENDING — Created from TASK-033 security audit findings.
+      
+      BACKGROUND (TASK-033 OAuth2/JWT Security Audit):
+      TASK-033 identified 3 critical security issues in User-Service JWT/OAuth2 implementation:
+      
+      1. **A02 (Cryptographic Failures):** JWT Secret Hardcoded
+         - Current: JWT secret stored in application.properties as plaintext
+         - Risk: Secret exposed in version control, deployments, backups
+         - Fix: Move to environment variable (JWT_SECRET_KEY) with validation
+         - Impact: Medium (requires key rotation and redeployment)
+      
+      2. **A07 (Broken Authentication):** Empty Email Claim in Refresh Token
+         - Current: Refresh token response includes email claim but value is null/empty
+         - Risk: Downstream services cannot identify user from refresh context
+         - Fix: Populate email from User aggregate in refresh token creation
+         - Impact: Medium (affects user identification in services)
+      
+      3. **A07 (Broken Authentication):** No Refresh Token Rotation
+         - Current: Refresh tokens never expire or rotate
+         - Risk: Compromised token grants indefinite access
+         - Fix: Implement TTL-based expiry + version tracking for token rotation
+         - Impact: High (industry best practice, security hardening)
+      
+      FILES TO MODIFY:
+      - services/user-service/src/main/java/…/JwtTokenProvider.java
+      - services/user-service/src/main/resources/application*.yml
+      - services/user-service/src/test/java/…/JwtSecurityTests.java (add tests)
+      
+      IMPLEMENTATION STEPS:
+      1. Extract JWT_SECRET_KEY from application.properties → environment variable
+      2. Add email claim to refresh token payload (from User aggregate)
+      3. Implement RefreshTokenRotationService with TTL + version management
+      4. Update token validation to check refresh token version
+      5. Add migration for refresh token schema (if database-backed)
+      6. Write 6+ security tests for all 3 fixes
+      7. Security review of changes before merge
+      
+      DEPENDENCIES:
+      - Depends on: TASK-033 (audit findings) — ✅ COMPLETED
+      - May impact: TASK-015 (already implemented JWT + refresh rotation, need to verify compatibility)
+      
+      EFFORT ESTIMATE: 3h
+      - JWT secret migration: 30m
+      - Email claim addition: 45m
+      - Refresh token rotation: 1h 30m
+      - Testing + security review: 45m
+      
+      DEPLOYMENT NOTES:
+      - Requires environment variable setup in deployment pipelines
+      - May need gradual rollout (keep old tokens valid for transitional period)
+      - Add monitoring for token rotation metrics
+      
+      NEXT PHASE AFTER COMPLETION:
+      → TASK-040: E2E Testing with all Phase 7 changes
+      → TASK-041: Deployment readiness verification
