@@ -4,7 +4,19 @@ min_compatible_version: "2.0"
 last_updated: "2026-03-09T03:35:00Z"
 last_updated_by: "github-copilot"
 
-active_agents: []
+active_agents:
+  - agent_id: "github-copilot"
+    agent_type: "ai-assistant"
+    task_id: "TASK-038"
+    task_title: "FIX: Schema Alignment (JPA Mappings ↔ SQL)"
+    priority: "critical"
+    claimed_at: "2026-03-09T03:56:10Z"
+    heartbeat_at: "2026-03-09T03:56:10Z"
+    last_action: "FASE 1 GATE 1B: Registered in agent_lock"
+    session_id: "20260309-0400-copilot-session-TASK-038"
+    status: "active"
+    expected_completion: "2026-03-09T05:56:10Z"
+    backoff_retries: 0
 
 ghost_entries:
   - agent_id: "antigravity"
