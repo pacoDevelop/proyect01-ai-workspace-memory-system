@@ -1,24 +1,10 @@
 # AGENT LOCK — Mutex distribuido
 schema_version: "3.0"
 min_compatible_version: "2.0"
-last_updated: "2026-03-09T19:25:00Z"
+last_updated: "2026-03-09T19:40:00Z"
 last_updated_by: "github-copilot"
 
-active_agents:
-  - agent_id: "github-copilot"
-    session_id: "20260309-1920-github-copilot-session-040"
-    started_at: "2026-03-09T19:20:00Z"
-    last_heartbeat: "2026-03-09T19:25:00Z"
-    current_task: "TASK-040"
-    status: "working"
-    working_branch: "main"
-    base_branch: "main"
-    locked_files:
-      - "ai/tasks.yaml"
-      - "ai/signals.yaml"
-      - "ai/agent_lock.yaml"
-      - "ai/sessions/20260309-1920-github-copilot-session-040.md"
-    notes: "TASK-040: Fixing GitHub Actions CI/CD and Maven compilation errors in job-service"
+active_agents: []
 
 ghost_entries:
   - agent_id: "antigravity"
