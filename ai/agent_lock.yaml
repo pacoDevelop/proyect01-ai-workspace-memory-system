@@ -1,10 +1,17 @@
 # AGENT LOCK — Mutex distribuido
 schema_version: "3.0"
 min_compatible_version: "2.0"
-last_updated: "2026-03-09T20:07:00Z"
+last_updated: "2026-03-09T21:45:00Z"
 last_updated_by: "github-copilot"
 
-active_agents: []
+active_agents:
+  - agent_id: "github-copilot"
+    session_id: "20260309-2145-session-042"
+    started_at: "2026-03-09T21:45:00Z"
+    last_heartbeat: "2026-03-09T21:45:00Z"
+    current_task: "TASK-042"
+    current_phase: "FASE 0 - Sync & Setup"
+    status: "active"
 
 ghost_entries:
   - agent_id: "antigravity"
@@ -17,4 +24,4 @@ ghost_entries:
     cleaned_by: "github-copilot [FASE-0.2b]"
     cleaned_at: "2026-03-09T02:00:00Z"
 
-note: "TASK-040 in_progress. Schema alignment (TASK-038) and security hardening (TASK-039) completed. Phase 7 CI/CD and compilation issues now being fixed."
+note: "TASK-042 in_progress - Comprehensive test dependency audit across all microservices. TASK-041 fixed spring-boot-test-autoconfigure in job-service."
