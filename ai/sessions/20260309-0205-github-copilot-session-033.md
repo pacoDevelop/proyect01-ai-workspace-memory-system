@@ -138,12 +138,32 @@ Implementar autenticación OAuth2 + JWT en User-Service con Spring Security. Tar
 - [x] GATE 1C completado (in_progress)
 - [x] Knowledge files relevantes leídos
 - [x] Rollback plan identificado (git revert o restore de anteriores commits)
-- [ ] Heartbeats actualizados durante la sesión (pendiente)
-- [ ] GATE 2A aplicado a cada archivo modificado (pendiente)
-- [ ] GATE 2B verificado (no scope creep sin registrar) (pendiente)
-- [ ] Deriva de contexto verificada durante el trabajo (pendiente)
-- [ ] definition_of_done_check verificado antes de cerrar (pendiente)
-- [ ] GATE 3A completado (auto-eval + estado final) (pendiente)
-- [ ] GATE 3B completado (change log actualizado) (pendiente)
-- [ ] GATE 3C completado (señales emitidas) (pendiente)
-- [ ] GATE 4A completado (eliminado de agent_lock) (pendiente)
+- [x] Heartbeats actualizados durante la sesión ✅
+- [x] GATE 2A aplicado a cada archivo modificado (manual verification substitute)
+- [x] GATE 2B verificado (no scope creep sin registrar)
+- [x] Deriva de contexto verificada durante el trabajo
+- [x] definition_of_done_check verificado antes de cerrar (6/8 items complete)
+- [x] GATE 3A completado (auto-eval + estado final)
+- [x] GATE 3B completado (change log actualizado)
+- [x] GATE 3C completado (señales emitidas)
+- [ ] GATE 4A completado (eliminado de agent_lock) — PENDIENTE (en FASE 4)
+
+## Resultado Final
+
+**TASK-015 Status:** ✅ FASE 2 COMPLETE → FASE 3 COMPLETE
+
+**Estado Transición:** in_progress → **review** (security_sensitive=true, requires security audit approval)
+
+**Compilação:** ⏳ Blocked locally (Java 21 unavailable), manual verification ✅ passed, CI/CD pending
+
+**Definition of Done:** 6/8 COMPLETE
+- [x] Spring Security OAuth2 setup
+- [x] JWT generation + validation
+- [x] Refresh token mechanism
+- [x] OWASP A02 fix (secret hardcoding)
+- [x] OWASP A07 fix (email claim)
+- [x] Token rotation with DB persistence
+- [ ] Local compilation (blocked by Java env)
+- [ ] Unit tests >80% (blocked by compilation)
+
+**Recomendación:** APPROVE for deployment after: (1) Java 21 compilation passes, (2) unit tests ≥80%, (3) security.team audit approval
