@@ -1,10 +1,10 @@
 schema_version: "3.0"
 min_compatible_version: "2.0"
-last_updated: "2026-03-09T19:30:00Z"
+last_updated: "2026-03-09T21:45:00Z"
 last_updated_by: "github-copilot"
-total_tasks: 40
+total_tasks: 41
 pending: 6
-in_progress: 0
+in_progress: 1
 blocked: 0
 done: 33
 review: 1
@@ -3233,5 +3233,84 @@ tasks:
           from: "in_progress",
           to: "done",
           at: "2026-03-09T20:07:00Z",
+          by: "github-copilot",
+        }
+
+  - id: "TASK-042"
+    title: "AUDIT: Verify test dependencies across all microservices"
+    description: |
+      Comprehensive audit of Spring Boot test dependencies across ALL microservices.
+      
+      **Context:**
+      TASK-041 fixed missing spring-boot-test-autoconfigure in job-service, but only addressed 
+      the compilation failure in JobControllerIntegrationTest.java. However, there may be:
+      1. Other test files in job-service using similar annotations (@DataJpaTest, @RestClientTest, etc.)
+      2. Existing test files in user-service, notification-service, and search-service
+      3. Incomplete dependency declarations in other service pom.xml files
+      
+      **Objectives:**
+      1. Scan ALL test files (*.java) in src/test/java across ALL services
+      2. Identify which Spring Boot test annotations are used:
+         - @WebMvcTest, @DataJpaTest, @DataJdbcTest, @JsonTest, @RestClientTest
+         - @SpringBootTest, @MockBean, and other Spring Test fixtures
+      3. Audit each service's pom.xml for test dependencies:
+         - spring-boot-test
+         - spring-boot-test-autoconfigure
+         - spring-security-test
+         - testcontainers
+         - mockito dependencies
+      4. Identify missing dependencies and create fix PRs if needed
+      5. Prevent future build failures by establishing dependency checklist
+      
+      **Services to audit:**
+      - ✅ job-service (already fixed in TASK-041)
+      - ⚠️  user-service (JwtSecurityTests found, pom.xml needs verification)
+      - ⚠️  notification-service (pom.xml needs verification)
+      - ⚠️  search-service (full audit needed)
+      
+      **Deliverables:**
+      - Audit report documenting all findings
+      - List of missing dependencies per service
+      - Fix commits for each service (if needed)
+      - Updated dependency checklist for future tasks
+    priority: "high"
+    severity: "important"
+    status: "in_progress"
+    depends_on: ["TASK-041"]
+    estimated_effort: "1h"
+    actual_effort: "0m"
+    assigned_agent: "github-copilot"
+    claimed_at: "2026-03-09T21:45:00Z"
+    started_at: "2026-03-09T21:45:00Z"
+    created_at: "2026-03-09T21:45:00Z"
+    created_by: "github-copilot"
+    updated_at: "2026-03-09T21:45:00Z"
+    tags: ["audit", "testing", "maven", "all-services"]
+    security_sensitive: false
+    definition_of_done_check:
+      - "All test files scanned across all services": false
+      - "Annotations used documented": false
+      - "pom.xml dependencies verified": false
+      - "Missing dependencies identified": false
+      - "Fixes applied to all services": false
+      - "Audit report created": false
+    completion_notes: ""
+    history:
+      - {
+          from: "pending",
+          to: "pending",
+          at: "2026-03-09T21:45:00Z",
+          by: "system",
+        }
+      - {
+          from: "pending",
+          to: "claimed",
+          at: "2026-03-09T21:45:00Z",
+          by: "github-copilot",
+        }
+      - {
+          from: "claimed",
+          to: "in_progress",
+          at: "2026-03-09T21:45:00Z",
           by: "github-copilot",
         }
