@@ -61,31 +61,31 @@ jobs:
           distribution: "temurin"
           cache: maven
 
-      - name: 🧹 Clean & Resolve Dependencies Safely
+      - name: 🧹 Clean & Force Resolve Maven Dependencies
         run: |
           cd services/job-service
-          mvn clean dependency:resolve dependency:resolve-plugins -U
-
-      - name: 🧽 Prevent Corrupt Maven Cache
-        run: |
-          echo "Checking for corrupt or incomplete Maven artifacts..."
-          cd ~/.m2/repository/org/springframework/boot/
-          find . -name "*.lastUpdated" -delete || true
+          mvn clean
+          mvn dependency:purge-local-repository -DreResolve=true -DactTransitively=true
 
       - name: 📋 Verify spring-boot-test-autoconfigure
         run: |
           cd services/job-service
-          grep -A2 "spring-boot-test-autoconfigure" pom.xml || true
+          grep -A2 "spring-boot-test-autoconfigure" pom.xml || echo "No issues found"
 
-      - name: 📊 Show Dependency Tree for Tests
+      - name: 🔄 Resolve All Dependencies
+        run: |
+          cd services/job-service
+          mvn dependency:resolve dependency:resolve-plugins -U
+
+      - name: 📊 Show Dependency Tree (Spring Boot Tests)
         run: |
           cd services/job-service
           mvn dependency:tree | grep -i "spring-boot-test"
 
-      - name: 🏗️ Compile & Test
+      - name: 🏗️ Compile & Test Compile
         run: |
           cd services/job-service
-          mvn clean compile test-compile -DskipTests=false -U -e
+          mvn clean compile test-compile -U
 
       - name: 🧪 Run Unit Tests
         run: |
