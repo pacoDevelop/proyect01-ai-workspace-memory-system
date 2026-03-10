@@ -1,9 +1,9 @@
 schema_version: "3.0"
 min_compatible_version: "2.0"
-last_updated: "2026-03-10T01:45:00Z"
+last_updated: "2026-03-10T02:45:00Z"
 last_updated_by: "github-copilot"
-total_tasks: 45
-pending: 2
+total_tasks: 47
+pending: 4
 in_progress: 0
 blocked: 0
 done: 42
@@ -3914,3 +3914,249 @@ aning cache AGGRESSIVELY, we guarantee Maven will fetch fresh dependencies.
       - {from: "pending", to: "claimed", at: "2026-03-10T02:05:00Z", by: "github-copilot"}
       - {from: "claimed", to: "in_progress", at: "2026-03-10T02:05:00Z", by: "github-copilot"}
       - {from: "in_progress", to: "done", at: "2026-03-10T02:10:00Z", by: "github-copilot"}
+
+  # ============================================================================
+  # TASK-047: Fix Hibernate Session Management in JobRepositoryIntegrationTest
+  # ============================================================================
+  
+  - id: "TASK-047"
+    title: "FIX: JobRepositoryIntegrationTest - Hibernate session management issues"
+    description: |
+      Three repository integration tests fail due to Hibernate session lifecycle management:
+      
+      1. testCountByStatus() - "A different object with the same identifier value was already associated with the session"
+         - Problem: Saves job -> modifies it -> attempts to re-save in same transaction without proper session management
+         - Expected: Status count by job status
+         - Actual: Hibernate NonUniqueObjectException
+      
+      2. testFindByStatus() - Same session management issue
+         - Multiple save/modify cycles on same entity
+         - Session detachment/attachment mismatch
+      
+      3. testUpdateJobState() - Same session management issue
+         - Modifies job state and attempts merge without proper handling
+      
+      Root Cause Analysis:
+      - @DataJpaTest creates EntityManager/Hibernate session scoped to test method
+      - Multiple save/update/save cycles on same entity without proper merge()
+      - Test fixtures create detached entities, then attempt to re-attach without merge()
+      - TestEntityManager.persist() vs merge() distinction not properly handled
+      
+      Solutions:
+      1. Use TestEntityManager.merge() instead of save() for modified entities
+      2. Clear EntityManager cache between operations: testEntityManager.clear()
+      3. Detach and re-attach entities: testEntityManager.detach(entity)
+      4. Use repository.saveAndFlush() instead of save() to ensure immediate database sync
+      5. Refactor test fixtures to avoid state mutations on same entity
+    priority: "high"
+    severity: "important"
+    status: "pending"
+    depends_on: ["TASK-045"]
+    estimated_effort: "1.5h"
+    actual_effort: null
+    assigned_agent: null
+    claimed_at: null
+    started_at: null
+    completed_at: null
+    created_at: "2026-03-10T02:45:00Z"
+    created_by: "github-copilot"
+    updated_at: "2026-03-10T02:45:00Z"
+    tags: ["test", "persistence", "hibernate", "job-service", "infrastructure"]
+    security_sensitive: false
+    definition_of_done_check:
+      - "testCountByStatus passes (no NonUniqueObjectException)": false
+      - "testFindByStatus passes": false
+      - "testUpdateJobState passes": false
+      - "All JobRepositoryIntegrationTest methods pass": false
+      - "No Hibernate session lifecycle warnings": false
+      - "Test runs with mvn test -Dtest=JobRepositoryIntegrationTest": false
+    
+    completion_notes: |
+      [PENDING - Not Yet Started]
+      
+      This task addresses the remaining JobRepositoryIntegrationTest failures
+      identified during TASK-045 and TASK-046 implementation.
+      
+      **CURRENT FAILURE DETAILS:**
+      
+      From full test run (mvn clean test):
+      ```
+      [ERROR] testCountByStatus(JobRepositoryIntegrationTest) Time elapsed: 0.256 s -  ERROR
+      java.lang.IllegalStateException: A different object with the same identifier value was
+      already associated with the session
+      
+      [ERROR] testFindByStatus(JobRepositoryIntegrationTest) Time elapsed: 0.189 s - ERROR
+      [Same error as above]
+      
+      [ERROR] testUpdateJobState(JobRepositoryIntegrationTest) Time elapsed: 0.118 s - ERROR
+      [Same error as above]
+      ```
+      
+      **INVESTIGATION STEPS:**
+      1. Examine JobRepositoryIntegrationTest test methods
+      2. Identify all job entity save/modify/save sequences
+      3. Locate where multiple entity instances with same ID are created
+      4. Check EntityManager.persist() vs merge() usage
+      5. Verify TestEntityManager configuration and lifecycle
+      
+      **IMPLEMENTATION STRATEGY:**
+      
+      Option A: Use merge() for modified entities (RECOMMENDED)
+      ```java
+      Job savedJob = testEntityManager.persist(job);
+      testEntityManager.flush();
+      savedJob.setStatus(JobStatus.PUBLISHED);  // Modify
+      Job merged = testEntityManager.merge(savedJob);  // Merge instead of save
+      testEntityManager.flush();
+      ```
+      
+      Option B: Use clear() to detach between operations
+      ```java
+      Job savedJob = testEntityManager.persist(job);
+      testEntityManager.flush();
+      testEntityManager.clear();  // Detach all
+      Job modified = new Job(...);  // Create fresh instance
+      testEntityManager.persist(modified);  // Re-persist
+      ```
+      
+      Option C: Use saveAndFlush() for immediate sync
+      ```java
+      Job savedJob = jobRepository.saveAndFlush(job);
+      savedJob.setStatus(JobStatus.PUBLISHED);
+      Job updated = jobRepository.saveAndFlush(savedJob);  // Force flush
+      ```
+      
+      **FILES TO MODIFY:**
+      - services/job-service/src/test/java/.../JobRepositoryIntegrationTest.java
+      
+      **EXPECTED OUTCOME:**
+      - All 11 JobRepositoryIntegrationTest tests pass
+      - No Hibernate session management warnings
+      - Test suite clean with 0 failures, 0 errors
+      
+      **RELATED TASKS:**
+      - TASK-045: H2 Embedded Database (parent task, now complete)
+      - TASK-046: JobController Tests (completed, controller-focused)
+      - TASK-047: This task (persistence layer focus)
+      
+    state_history:
+      - {from: "pending", to: "pending", at: "2026-03-10T02:45:00Z", by: "github-copilot"}
+
+  # ============================================================================
+  # TASK-048: Fix JobServiceApplicationTests - Application Context Loading
+  # ============================================================================
+  
+  - id: "TASK-048"
+    title: "FIX: JobServiceApplicationTests - @SpringBootTest context loading with test profile"
+    description: |
+      Application context test fails due to attempting to connect to PostgreSQL dev instance:
+      
+      JobServiceApplicationTests.contextLoads() - Application fails to start
+      Expected: Context loads successfully using test configuration
+      Actual: IOException connecting to PostgreSQL localhost:5432 (dev database not running)
+      
+      Root Cause Analysis:
+      - @SpringBootTest loads full application context without specifying test profile
+      - Default application.yml tries to connect to PostgreSQL in dev environment
+      - No @ActiveProfiles("test") annotation to switch to application-test.yml
+      - Flyway migration runs against non-existent PostgreSQL instance
+      
+      Solutions:
+      1. Add @ActiveProfiles("test") annotation to test class
+      2. Or: Add @SpringBootTest(properties = {"spring.flyway.enabled=false"})
+      3. Or: Disable Flyway in application.yml for test environment
+      4. Ensure application-test.yml is properly configured with H2
+      5. Verify Flyway can run with H2 schema or disable it for tests
+    priority: "medium"
+    severity: "important"
+    status: "pending"
+    depends_on: ["TASK-045"]
+    estimated_effort: "30m"
+    actual_effort: null
+    assigned_agent: null
+    claimed_at: null
+    started_at: null
+    completed_at: null
+    created_at: "2026-03-10T02:45:00Z"
+    created_by: "github-copilot"
+    updated_at: "2026-03-10T02:45:00Z"
+    tags: ["test", "spring-boot", "application-context", "job-service", "infrastructure"]
+    security_sensitive: false
+    definition_of_done_check:
+      - "contextLoads() passes without PostgreSQL connection": false
+      - "Application starts with H2 in-memory database": false
+      - "No Flyway migration errors": false
+      - "mvn test -Dtest=JobServiceApplicationTests passes": false
+      - "Test output shows H2 database initialization": false
+    
+    completion_notes: |
+      [PENDING - Not Yet Started]
+      
+      This task addresses the JobServiceApplicationTests.contextLoads() failure
+      identified during TASK-045 and TASK-046 implementation.
+      
+      **CURRENT FAILURE:**
+      ```
+      [ERROR] contextLoads(JobServiceApplicationTests) Time elapsed: 2.154 s - ERROR
+      java.net.ConnectException: Connection refused: localhost:5432
+      ```
+      
+      Application is attempting to connect to PostgreSQL dev instance during test startup.
+      Since test environment doesn't have PostgreSQL running, context fails to initialize.
+      
+      **INVESTIGATION STEPS:**
+      1. Examine JobServiceApplicationTests annotation configuration
+      2. Check if @ActiveProfiles("test") is present
+      3. Verify application-test.yml exists and has H2 configuration
+      4. Check if Flyway is enabled in test profile
+      5. Review application.yml for PostgreSQL connection strings
+      
+      **IMPLEMENTATION OPTIONS:**
+      
+      Option A: Add @ActiveProfiles annotation (SIMPLEST)
+      ```java
+      @SpringBootTest
+      @ActiveProfiles("test")
+      class JobServiceApplicationTests {
+          @Test
+          void contextLoads() {
+          }
+      }
+      ```
+      
+      Option B: Disable Flyway in test annotation (MINIMAL)
+      ```java
+      @SpringBootTest(properties = {
+          "spring.flyway.enabled=false"
+      })
+      class JobServiceApplicationTests {
+      }
+      ```
+      
+      Option C: Configure test profile in TestContainer (ADVANCED)
+      ```java
+      @TestcontainersTest
+      @SpringBootTest
+      @ServiceConnection
+      static class Tests {
+      }
+      ```
+      
+      **FILES TO MODIFY:**
+      - services/job-service/src/test/java/.../JobServiceApplicationTests.java
+      - services/job-service/src/test/resources/application-test.yml (already exists)
+      
+      **EXPECTED OUTCOME:**
+      - JobServiceApplicationTests.contextLoads() passes
+      - Application initializes with H2 in-memory database
+      - No PostgreSQL connection attempts
+      - Test marked as @SpringBootTest with proper profile activation
+      
+      **RELATED TASKS:**
+      - TASK-045: H2 Embedded Database (foundation, now complete)
+      - TASK-046: JobController Tests (completed, this is separate)
+      - TASK-047: JobRepositoryIntegrationTest (parallel task)
+      - TASK-048: This task (application context focus)
+      
+    state_history:
+      - {from: "pending", to: "pending", at: "2026-03-10T02:45:00Z", by: "github-copilot"}
