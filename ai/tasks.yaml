@@ -3,10 +3,10 @@ min_compatible_version: "2.0"
 last_updated: "2026-03-10T02:45:00Z"
 last_updated_by: "github-copilot"
 total_tasks: 47
-pending: 4
+pending: 2
 in_progress: 0
 blocked: 0
-done: 42
+done: 44
 review: 1
 
 # ============================================================================
