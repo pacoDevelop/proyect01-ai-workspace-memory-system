@@ -14,7 +14,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: jrecruiter/job-service
+  IMAGE_NAME: pacoDevelop/jrecruiter-job-service
 
 jobs:
   build:
