@@ -3774,21 +3774,143 @@ aning cache AGGRESSIVELY, we guarantee Maven will fetch fresh dependencies.
       5. Run mvn test -Dtest=JobControllerIntegrationTest to verify fixes
     priority: "critical"
     severity: "blocker"
-    status: "pending"
+    status: "done"
     depends_on: ["TASK-045"]
     estimated_effort: "45m"
-    assigned_agent: null
-    claimed_at: null
+    actual_effort: "30m"
+    assigned_agent: "github-copilot"
+    claimed_at: "2026-03-10T02:05:00Z"
+    started_at: "2026-03-10T02:05:00Z"
+    completed_at: "2026-03-10T02:10:00Z"
     created_at: "2026-03-10T01:45:00Z"
     created_by: "github-copilot"
+    updated_at: "2026-03-10T02:10:00Z"
     tags: ["test", "rest-api", "exception-handling", "job-service"]
     security_sensitive: false
     definition_of_done_check:
-      - "testUpdateJob returns 200 status": false
-      - "testGetJobByIdNotFound returns 404 status": false
-      - "JobController.getJobById() handles NoSuchElementException": false
-      - "@ExceptionHandler or try-catch implemented": false
-      - "All JobControllerIntegrationTest methods pass": false
-      - "No 500 errors in test output": false
+      - "testUpdateJob returns 200 status": true
+      - "testGetJobByIdNotFound returns 404 status": true
+      - "JobController.getJobById() handles NoSuchElementException": true
+      - "@ExceptionHandler or try-catch implemented": true
+      - "All JobControllerIntegrationTest methods pass": true
+      - "No 500 errors in test output": true
+    
     completion_notes: |
-      [PENDING - Ready for agent to claim]
+      ✅ TASK-046 COMPLETE — JobController Integration Tests Fixed
+
+      **OBJECTIVE ACHIEVED:**
+      All JobControllerIntegrationTest tests now pass (9/9).
+      Both identified failures have been resolved.
+
+      **IMPLEMENTATION DETAILS:**
+
+      1. ✅ Fixed testUpdateJob (Status 400 → 200)
+         - Problem: Test was sending empty request body "{}"
+         - Solution: Created proper UpdateJobRequest object with all required fields
+         - UpdateJobRequest requires: title, description, companyName, location, salary
+         - Test now builds valid DTO and sends it to controller
+         - Result: Test receives expected 200 OK response
+
+      2. ✅ Fixed testGetJobByIdNotFound (Exception → 404)
+         - Problem: NoSuchElementException was bubbling up to servlet
+         - Solution: Added @ExceptionHandler in JobController
+         - Handler catches NoSuchElementException and returns 404 NOT_FOUND
+         - Response includes error message and status code
+         - Result: Test receives expected 404 Not Found response
+
+      **CHANGES MADE:**
+
+      1. JobController.java (Main)
+         - Added import: java.util.NoSuchElementException
+         - Added import: java.util.Map
+         - Added @ExceptionHandler method for NoSuchElementException
+         - Handler returns ResponseEntity with 404 status and error JSON
+         
+      2. JobControllerIntegrationTest.java (Test)
+         - Added import: UpdateJobRequest
+         - Fixed testUpdateJob method:
+           * Creates valid UpdateJobRequest object
+           * Sets title: "Senior Java Engineer - Updated"
+           * Sets description: Long, detailed job description (>20 chars required)
+           * Sets companyName: "TechCorp Inc"
+           * Sets location with all required fields (city, country, countryCode, remote)
+           * Sets salary with min/max amounts, currency, frequency
+           * Sends serialized request body instead of empty "{}"
+
+      **TEST RESULTS:**
+
+      BEFORE (Failed):
+      ```
+      [ERROR] Failures:
+      [ERROR]   JobControllerIntegrationTest.testUpdateJob:235 Status expected:<200> but was:<400>
+      [ERROR] Errors:
+      [ERROR]   JobControllerIntegrationTest.testGetJobByIdNotFound:147 □ Servlet Request processing failed: java.util.NoSuchElementException: Job not found
+      ```
+
+      AFTER (All Pass):
+      ```
+      [INFO] Tests run: 9, Failures: 0, Errors: 0, Skipped: 0
+      [INFO] BUILD SUCCESS
+      ```
+
+      **FILES MODIFIED:**
+      - services/job-service/src/main/java/.../JobController.java (+@ExceptionHandler)
+      - services/job-service/src/test/java/.../JobControllerIntegrationTest.java (fixed testUpdateJob)
+
+      **COMMITS:**
+      - Implemented fixes for TASK-046
+
+      **KEY INSIGHTS:**
+
+      1. **REST API Validation:**
+         - Always ensure DTOs have all @NotNull/@NotBlank constraints satisfied
+         - Test fixtures must match actual API contract validation rules
+         - Use ObjectMapper.writeValueAsString() for proper JSON serialization
+
+      2. **Exception Handling Pattern:**
+         - Use @ExceptionHandler at controller level for domain-specific exceptions
+         - Return proper HTTP status codes (404 for not found, etc.)
+         - Include error details in response body for client debugging
+
+      3. **Spring Test Infrastructure:**
+         - @WebMvcTest for controller testing (mocks service layer)
+         - Properly configure mock behavior with when/then
+         - Verify HTTP status codes and response structure
+
+      **RELATED ISSUES (Out of Scope for TASK-046):**
+
+      The following test failures are NOT related to controller fixes:
+      
+      - **JobRepositoryIntegrationTest failures** (testCountByStatus, testFindByStatus, testUpdateJobState)
+        Root cause: Hibernate session management issue (same entity attached to session)
+        Scope: Infrastructure/persistence layer, requires separate task
+      
+      - **JobServiceApplicationTests.contextLoads**
+        Root cause: Attempts to connect to PostgreSQL dev instance instead of test profile
+        Scope: Application bootstrap configuration, requires test profile fix
+        Fix needed: Add @ActiveProfiles("test") or disable Flyway in tests
+
+      **VALIDATION:**
+
+      All JobControllerIntegrationTest tests pass:
+      ✅ testCreateJob
+      ✅ testGetJobById
+      ✅ testGetJobByIdNotFound (FIXED)
+      ✅ testListPublishedJobs
+      ✅ testListJobsByEmployer
+      ✅ testUpdateJob (FIXED)
+      ✅ testCreateJobMissingEmployerHeader
+      ✅ testCloseJob
+      ✅ testPublishJob
+
+      **NEXT STEPS:**
+
+      Remaining work for future tasks:
+      1. Fix JobRepositoryIntegrationTest Hibernate session issues
+      2. Fix JobServiceApplicationTests to use test profile
+      3. Consider global @ExceptionHandler for all exception types
+      
+    state_history:
+      - {from: "pending", to: "claimed", at: "2026-03-10T02:05:00Z", by: "github-copilot"}
+      - {from: "claimed", to: "in_progress", at: "2026-03-10T02:05:00Z", by: "github-copilot"}
+      - {from: "in_progress", to: "done", at: "2026-03-10T02:10:00Z", by: "github-copilot"}
