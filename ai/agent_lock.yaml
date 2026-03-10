@@ -1,25 +1,10 @@
 # AGENT LOCK — Mutex distribuido
 schema_version: "3.0"
 min_compatible_version: "2.0"
-last_updated: "2026-03-10T01:50:00Z"
+last_updated: "2026-03-10T02:00:00Z"
 last_updated_by: "github-copilot"
 
-active_agents:
-  - agent_id: "github-copilot"
-    session_id: "20260310-0150-github-copilot-session-002"
-    started_at: "2026-03-10T01:50:00Z"
-    last_heartbeat: "2026-03-10T01:50:00Z"
-    current_task: "TASK-045"
-    status: "working"
-    working_branch: "feat/TASK-045-h2-embedded-database"
-    base_branch: "main"
-    locked_files:
-      - "ai/tasks.yaml"
-      - "services/job-service/pom.xml"
-      - "services/user-service/pom.xml"
-      - "services/notification-service/pom.xml"
-      - "services/search-service/pom.xml"
-    notes: "Adding H2 embedded database dependency for Spring Boot test integration"
+active_agents: []
 
 ghost_entries:
   - agent_id: "antigravity"
