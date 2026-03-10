@@ -18,6 +18,9 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import org.springframework.security.test.context.support.WithMockUser;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jrecruiter.jobservice.application.dtos.CreateJobRequest;
 import com.jrecruiter.jobservice.application.dtos.JobResponse;
@@ -34,6 +37,7 @@ import com.jrecruiter.jobservice.application.services.JobApplicationService;
  */
 @WebMvcTest(JobController.class)
 @DisplayName("Job REST Controller Integration Tests")
+@WithMockUser
 class JobControllerIntegrationTest {
     
     @Autowired
@@ -112,6 +116,7 @@ class JobControllerIntegrationTest {
                 .thenReturn(mockJobResponse);
         
         mockMvc.perform(post("/api/jobs")
+                .with(csrf())
                 .header("X-Employer-ID", employerId.toString())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
@@ -175,6 +180,7 @@ class JobControllerIntegrationTest {
         when(jobApplicationService.publishJob(jobId)).thenReturn(mockJobResponse);
         
         mockMvc.perform(post("/api/jobs/{id}/publish", jobId)
+                .with(csrf())
                 .header("X-Employer-ID", employerId.toString()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status").value("PUBLISHED"))
@@ -192,6 +198,7 @@ class JobControllerIntegrationTest {
         when(jobApplicationService.closeJob(eq(jobId), anyString())).thenReturn(mockJobResponse);
         
         mockMvc.perform(post("/api/jobs/{id}/close", jobId)
+                .with(csrf())
                 .header("X-Employer-ID", employerId.toString())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(closeRequest)))
@@ -205,6 +212,7 @@ class JobControllerIntegrationTest {
         doNothing().when(jobApplicationService).deleteJob(jobId);
         
         mockMvc.perform(delete("/api/jobs/{id}", jobId)
+                .with(csrf())
                 .header("X-Employer-ID", employerId.toString()))
                 .andExpect(status().isNoContent());
     }
@@ -220,6 +228,7 @@ class JobControllerIntegrationTest {
         when(jobApplicationService.updateJob(eq(jobId), any())).thenReturn(mockJobResponse);
         
         mockMvc.perform(put("/api/jobs/{id}", jobId)
+                .with(csrf())
                 .header("X-Employer-ID", employerId.toString())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{}"))
@@ -232,6 +241,7 @@ class JobControllerIntegrationTest {
         CreateJobRequest request = new CreateJobRequest();
         
         mockMvc.perform(post("/api/jobs")
+                .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest());

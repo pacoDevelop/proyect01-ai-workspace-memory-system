@@ -14,7 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 
 import com.jrecruiter.jobservice.domain.aggregates.Job;
 import com.jrecruiter.jobservice.domain.repositories.JobRepository;
@@ -39,6 +41,11 @@ import com.jrecruiter.jobservice.domain.valueobjects.OfferedBy;
 @DataJpaTest
 @Import({PostgresJobRepository.class})
 @ActiveProfiles("test")
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
+@TestPropertySource(properties = {
+    "spring.flyway.enabled=false",
+    "spring.jpa.hibernate.ddl-auto=create-drop"
+})
 @DisplayName("PostgreSQL Job Repository Integration Tests")
 class JobRepositoryIntegrationTest {
     
