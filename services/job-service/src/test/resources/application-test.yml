@@ -1,0 +1,66 @@
+# TEST PROFILE Configuration
+# Used by @ActiveProfiles("test") in test classes
+# Spring automatically loads this file when profile is active
+
+spring:
+  application:
+    name: job-service-test
+
+  # DATA SOURCE - H2 IN-MEMORY DATABASE FOR TESTS
+  datasource:
+    url: jdbc:h2:mem:testdb;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: 
+
+  # JPA/HIBERNATE CONFIGURATION
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop  # Create schema on startup, drop on shutdown
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        jdbc:
+          batch_size: 10
+        dialect: org.hibernate.dialect.H2Dialect
+
+  # SQL INITIALIZATION (Flyway disabled in tests)
+  flyway:
+    enabled: false
+
+  # H2 Console (optional, useful for debugging)
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  # RABBITMQ (Mock/Disable in tests)
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: /
+
+# SECURITY
+security:
+  jwt:
+    secret: test-secret-key-for-testing-only-min-32-chars-long!!!
+    expiration: 86400000  # 24 hours in milliseconds
+
+# LOGGING
+logging:
+  level:
+    root: INFO
+    com.jrecruiter: DEBUG
+    org.springframework: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql: TRACE
+
+# SERVER
+server:
+  port: 8080
+  servlet:
+    context-path: /api
