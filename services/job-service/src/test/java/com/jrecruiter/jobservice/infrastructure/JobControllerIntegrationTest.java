@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jrecruiter.jobservice.application.dtos.CreateJobRequest;
 import com.jrecruiter.jobservice.application.dtos.JobResponse;
 import com.jrecruiter.jobservice.application.dtos.PaginatedJobResponse;
+import com.jrecruiter.jobservice.application.dtos.UpdateJobRequest;
 import com.jrecruiter.jobservice.application.services.JobApplicationService;
 
 /**
@@ -220,10 +221,26 @@ class JobControllerIntegrationTest {
     @Test
     @DisplayName("PUT /api/jobs/{id} updates job (200 OK)")
     void testUpdateJob() throws Exception {
-        CreateJobRequest.LocationRequest locationRequest = buildLocationRequest(
-                "123 Tech St", "San Francisco", "CA", "94102", "United States", "US", false);
+        // Create a valid UpdateJobRequest with all required fields
+        UpdateJobRequest updateRequest = new UpdateJobRequest(
+            "Senior Java Engineer - Updated",
+            "Build scalable microservices with Spring Boot and Java. Experience with cloud platforms required.",
+            "TechCorp Inc",
+            new CreateJobRequest.LocationRequest(
+                "San Francisco",
+                "United States",
+                "US",
+                false
+            ),
+            new CreateJobRequest.SalaryRequest(
+                new BigDecimal("160000"),
+                new BigDecimal("200000"),
+                "USD",
+                "ANNUAL"
+            )
+        );
         
-        mockJobResponse.setTitle("Updated Title");
+        mockJobResponse.setTitle("Senior Java Engineer - Updated");
         
         when(jobApplicationService.updateJob(eq(jobId), any())).thenReturn(mockJobResponse);
         
@@ -231,7 +248,7 @@ class JobControllerIntegrationTest {
                 .with(csrf())
                 .header("X-Employer-ID", employerId.toString())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{}"))
+                .content(objectMapper.writeValueAsString(updateRequest)))
                 .andExpect(status().isOk());
     }
     
