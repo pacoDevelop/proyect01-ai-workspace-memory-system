@@ -1,11 +1,14 @@
 package com.jrecruiter.jobservice.infrastructure.rest;
 
+import java.util.NoSuchElementException;
 import java.util.UUID;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.jrecruiter.jobservice.application.dtos.CreateJobRequest;
 import com.jrecruiter.jobservice.application.dtos.JobResponse;
@@ -288,6 +292,28 @@ public class JobController {
         return ResponseEntity.noContent().build();
     }
     
+    // ========================================================================
+    // EXCEPTION HANDLERS
+    // ========================================================================
+    
+    /**
+     * Handle NoSuchElementException thrown by service when job not found.
+     * Returns 404 Not Found with error message.
+     * 
+     * @param e the exception
+     * @return 404 response with error details
+     */
+    @ExceptionHandler(NoSuchElementException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<Map<String, Object>> handleJobNotFound(NoSuchElementException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Map.of(
+                    "error", "Not Found",
+                    "message", e.getMessage(),
+                    "status", 404
+                ));
+    }
+
     // ========================================================================
     // NESTED REQUEST DTOs (for state transitions with optional reason)
     // ========================================================================

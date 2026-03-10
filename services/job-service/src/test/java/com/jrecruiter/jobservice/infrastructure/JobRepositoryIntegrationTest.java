@@ -131,7 +131,7 @@ class JobRepositoryIntegrationTest {
                 industryId,
                 regionId,
                 JobTitle.of("Frontend Developer"),
-                JobDescription.of("React and TypeScript expert needed"),
+                JobDescription.of("React and TypeScript expert needed for web apps"),
                 CompanyName.of("TechCorp"),
                 JobLocation.withAddress("456 Market St", "New York", "NY", "10001", "United States", "US"),
                 JobSalary.of(new BigDecimal("100000"), new BigDecimal("130000"), "USD", JobSalary.SalaryFrequency.ANNUAL),
@@ -168,7 +168,7 @@ class JobRepositoryIntegrationTest {
         Job job2 = jobRepository.save(Job.createDraft(
                 2, employerId, industryId, regionId,
                 JobTitle.of("Backend Developer"),
-                JobDescription.of("Java microservices"),
+                JobDescription.of("Build scalable Java microservices with Spring Boot"),
                 CompanyName.of("TechCorp"),
                 JobLocation.withAddress("456 Market St", "New York", "NY", "10001", "United States", "US"),
                 JobSalary.of(new BigDecimal("110000"), new BigDecimal("140000"), "USD", JobSalary.SalaryFrequency.ANNUAL),
@@ -203,7 +203,7 @@ class JobRepositoryIntegrationTest {
         Job job2 = Job.createDraft(
                 2, UUID.randomUUID(), industryId, regionId,
                 JobTitle.of("Data Engineer"),
-                JobDescription.of("BigData and analytics"),
+                JobDescription.of("BigData and analytics analytics platform development"),
                 CompanyName.of("DataCorp"),
                 JobLocation.withAddress("789 Oak Ave", "Seattle", "WA", "98101", "United States", "US"),
                 JobSalary.of(new BigDecimal("130000"), new BigDecimal("160000"), "USD", JobSalary.SalaryFrequency.ANNUAL),
@@ -228,7 +228,7 @@ class JobRepositoryIntegrationTest {
         Job job2 = jobRepository.save(Job.createDraft(
                 2, UUID.randomUUID(), industryId, regionId,
                 JobTitle.of("QA Engineer"),
-                JobDescription.of("Selenium and automation"),
+                JobDescription.of("Selenium testing and test automation frameworks"),
                 CompanyName.of("TestCorp"),
                 JobLocation.withAddress("321 Pine St", "Austin", "TX", "78701", "United States", "US"),
                 JobSalary.of(new BigDecimal("90000"), new BigDecimal("120000"), "USD", JobSalary.SalaryFrequency.ANNUAL),
