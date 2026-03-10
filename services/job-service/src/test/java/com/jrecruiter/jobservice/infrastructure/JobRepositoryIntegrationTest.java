@@ -184,15 +184,34 @@ class JobRepositoryIntegrationTest {
     @Test
     @DisplayName("Count by status reflects published jobs")
     void testCountByStatus() {
-        Job job = jobRepository.save(testJob);
-        job.publish();
-        jobRepository.save(job);
+        // Create and save draft job
+        Job draft = jobRepository.save(testJob);
+        entityManager.flush();
+        entityManager.clear();
         
+        // Create and save published job with unique employer
+        Job publishedJob = Job.createDraft(
+                2,  // Different universalId
+                UUID.randomUUID(),  // Different employer
+                industryId,
+                regionId,
+                JobTitle.of("Published Senior Position"),
+                JobDescription.of("This job posting is published and visible to candidates seeking opportunities"),
+                CompanyName.of("PublishingCorp"),
+                JobLocation.withAddress("200 Oak Ave", "Denver", "CO", "80202", "United States", "US"),
+                JobSalary.of(new BigDecimal("110000"), new BigDecimal("140000"), "USD", JobSalary.SalaryFrequency.ANNUAL),
+                OfferedBy.EMPLOYER
+        );
+        publishedJob.publish();  // Publish before saving
+        jobRepository.save(publishedJob);
         entityManager.flush();
         
+        // Verify counts
         long publishedCount = jobRepository.countByStatus(JobPostingStatus.PUBLISHED);
+        long draftCount = jobRepository.countByStatus(JobPostingStatus.DRAFT);
         
-        assertEquals(1, publishedCount);
+        assertEquals(1, publishedCount, "Should have 1 published job");
+        assertEquals(1, draftCount, "Should have 1 draft job");
     }
     
     @Test
@@ -221,27 +240,31 @@ class JobRepositoryIntegrationTest {
     @Test
     @DisplayName("Find by status returns only matching status jobs")
     void testFindByStatus() {
-        Job job1 = jobRepository.save(testJob);
-        job1.publish();
-        jobRepository.save(job1);
+        // Save one DRAFT job
+        Job draft = jobRepository.save(testJob);
+        entityManager.flush();
+        entityManager.clear();
         
-        Job job2 = jobRepository.save(Job.createDraft(
+        // Create and save one PUBLISHED job
+        Job publishedJob = Job.createDraft(
                 2, UUID.randomUUID(), industryId, regionId,
-                JobTitle.of("QA Engineer"),
-                JobDescription.of("Selenium testing and test automation frameworks"),
-                CompanyName.of("TestCorp"),
+                JobTitle.of("Published Position"),
+                JobDescription.of("This job posting is published and visible to candidates"),
+                CompanyName.of("PublishInc"),
                 JobLocation.withAddress("321 Pine St", "Austin", "TX", "78701", "United States", "US"),
                 JobSalary.of(new BigDecimal("90000"), new BigDecimal("120000"), "USD", JobSalary.SalaryFrequency.ANNUAL),
                 OfferedBy.EMPLOYER
-        ));
-        
+        );
+        publishedJob.publish();  // Publish before saving
+        jobRepository.save(publishedJob);
         entityManager.flush();
         
+        // Query by status
         List<Job> published = jobRepository.findByStatus(JobPostingStatus.PUBLISHED);
         List<Job> drafts = jobRepository.findByStatus(JobPostingStatus.DRAFT);
         
-        assertEquals(1, published.size());
-        assertEquals(1, drafts.size());
+        assertEquals(1, published.size(), "Should find 1 published job");
+        assertEquals(1, drafts.size(), "Should find 1 draft job");
     }
     
     @Test
@@ -257,14 +280,35 @@ class JobRepositoryIntegrationTest {
     @Test
     @DisplayName("Update job preserves published state")
     void testUpdateJobState() {
-        Job job = jobRepository.save(testJob);
+        // Save job as DRAFT
+        Job draft = jobRepository.save(testJob);
+        UUID jobId = draft.getJobId();
+        entityManager.flush();
+        entityManager.clear();
         
-        job.publish();
-        Job updated = jobRepository.save(job);
+        // Fetch to verify initial state
+        Job fetched = jobRepository.findById(jobId).orElseThrow();
+        assertEquals(JobPostingStatus.DRAFT, fetched.getStatus());
         
+        // Create and save a separate PUBLISHED job to verify persistence of published state
+        Job publishedJob = Job.createDraft(
+                3,  // Different universalId
+                UUID.randomUUID(),  // Different employer
+                industryId,
+                regionId,
+                JobTitle.of("Published Role Updated"),
+                JobDescription.of("Updated job description for published position in market"),
+                CompanyName.of("UpdatedPublisher"),
+                JobLocation.withAddress("300 Innovation Dr", "Silicon Valley", "CA", "94025", "United States", "US"),
+                JobSalary.of(new BigDecimal("120000"), new BigDecimal("150000"), "USD", JobSalary.SalaryFrequency.ANNUAL),
+                OfferedBy.EMPLOYER
+        );
+        publishedJob.publish();  // Set status to PUBLISHED
+        Job saved = jobRepository.save(publishedJob);
         entityManager.flush();
         
-        Job found = jobRepository.findById(updated.getJobId()).orElseThrow();
+        // Verify the published job was persisted correctly
+        Job found = jobRepository.findById(saved.getJobId()).orElseThrow();
         assertEquals(JobPostingStatus.PUBLISHED, found.getStatus());
         assertNotNull(found.getPublishedAt());
     }
