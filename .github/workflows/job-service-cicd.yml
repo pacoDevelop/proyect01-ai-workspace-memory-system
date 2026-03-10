@@ -159,7 +159,8 @@ jobs:
     if: github.event_name == 'push'
 
     permissions:
-      contents: read
+      packages: write        # ✅ Asegúrate de que esto esté aquí
+      id-token: write 
       security-events: write
 
     steps:
@@ -184,9 +185,9 @@ jobs:
       - name: 🔑 Log in to Container Registry
         uses: docker/login-action@v3
         with:
-          registry: ghcr.io
+          registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
-          password: ${{ secrets.GHCR_PAT }}
+          password: ${{ secrets.GITHUB_TOKEN }}  # ✅ Usa GITHUB_TOKEN, no un custom token
 
       - name: 📝 Extract Docker Metadata
         id: meta
