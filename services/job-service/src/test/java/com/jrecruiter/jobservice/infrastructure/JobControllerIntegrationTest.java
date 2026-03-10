@@ -96,15 +96,7 @@ class JobControllerIntegrationTest {
                 "Senior Java Engineer",
                 "Build microservices with Spring Boot and modern cloud technologies",
                 "TechCorp Inc",
-                new CreateJobRequest.LocationRequest(
-                        "123 Tech St",
-                        "San Francisco",
-                        "CA",
-                        "94102",
-                        "United States",
-                        "US",
-                        false
-                ),
+                buildLocationRequest("123 Tech St", "San Francisco", "CA", "94102", "United States", "US", false),
                 new CreateJobRequest.SalaryRequest(
                         new BigDecimal("150000"),
                         new BigDecimal("200000"),
@@ -220,15 +212,8 @@ class JobControllerIntegrationTest {
     @Test
     @DisplayName("PUT /api/jobs/{id} updates job (200 OK)")
     void testUpdateJob() throws Exception {
-        CreateJobRequest.LocationRequest locationRequest = new CreateJobRequest.LocationRequest(
-                "123 Tech St",
-                "San Francisco",
-                "CA",
-                "94102",
-                "United States",
-                "US",
-                false
-        );
+        CreateJobRequest.LocationRequest locationRequest = buildLocationRequest(
+                "123 Tech St", "San Francisco", "CA", "94102", "United States", "US", false);
         
         mockJobResponse.setTitle("Updated Title");
         
@@ -250,5 +235,18 @@ class JobControllerIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest());
+    }
+
+    // ── Helper ───────────────────────────────────────────────────────────────
+
+    private CreateJobRequest.LocationRequest buildLocationRequest(
+            String street, String city, String stateProvince, String postalCode,
+            String country, String countryCode, boolean remote) {
+        CreateJobRequest.LocationRequest loc =
+                new CreateJobRequest.LocationRequest(city, country, countryCode, remote);
+        loc.setStreet(street);
+        loc.setStateProvince(stateProvince);
+        loc.setPostalCode(postalCode);
+        return loc;
     }
 }

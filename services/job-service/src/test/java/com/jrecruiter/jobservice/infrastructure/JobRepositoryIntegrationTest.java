@@ -72,7 +72,7 @@ class JobRepositoryIntegrationTest {
                         new BigDecimal("120000"),
                         new BigDecimal("150000"),
                         "USD",
-                        "ANNUAL"
+                        JobSalary.SalaryFrequency.ANNUAL
                 ),
                 OfferedBy.EMPLOYER
         );
@@ -127,7 +127,7 @@ class JobRepositoryIntegrationTest {
                 JobDescription.of("React and TypeScript expert needed"),
                 CompanyName.of("TechCorp"),
                 JobLocation.withAddress("456 Market St", "New York", "NY", "10001", "United States", "US"),
-                JobSalary.of(new BigDecimal("100000"), new BigDecimal("130000"), "USD", "ANNUAL"),
+                JobSalary.of(new BigDecimal("100000"), new BigDecimal("130000"), "USD", JobSalary.SalaryFrequency.ANNUAL),
                 OfferedBy.EMPLOYER
         );
         jobRepository.save(job2);
@@ -164,7 +164,7 @@ class JobRepositoryIntegrationTest {
                 JobDescription.of("Java microservices"),
                 CompanyName.of("TechCorp"),
                 JobLocation.withAddress("456 Market St", "New York", "NY", "10001", "United States", "US"),
-                JobSalary.of(new BigDecimal("110000"), new BigDecimal("140000"), "USD", "ANNUAL"),
+                JobSalary.of(new BigDecimal("110000"), new BigDecimal("140000"), "USD", JobSalary.SalaryFrequency.ANNUAL),
                 OfferedBy.EMPLOYER
         ));
         entityManager.flush();
@@ -199,7 +199,7 @@ class JobRepositoryIntegrationTest {
                 JobDescription.of("BigData and analytics"),
                 CompanyName.of("DataCorp"),
                 JobLocation.withAddress("789 Oak Ave", "Seattle", "WA", "98101", "United States", "US"),
-                JobSalary.of(new BigDecimal("130000"), new BigDecimal("160000"), "USD", "ANNUAL"),
+                JobSalary.of(new BigDecimal("130000"), new BigDecimal("160000"), "USD", JobSalary.SalaryFrequency.ANNUAL),
                 OfferedBy.RECRUITER
         );
         jobRepository.save(job2);
@@ -224,7 +224,7 @@ class JobRepositoryIntegrationTest {
                 JobDescription.of("Selenium and automation"),
                 CompanyName.of("TestCorp"),
                 JobLocation.withAddress("321 Pine St", "Austin", "TX", "78701", "United States", "US"),
-                JobSalary.of(new BigDecimal("90000"), new BigDecimal("120000"), "USD", "ANNUAL"),
+                JobSalary.of(new BigDecimal("90000"), new BigDecimal("120000"), "USD", JobSalary.SalaryFrequency.ANNUAL),
                 OfferedBy.EMPLOYER
         ));
         

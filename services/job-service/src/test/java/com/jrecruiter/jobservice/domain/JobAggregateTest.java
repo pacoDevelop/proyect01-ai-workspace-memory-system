@@ -57,7 +57,7 @@ class JobAggregateTest {
                 new BigDecimal("150000"),
                 new BigDecimal("200000"),
                 "USD",
-                "ANNUAL"
+                JobSalary.SalaryFrequency.ANNUAL
         );
         offeredBy = OfferedBy.EMPLOYER;
     }

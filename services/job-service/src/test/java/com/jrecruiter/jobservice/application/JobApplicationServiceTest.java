@@ -83,7 +83,7 @@ class JobApplicationServiceTest {
                         new BigDecimal("180000"),
                         new BigDecimal("220000"),
                         "USD",
-                        "ANNUAL"
+                        JobSalary.SalaryFrequency.ANNUAL
                 ),
                 OfferedBy.EMPLOYER
         );
@@ -92,7 +92,7 @@ class JobApplicationServiceTest {
                 "Senior Architect",
                 "Leading microservices architecture and team development",
                 "ArchitectureCorp",
-                new CreateJobRequest.LocationRequest("999 Tech St", "San Jose", "CA", "95110", "United States", "US", false),
+                buildLocationRequest("999 Tech St", "San Jose", "CA", "95110", "United States", "US", false),
                 new CreateJobRequest.SalaryRequest(
                         new BigDecimal("180000"),
                         new BigDecimal("220000"),
@@ -129,7 +129,7 @@ class JobApplicationServiceTest {
         JobResponse response = jobApplicationService.getJobById(jobId);
         
         assertNotNull(response);
-        assertEquals(testJob.getTitle().getValue(), response.getTitle());
+        assertEquals(testJob.getTitle().value(), response.getTitle());
         verify(jobRepository).findById(jobId);
     }
     
@@ -215,7 +215,7 @@ class JobApplicationServiceTest {
                 JobDescription.of("Kubernetes and Docker expert"),
                 CompanyName.of("CloudCorp"),
                 JobLocation.withAddress("888 Cloud Ave", "Portland", "OR", "97201", "United States", "US"),
-                JobSalary.of(new BigDecimal("140000"), new BigDecimal("170000"), "USD", "ANNUAL"),
+                JobSalary.of(new BigDecimal("140000"), new BigDecimal("170000"), "USD", JobSalary.SalaryFrequency.ANNUAL),
                 OfferedBy.EMPLOYER
         );
         
@@ -265,5 +265,18 @@ class JobApplicationServiceTest {
         
         assertEquals(1, response.getContent().size());
         assertEquals(1L, response.getTotalElements());
+    }
+
+    // ── Helper ───────────────────────────────────────────────────────────────
+
+    private CreateJobRequest.LocationRequest buildLocationRequest(
+            String street, String city, String stateProvince, String postalCode,
+            String country, String countryCode, boolean remote) {
+        CreateJobRequest.LocationRequest loc =
+                new CreateJobRequest.LocationRequest(city, country, countryCode, remote);
+        loc.setStreet(street);
+        loc.setStateProvince(stateProvince);
+        loc.setPostalCode(postalCode);
+        return loc;
     }
 }
