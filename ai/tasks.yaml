@@ -1,12 +1,12 @@
 schema_version: "3.0"
 min_compatible_version: "2.0"
-last_updated: "2026-03-09T22:15:00Z"
+last_updated: "2026-03-10T01:45:00Z"
 last_updated_by: "github-copilot"
-total_tasks: 43
-pending: 3
+total_tasks: 45
+pending: 2
 in_progress: 0
 blocked: 0
-done: 36
+done: 42
 review: 1
 
 # ============================================================================
@@ -3614,3 +3614,79 @@ aning cache AGGRESSIVELY, we guarantee Maven will fetch fresh dependencies.
           at: "2026-03-09T22:20:00Z",
           by: "github-copilot",
         }
+
+  - id: "TASK-045"
+    title: "FIX: Add H2 embedded database for Spring Boot test integration"
+    description: |
+      JobRepositoryIntegrationTest is failing with:
+      "Failed to replace DataSource with an embedded database for tests. 
+       If you want an embedded database please put a supported one on the classpath"
+
+      Root cause: Missing H2 dependency in scope=test. Spring needs an embedded database 
+      to initialize @DataJpaTest context.
+
+      Solution:
+      1. Add H2 database dependency to pom.xml (scope=test)
+      2. Configure @AutoConfigureTestDatabase(replace=REPLACE.ANY) in test classes
+      3. Add application-test.yml with embedded database config
+      4. Verify all repositories can init context with in-memory H2
+    priority: "critical"
+    severity: "blocker"
+    status: "pending"
+    depends_on: ["TASK-044"]
+    estimated_effort: "30m"
+    assigned_agent: null
+    claimed_at: null
+    created_at: "2026-03-10T01:45:00Z"
+    created_by: "github-copilot"
+    tags: ["test", "database", "spring-boot", "job-service"]
+    security_sensitive: false
+    definition_of_done_check:
+      - "H2 dependency added to job-service pom.xml": false
+      - "H2 dependency added to all microservices pom.xml": false
+      - "@AutoConfigureTestDatabase annotation added to tests": false
+      - "application-test.yml created with embedded DB config": false
+      - "JobRepositoryIntegrationTest context loads without error": false
+      - "All 9 repository tests pass": false
+
+  - id: "TASK-046"
+    title: "FIX: JobController integration tests - update endpoint & exception handling"
+    description: |
+      Two test failures identified:
+      
+      1. JobControllerIntegrationTest.testUpdateJob() - returns 400 instead of 200
+         Expected: Status 200 after successful PUT /api/jobs/{id}
+         Actual: Status 400 (Bad Request)
+         Cause: Likely request body validation or mapping issue
+
+      2. JobControllerIntegrationTest.testGetJobByIdNotFound() - throws NoSuchElementException
+         Expected: Return 404 Not Found
+         Actual: Servlet throws java.util.NoSuchElementException
+         Cause: Controller should handle missing entity with @ExceptionHandler or ifPresent
+
+      Solutions:
+      1. Debug testUpdateJob: verify request body format, DTO validation
+      2. Add proper 404 exception handling in JobController.getJobById()
+      3. Add @ExceptionHandler for EntityNotFoundException or NoSuchElementException
+      4. Validate test fixtures match expected API contract
+      5. Run mvn test -Dtest=JobControllerIntegrationTest to verify fixes
+    priority: "critical"
+    severity: "blocker"
+    status: "pending"
+    depends_on: ["TASK-045"]
+    estimated_effort: "45m"
+    assigned_agent: null
+    claimed_at: null
+    created_at: "2026-03-10T01:45:00Z"
+    created_by: "github-copilot"
+    tags: ["test", "rest-api", "exception-handling", "job-service"]
+    security_sensitive: false
+    definition_of_done_check:
+      - "testUpdateJob returns 200 status": false
+      - "testGetJobByIdNotFound returns 404 status": false
+      - "JobController.getJobById() handles NoSuchElementException": false
+      - "@ExceptionHandler or try-catch implemented": false
+      - "All JobControllerIntegrationTest methods pass": false
+      - "No 500 errors in test output": false
+    completion_notes: |
+      [PENDING - Ready for agent to claim]
