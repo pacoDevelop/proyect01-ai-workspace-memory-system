@@ -10,7 +10,7 @@ signals:
     task_id: "TASK-041"
     message: "TASK-041 COMPLETE. Maven test compilation failure FIXED. Added spring-boot-test + spring-boot-test-autoconfigure dependencies to pom.xml. Deploy blocker eliminated. GitHub Actions workflow can now proceed to test execution phase. Ready for deployment retry."
     created_at: "2026-03-09T20:07:00Z"
-    read_by: []
+    read_by: ["cline"]
     priority: "high"
     requires_review: false
     metadata:
@@ -26,7 +26,7 @@ signals:
     task_id: "TASK-040"
     message: "TASK-040 COMPLETE. GitHub Actions CI/CD and Maven compilation issues resolved. Fixed: health-cmd escaping, Flyway 9.20.1, Spring Sleuth removal, RabbitMQ fluent API, value object factory methods, record accessors, DTO types, enum conversions. Result: BUILD SUCCESS (31 source files compiled, 0 errors). Commits: 31ccbea + 7d8f32f. Ready for E2E testing."
     created_at: "2026-03-09T19:30:00Z"
-    read_by: []
+    read_by: ["cline"]
     priority: "critical"
     requires_review: false
     metadata:
@@ -193,7 +193,7 @@ signals:
     task_id: "TASK-027"
     message: "[CRITICAL] TASK-027 COMPLETE but schema mismatch detected. SQL schema (V1__Initial_Schema.sql) and JPA entity mappings (JobLocationEmbeddable) are MISALIGNED. 5 SQL columns not mapped in JPA, 2 JPA fields not in SQL, 1 column naming mismatch. Data loss potential in production. Requires TASK-038 (Infrastructure Alignment) to fix before deployment. See change_log.md for full details."
     created_at: "2026-03-09T03:50:00Z"
-    read_by: []
+    read_by: ["cline"]
     priority: "critical"
     requires_review: true
 
@@ -204,7 +204,7 @@ signals:
     task_id: "TASK-033"
     message: "TASK-033 APPROVED by user security review. OAuth2/JWT audit complete. Security findings documented. Code approved for Phase 7 (Infrastructure Hardening). Known issues: JWT secret hardcoding, email claim empty, refresh token rotation missing - to be addressed in TASK-039."
     created_at: "2026-03-09T03:55:00Z"
-    read_by: []
+    read_by: ["cline"]
     priority: "high"
     requires_review: false
 
@@ -215,7 +215,7 @@ signals:
     task_id: "TASK-038"
     message: "TASK-038 created: Schema Alignment (JPA ↔ SQL). Critical blocker from TASK-027. Priority: critical. Effort: 2h. Depends on: TASK-027. Action: Create Flyway V2 migration, normalize schema, update JPA mappings, verify with integration tests."
     created_at: "2026-03-09T03:55:00Z"
-    read_by: []
+    read_by: ["cline"]
     priority: "critical"
     requires_review: false
 - id: "SIG-TASK-039-DONE"
@@ -225,7 +225,7 @@ signals:
     task_id: "TASK-039"
     message: "TASK-039 COMPLETE. Security hardening fully implemented and compiled: A02 (JWT secret env var validation), A07 (email claim enforced), A07 (refresh token rotation enforced). Compilation: BUILD SUCCESS with Java 21.0.10 (53 files, 0 errors). JwtSecurityTests.java: 15 comprehensive test cases (syntax verified). All code production-ready. No breaking changes. Backward compatible. Commit: c9c30a5, 08e1065, f0a673a"
     created_at: "2026-03-09T04:35:00Z"
-    read_by: []
+    read_by: ["cline"]
     priority: "high"
     requires_review: false
     metadata:
